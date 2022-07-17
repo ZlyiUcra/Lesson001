@@ -32,7 +32,7 @@ export const bloggersRepository = {
     let blogger = bloggers.find(b => b.id === id);
     if (blogger) {
       blogger.name = name;
-      if (youtubeUrl) blogger.youtubeUrl = youtubeUrl;
+      blogger.youtubeUrl = youtubeUrl;
       return true;
     }
     return false;
