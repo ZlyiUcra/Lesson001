@@ -10,7 +10,7 @@ const titleValidation = body('title').trim()
 
 videosRouter.get("/", (req: Request, res: Response) => {
   const foundVideos = videosRepository.findVideos();
-  res.status(200).send(foundVideos);
+  res.sendStatus(200).send(foundVideos);
 
 });
 videosRouter.post("/",
@@ -18,7 +18,7 @@ videosRouter.post("/",
   inputValidationMiddleware,
   (req: Request, res: Response) => {
     const newVideo = videosRepository.createVideo(req.body.title, req.body.author);
-    res.status(201).send(newVideo);
+    res.sendStatus(201).send(newVideo);
   }
 );
 videosRouter.get('/:id', (req: Request, res: Response) => {
