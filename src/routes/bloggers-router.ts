@@ -1,6 +1,7 @@
 import {Request, Response, Router} from "express";
 import {bloggersRepository} from "../repositories/bloggers-repository";
-import {errorsMessagesCreator} from "../helpers/errorMessagesCreator";
+import {ErrorMessagesType, errorsMessagesCreator} from "../helpers/errorMessagesCreator";
+import {errorCreator} from "../helpers/bloggersHelpers";
 
 
 export const bloggersRouter = Router({});
@@ -11,12 +12,11 @@ bloggersRouter.get("/", (req: Request, res: Response) => {
   res.send(foundVideos);
 });
 bloggersRouter.post("/", (req: Request, res: Response) => {
-  if (!req.body.name || req.body.name.length > 40) {
-    const errorsMessages = errorsMessagesCreator([],
-      "Name must be present and contain corresponding quantity of characters",
-      "name"
-    );
-    res.status(400).send(errorsMessages);
+  let errors: ErrorMessagesType | undefined = undefined;
+  errors = errorCreator(errors, req.body.name, req.body.youtubeUrl);
+
+  if (errors?.errorsMessages?.length) {
+    res.status(400).send(errors);
     return;
   }
   const newBlogger = bloggersRepository.create(req.body.name, req.body.youtubeUrl);
@@ -31,18 +31,15 @@ bloggersRouter.get('/:id', (req: Request, res: Response) => {
   res.status(404).send();
 });
 bloggersRouter.put('/:id', (req: Request, res: Response) => {
-  let errors;
-  if (!+req.params.id || isNaN(+req.params.id)) {
+  let errors: ErrorMessagesType | undefined;
+  if (!+req.params.id || isNaN(+req.params.id) || !bloggersRepository.findById(+req.params.id)) {
     errors = errorsMessagesCreator(
       [],
-      "Bloggers's id must be present",
+      "Incorrect blogger's Id",
       "id");
   }
-  if (!req.body.name || req.body.name.length > 40) {
-    errors = errorsMessagesCreator(errors?.errorsMessages ? errors.errorsMessages : [],
-      "Name must be present and contain corresponding quantity of characters",
-      "name");
-  }
+  errors = errorCreator(errors, req.body.name, req.body.youtubeUrl);
+
   if (errors?.errorsMessages?.length) {
     res.status(400).send(errors);
     return;
@@ -62,5 +59,4 @@ bloggersRouter.delete('/:id', (req: Request, res: Response) => {
     return;
   }
   res.status(404).send();
-
-})
+});
