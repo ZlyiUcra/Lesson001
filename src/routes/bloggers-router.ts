@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {ErrorMessagesType, errorsMessagesCreator} from "../helpers/errorMessagesCreator";
-import {errorCreator} from "../helpers/bloggersHelpers";
+import {bloggerErrorCreator} from "../helpers/bloggersHelpers";
 
 
 export const bloggersRouter = Router({});
@@ -13,7 +13,7 @@ bloggersRouter.get("/", (req: Request, res: Response) => {
 });
 bloggersRouter.post("/", (req: Request, res: Response) => {
   let errors: ErrorMessagesType | undefined = undefined;
-  errors = errorCreator(errors, req.body.name, req.body.youtubeUrl);
+  errors = bloggerErrorCreator(errors, req.body.name, req.body.youtubeUrl);
 
   if (errors?.errorsMessages?.length) {
     res.status(400).send(errors);
@@ -38,7 +38,7 @@ bloggersRouter.put('/:id', (req: Request, res: Response) => {
       "Incorrect blogger's Id",
       "id");
   }
-  errors = errorCreator(errors, req.body.name, req.body.youtubeUrl);
+  errors = bloggerErrorCreator(errors, req.body.name, req.body.youtubeUrl);
 
   if (errors?.errorsMessages?.length) {
     res.status(400).send(errors);
