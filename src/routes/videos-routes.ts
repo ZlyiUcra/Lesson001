@@ -21,8 +21,7 @@ videosRouter.post("/", (req: Request, res: Response) => {
     const newVideo = videosRepository.createVideo(req.body.title, req.body.author);
     res.status(201).send(newVideo);
   }
-)
-;
+);
 videosRouter.get('/:id', (req: Request, res: Response) => {
   let video = videosRepository.findVideoById(+req.params.id);
   if (video) {
@@ -34,18 +33,18 @@ videosRouter.get('/:id', (req: Request, res: Response) => {
 videosRouter.put('/:id', (req: Request, res: Response) => {
   let errors;
 
-  if(!+req.params.id || isNaN(+req.params.id)){
+  if (!+req.params.id || isNaN(+req.params.id)) {
     errors = errorsMessagesCreator(
       [],
       "Video's id must be present",
       "id");
   }
-  if(!req.body.title || req.body.title.length > 40){
+  if (!req.body.title || req.body.title.length > 40) {
     errors = errorsMessagesCreator(errors?.errorsMessages ? errors.errorsMessages : [],
       "Title must be present and not empty",
       "title");
   }
-  if(errors?.errorsMessages?.length){
+  if (errors?.errorsMessages?.length) {
     res.status(400).send(errors);
     return;
   }

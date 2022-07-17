@@ -27,7 +27,7 @@ export const videosRepository = {
     return [...videos];
   },
   createVideo(title: string, author?: string) {
-    const newVideo: VideoType = {id: +(new Date()), title: title};
+    const newVideo: VideoType = {id: +(new Date()), title: title, author: ""};
     if(typeof author === "string") newVideo.author = author;
     videos.push(newVideo);
     return newVideo;
