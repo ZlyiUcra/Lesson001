@@ -1,4 +1,5 @@
 import express, {Request, Response} from 'express';
+import cors from 'cors'
 import bodyParser from 'body-parser';
 import {productsRouter} from "./routes/products-router";
 import {addressesRouter} from "./routes/addresses-router";
@@ -9,6 +10,7 @@ import {postsRouter} from "./routes/posts-router";
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 
 const parserMiddleware = bodyParser({});
 app.use(parserMiddleware);
