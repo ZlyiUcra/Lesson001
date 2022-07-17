@@ -12,7 +12,7 @@ export const postsErrorCreator = (errors: ErrorMessagesType | undefined,
       "title"
     );
   }
-  if (typeof shortDescription === "string" &&
+  if (!shortDescription ||typeof shortDescription === "string" &&
     shortDescription.trim().length === 0 ||
     shortDescription &&
     shortDescription.length > 30) {
@@ -20,7 +20,7 @@ export const postsErrorCreator = (errors: ErrorMessagesType | undefined,
       "ShortDescription not correct",
       "shortDescription");
   }
-  if (typeof content === "string" &&
+  if (!content || typeof content === "string" &&
     content.trim().length === 0 ||
     content &&
     content.length > 30) {
