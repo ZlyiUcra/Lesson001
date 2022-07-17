@@ -14,7 +14,7 @@ export const errorCreator = (errors: ErrorMessagesType | undefined, name: string
     );
   }
   if (typeof youtubeUrl === "string" && !isValidUrl(youtubeUrl)) {
-    errors = errorsMessagesCreator(baseErrorList,
+    errors = errorsMessagesCreator(errors?.errorsMessages ? errors.errorsMessages : [],
       "Youtube URL must be correctly formatted",
       "youtubeUrl");
   }
