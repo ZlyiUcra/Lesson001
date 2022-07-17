@@ -27,7 +27,7 @@ export const videosRepository = {
     return videos;
   },
   createVideo(title: string, author?: string) {
-    const newVideo: VideoType = {id: +(new Date()), title: title, author: ""};
+    const newVideo: VideoType = {id: +(new Date()), title: title, author: author ? author : ""};
     videos.push(newVideo);
     return newVideo;
   },
@@ -38,7 +38,7 @@ export const videosRepository = {
     let video = videos.find(video => video.id === id);
     if (video) {
       video.title = title;
-      if(typeof author === "string"){
+      if (typeof author === "string") {
         video.author = author;
       }
       return true;
@@ -46,7 +46,7 @@ export const videosRepository = {
       return false;
     }
   },
-  deleteVideo(id: number){
+  deleteVideo(id: number) {
     for (let i = 0; i < videos.length; i++) {
       if (videos[i].id === id) {
         videos.splice(i, 1);
