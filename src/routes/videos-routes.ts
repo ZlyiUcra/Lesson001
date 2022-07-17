@@ -41,11 +41,11 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
       "id");
   }
   if(!req.body.title){
-    errors = errorMessagesCreator(errors?.errorMessages ? errors.errorMessages : [],
+    errors = errorMessagesCreator(errors?.errorsMessages ? errors.errorsMessages : [],
       "Title must be present and not empty",
       "title");
   }
-  if(errors?.errorMessages?.length){
+  if(errors?.errorsMessages?.length){
     res.status(400).send(errors);
     return;
   }
