@@ -3,23 +3,7 @@ type VideoType = {
   title?: string,
   author?: string
 }
-// const videos: Array<VideoType> = [
-//   {
-//     id: 1,
-//     title: "Video 1",
-//     author: "Author 1"
-//   },
-//   {
-//     id: 2,
-//     title: "Video 2",
-//     author: "Author 2"
-//   },
-//   {
-//     id: 3,
-//     title: "Video 3",
-//     author: "Author 3"
-//   }
-// ]
+
 let videos: Array<VideoType> = [];
 
 export const videosRepository = {
