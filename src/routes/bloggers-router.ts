@@ -32,7 +32,7 @@ bloggersRouter.get('/:id', (req: Request, res: Response) => {
 });
 bloggersRouter.put('/:id', (req: Request, res: Response) => {
   let errors: ErrorMessagesType | undefined;
-  if (!+req.params.id || isNaN(+req.params.id) || !bloggersRepository.findById(+req.params.id)) {
+  if (!+req.params.id || isNaN(+req.params.id)) {
     errors = errorsMessagesCreator(
       [],
       "Incorrect blogger's Id",
