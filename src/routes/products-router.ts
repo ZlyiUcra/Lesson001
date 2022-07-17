@@ -40,13 +40,13 @@ productsRouter.put('/:id',
       const product = productsRepository.findProductById(+req.params.id);
       res.send(product);
     }
-    res.send(404);
+    res.sendStatus(404);
   });
 
 productsRouter.delete('/:id', (req: Request, res: Response) => {
   const isDeletedProduct = productsRepository.deleteProduct(+req.params.id);
   if (isDeletedProduct) {
-    res.send(204);
+    res.sendStatus(204);
   }
-  res.send(404);
+  res.sendStatus(404);
 });
