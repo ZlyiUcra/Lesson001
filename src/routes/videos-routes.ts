@@ -5,7 +5,7 @@ import {inputValidationMiddleware} from "../middlewares/inputValidationMiddlewar
 
 export const videosRouter = Router({});
 
-const titleValidation = body('title').trim()
+const titleValidation = body('title').isString().trim()
   .isLength({min: 0})
   .withMessage('Title must be present and not empty.');
 
