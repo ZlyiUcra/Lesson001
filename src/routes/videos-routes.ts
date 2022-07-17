@@ -1,8 +1,6 @@
 import {Request, Response, Router} from "express";
 import {errorMessagesCreator} from "../helpers/errorMessagesCreator";
 import {videosRepository} from "../repositories/videos-repository";
-import {productsRepository} from "../repositories/products-repository";
-
 
 export const videosRouter = Router({});
 
@@ -15,7 +13,7 @@ videosRouter.post("/", (req: Request, res: Response) => {
       const errorsMessages = errorMessagesCreator([],
         "Title must be present and not empty",
         "title");
-      res.status(400).send({errorsMessages});
+      res.status(400).send(errorsMessages);
       return;
     }
     const newVideo = videosRepository.createVideo(req.body.title, req.body.author);
