@@ -5,6 +5,7 @@ import {errorsMessagesCreator} from "../helpers/errorMessagesCreator";
 
 export const bloggersRouter = Router({});
 
+
 bloggersRouter.get("/", (req: Request, res: Response) => {
   const foundVideos = bloggersRepository.findAll();
   res.send(foundVideos);
@@ -24,17 +25,17 @@ bloggersRouter.post("/", (req: Request, res: Response) => {
 bloggersRouter.get('/:id', (req: Request, res: Response) => {
   let blogger = bloggersRepository.findById(+req.params.id);
   if (blogger) {
-    res.send(blogger)
+    res.send(blogger);
     return;
   }
-  res.status(404);
+  res.status(404).send();
 });
 bloggersRouter.put('/:id', (req: Request, res: Response) => {
   let errors;
   if (!+req.params.id || isNaN(+req.params.id)) {
     errors = errorsMessagesCreator(
       [],
-      "Video's id must be present",
+      "Bloggers's id must be present",
       "id");
   }
   if (!req.body.name || req.body.name.length > 40) {
@@ -49,16 +50,17 @@ bloggersRouter.put('/:id', (req: Request, res: Response) => {
 
   const isUpdated = bloggersRepository.update(+req.params.id, req.body.name, req.body.youtubeUrl);
   if (isUpdated) {
-    res.sendStatus(204);
+    res.status(204).send();
     return;
   }
-  res.sendStatus(404);
+  res.status(404).send();
 });
 bloggersRouter.delete('/:id', (req: Request, res: Response) => {
   const isDeleted = bloggersRepository.delete(+req.params.id);
   if (isDeleted) {
-    res.sendStatus(204);
+    res.status(204).send();
     return;
   }
-    res.sendStatus(404);
+  res.status(404).send();
+
 })
