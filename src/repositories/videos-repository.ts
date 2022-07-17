@@ -21,9 +21,10 @@ type VideoType = {
 //   }
 // ]
 let videos: Array<VideoType> = [];
+
 export const videosRepository = {
   findVideos() {
-    return videos
+    return [...videos];
   },
   createVideo(title: string, author?: string) {
     const newVideo: VideoType = {id: +(new Date()), title: title};

@@ -1,22 +1,22 @@
 import {Request, Response, Router} from "express";
-import {errorMessagesCreator} from "../helpers/errorMessagesCreator";
 import {videosRepository} from "../repositories/videos-repository";
+import {body} from "express-validator";
+import {inputValidationMiddleware} from "../middlewares/inputValidationMiddleware";
 
 export const videosRouter = Router({});
+
+const titleValidation = body('title').trim()
+  .withMessage('Title must be present and not empty.');
 
 videosRouter.get("/", (req: Request, res: Response) => {
   const foundVideos = videosRepository.findVideos();
   res.status(200).send(foundVideos);
 
 });
-videosRouter.post("/", (req: Request, res: Response) => {
-    if (!req.body.title) {
-      const errorsMessages = errorMessagesCreator([],
-        "Title must be present and not empty",
-        "title");
-      res.status(400).send(errorsMessages);
-      return;
-    }
+videosRouter.post("/",
+  titleValidation,
+  inputValidationMiddleware,
+  (req: Request, res: Response) => {
     const newVideo = videosRepository.createVideo(req.body.title, req.body.author);
     res.status(201).send(newVideo);
   }
@@ -29,24 +29,11 @@ videosRouter.get('/:id', (req: Request, res: Response) => {
     res.send(404);
   }
 });
-videosRouter.put('/:id', (req: Request, res: Response) => {
-  let errors;
+videosRouter.put('/:id',
+  titleValidation,
+  inputValidationMiddleware,
+  (req: Request, res: Response) => {
 
-  if(!+req.params.id || isNaN(+req.params.id)){
-    errors = errorMessagesCreator(
-      [],
-      "Video's id must be present",
-      "id");
-  }
-  if(!req.body.title){
-    errors = errorMessagesCreator(errors?.errorMessages ? errors.errorMessages : [],
-      "Title must be present and not empty",
-      "title");
-  }
-  if(errors?.errorMessages?.length){
-    res.status(400).send(errors);
-    return;
-  }
 
   const isUpdated = videosRepository.updateVideo(+req.params.id, req.body.title, req.body.author);
   if (isUpdated) {
