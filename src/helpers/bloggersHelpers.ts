@@ -8,7 +8,7 @@ export const isValidUrl = (url: string) => {
 }
 export const errorCreator = (errors: ErrorMessagesType | undefined, name: string, youtubeUrl?: string) => {
   const baseErrorList = errors?.errorsMessages ? errors.errorsMessages : [];
-  if (!name || name.length > 30) {
+  if (!name || name.length > 20) {
     errors = errorsMessagesCreator(baseErrorList,
       "Name must be present and contain corresponding quantity of characters",
       "name"
