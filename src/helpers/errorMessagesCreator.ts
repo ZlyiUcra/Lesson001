@@ -11,7 +11,7 @@ export const errorMessagesCreator = (baseErrors: Array<ErrorType>,
   ErrorMessagesType | undefined => {
   if (field && message) {
     return {
-      errorMessages: [...baseErrors, {field, message: message?.toLowerCase()}]
+      errorMessages: [...baseErrors, {message: message?.toLowerCase(), field}]
     }
   }
 }
