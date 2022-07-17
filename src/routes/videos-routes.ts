@@ -19,7 +19,6 @@ videosRouter.post("/", (req: Request, res: Response) => {
     }
     const newVideo = videosRepository.createVideo(req.body.title, req.body.author);
     res.status(201).send(newVideo);
-    return;
   }
 );
 videosRouter.get('/:id', (req: Request, res: Response) => {
