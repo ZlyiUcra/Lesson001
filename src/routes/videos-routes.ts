@@ -6,7 +6,8 @@ export const videosRouter = Router({});
 
 videosRouter.get("/", (req: Request, res: Response) => {
   const foundVideos = videosRepository.findVideos();
-  res.status(200).send(foundVideos)
+  res.status(200).send(foundVideos);
+
 });
 videosRouter.post("/", (req: Request, res: Response) => {
     if (!req.body.title) {
@@ -18,6 +19,7 @@ videosRouter.post("/", (req: Request, res: Response) => {
     }
     const newVideo = videosRepository.createVideo(req.body.title, req.body.author);
     res.status(201).send(newVideo);
+    return;
   }
 );
 videosRouter.get('/:id', (req: Request, res: Response) => {
