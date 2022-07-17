@@ -1,4 +1,5 @@
 import {ErrorMessagesType, errorsMessagesCreator} from "./errorMessagesCreator";
+import {bloggersRepository} from "../repositories/bloggers-repository";
 
 export const postsErrorCreator = (errors: ErrorMessagesType | undefined,
                                   title?: string,
@@ -12,7 +13,7 @@ export const postsErrorCreator = (errors: ErrorMessagesType | undefined,
       "title"
     );
   }
-  if (!shortDescription ||typeof shortDescription === "string" &&
+  if (!shortDescription || typeof shortDescription === "string" &&
     shortDescription.trim().length === 0 ||
     shortDescription &&
     shortDescription.length > 30) {
@@ -28,7 +29,8 @@ export const postsErrorCreator = (errors: ErrorMessagesType | undefined,
       "Content not correct",
       "content");
   }
-  if (typeof bloggerId !== "number" ) {
+  const realBlogger = bloggerId && bloggersRepository.findById(bloggerId);
+  if (typeof bloggerId !== "number" || !realBlogger ) {
     errors = errorsMessagesCreator(errors?.errorsMessages ? errors.errorsMessages : [],
       "BloggerId not correct",
       "bloggerId");
