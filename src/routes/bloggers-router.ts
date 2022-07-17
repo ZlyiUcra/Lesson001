@@ -50,17 +50,15 @@ bloggersRouter.put('/:id', (req: Request, res: Response) => {
   const isUpdated = bloggersRepository.update(+req.params.id, req.body.name, req.body.youtubeUrl);
   if (isUpdated) {
     res.sendStatus(204);
-  } else {
-    res.sendStatus(404);
+    return;
   }
-
-
+  res.sendStatus(404);
 });
 bloggersRouter.delete('/:id', (req: Request, res: Response) => {
   const isDeleted = bloggersRepository.delete(+req.params.id);
   if (isDeleted) {
     res.sendStatus(204);
-  } else {
-    res.sendStatus(404);
+    return;
   }
+    res.sendStatus(404);
 })
