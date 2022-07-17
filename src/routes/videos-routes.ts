@@ -11,7 +11,7 @@ videosRouter.get("/", (req: Request, res: Response) => {
   res.send(foundVideos)
 });
 videosRouter.post("/", (req: Request, res: Response) => {
-    if (!req.body.title) {
+    if (!req.body.title || req.body.title.length > 40) {
       const errorsMessages = errorsMessagesCreator([],
         "Title must be present and not empty",
         "title");
