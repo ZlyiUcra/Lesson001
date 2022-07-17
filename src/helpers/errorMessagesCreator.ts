@@ -5,7 +5,7 @@ export type ErrorType = {
 export type ErrorMessagesType = {
   errorsMessages: Array<ErrorType>;
 }
-export const errorMessagesCreator = (baseErrors: Array<ErrorType>,
+export const errorsMessagesCreator = (baseErrors: Array<ErrorType>,
                                      message?: string,
                                      field?: string):
   ErrorMessagesType | undefined => {

@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import {errorMessagesCreator} from "../helpers/errorMessagesCreator";
+import {errorsMessagesCreator} from "../helpers/errorMessagesCreator";
 import {videosRepository} from "../repositories/videos-repository";
 import {productsRepository} from "../repositories/products-repository";
 
@@ -12,7 +12,7 @@ videosRouter.get("/", (req: Request, res: Response) => {
 });
 videosRouter.post("/", (req: Request, res: Response) => {
     if (!req.body.title) {
-      const errorsMessages = errorMessagesCreator([],
+      const errorsMessages = errorsMessagesCreator([],
         "Title must be present and not empty",
         "title");
       res.status(400).send(errorsMessages);
@@ -35,13 +35,13 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
   let errors;
 
   if(!+req.params.id || isNaN(+req.params.id)){
-    errors = errorMessagesCreator(
+    errors = errorsMessagesCreator(
       [],
       "Video's id must be present",
       "id");
   }
   if(!req.body.title){
-    errors = errorMessagesCreator(errors?.errorsMessages ? errors.errorsMessages : [],
+    errors = errorsMessagesCreator(errors?.errorsMessages ? errors.errorsMessages : [],
       "Title must be present and not empty",
       "title");
   }
