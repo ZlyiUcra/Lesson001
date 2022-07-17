@@ -1,27 +1,28 @@
 import {Request, Response, Router} from "express";
+import {errorMessagesCreator} from "../helpers/errorMessagesCreator";
 import {videosRepository} from "../repositories/videos-repository";
-import {body} from "express-validator";
-import {inputValidationMiddleware} from "../middlewares/inputValidationMiddleware";
+import {productsRepository} from "../repositories/products-repository";
+
 
 export const videosRouter = Router({});
 
-const titleValidation = body('title').isString().trim()
-  .isLength({min: 0})
-  .withMessage('Title must be present and not empty.');
-
 videosRouter.get("/", (req: Request, res: Response) => {
   const foundVideos = videosRepository.findVideos();
-  res.sendStatus(200).send(foundVideos);
-
+  res.send(foundVideos)
 });
-videosRouter.post("/",
-  titleValidation,
-  inputValidationMiddleware,
-  (req: Request, res: Response) => {
+videosRouter.post("/", (req: Request, res: Response) => {
+    if (!req.body.title) {
+      const errorsMessages = errorMessagesCreator([],
+        "Title must be present and not empty",
+        "title");
+      res.status(400).send({errorsMessages});
+      return;
+    }
     const newVideo = videosRepository.createVideo(req.body.title, req.body.author);
-    res.sendStatus(201).send(newVideo);
+    res.status(201).send(newVideo);
   }
-);
+)
+;
 videosRouter.get('/:id', (req: Request, res: Response) => {
   let video = videosRepository.findVideoById(+req.params.id);
   if (video) {
@@ -30,11 +31,24 @@ videosRouter.get('/:id', (req: Request, res: Response) => {
     res.send(404);
   }
 });
-videosRouter.put('/:id',
-  titleValidation,
-  inputValidationMiddleware,
-  (req: Request, res: Response) => {
+videosRouter.put('/:id', (req: Request, res: Response) => {
+  let errors;
 
+  if(!+req.params.id || isNaN(+req.params.id)){
+    errors = errorMessagesCreator(
+      [],
+      "Video's id must be present",
+      "id");
+  }
+  if(!req.body.title){
+    errors = errorMessagesCreator(errors?.errorMessages ? errors.errorMessages : [],
+      "Title must be present and not empty",
+      "title");
+  }
+  if(errors?.errorMessages?.length){
+    res.status(400).send(errors);
+    return;
+  }
 
   const isUpdated = videosRepository.updateVideo(+req.params.id, req.body.title, req.body.author);
   if (isUpdated) {
