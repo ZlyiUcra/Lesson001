@@ -15,7 +15,7 @@ videosRouter.post("/", (req: Request, res: Response) => {
       const errorsMessages = errorMessagesCreator([],
         "Title must be present and not empty",
         "title");
-      res.status(400).send({errorsMessages});
+      res.status(400).send(errorsMessages);
       return;
     }
     const newVideo = videosRepository.createVideo(req.body.title, req.body.author);
