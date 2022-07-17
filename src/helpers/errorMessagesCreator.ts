@@ -1,17 +1,17 @@
 export type ErrorType = {
   message: string,
-  title: string,
+  field: string,
 };
 export type ErrorMessagesType = {
   errorMessages: Array<ErrorType>;
 }
 export const errorMessagesCreator = (baseErrors: Array<ErrorType>,
-                                     title?: string,
+                                     field?: string,
                                      message?: string):
   ErrorMessagesType | undefined => {
-  if (title && message) {
+  if (field && message) {
     return {
-      errorMessages: [...baseErrors, {title, message: message?.toLowerCase()}]
+      errorMessages: [...baseErrors, {field, message: message?.toLowerCase()}]
     }
   }
 }
