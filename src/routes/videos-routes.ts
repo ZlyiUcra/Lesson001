@@ -6,7 +6,7 @@ export const videosRouter = Router({});
 
 videosRouter.get("/", (req: Request, res: Response) => {
   const foundVideos = videosRepository.findVideos();
-  res.send(foundVideos)
+  res.status(200).send(foundVideos)
 });
 videosRouter.post("/", (req: Request, res: Response) => {
     if (!req.body.title) {
