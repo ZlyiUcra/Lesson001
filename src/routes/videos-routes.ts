@@ -40,7 +40,7 @@ videosRouter.put('/:id', (req: Request, res: Response) => {
       "Video's id must be present",
       "id");
   }
-  if(!req.body.title){
+  if(!req.body.title || req.body.title.length > 40){
     errors = errorsMessagesCreator(errors?.errorsMessages ? errors.errorsMessages : [],
       "Title must be present and not empty",
       "title");
