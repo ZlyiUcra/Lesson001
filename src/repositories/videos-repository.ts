@@ -1,10 +1,6 @@
-type VideoType = {
-  id: number,
-  title?: string,
-  author?: string
-}
+import {VideoType} from "../db/types";
+import {videos} from "../db/db";
 
-let videos: Array<VideoType> = [];
 
 export const videosRepository = {
   findVideos() {
