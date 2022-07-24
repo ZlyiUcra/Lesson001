@@ -8,30 +8,30 @@ type PostType = {
 }
 
 let posts: Array<PostType> = [
-  {
-    id: 1,
-    title: "title1",
-    shortDescription: "shortDescription1",
-    content: "content1",
-    bloggerId: 1,
-    bloggerName: "bloggerName1"
-  },
-  {
-    id: 2,
-    title: "title2",
-    shortDescription: "shortDescription2",
-    content: "content2",
-    bloggerId: 1,
-    bloggerName: "bloggerName1"
-  },
-  {
-    id: 3,
-    title: "title1",
-    shortDescription: "shortDescription1",
-    content: "content1",
-    bloggerId: 2,
-    bloggerName: "bloggerName2"
-  }
+  // {
+  //   id: 1,
+  //   title: "title1",
+  //   shortDescription: "shortDescription1",
+  //   content: "content1",
+  //   bloggerId: 1,
+  //   bloggerName: "bloggerName1"
+  // },
+  // {
+  //   id: 2,
+  //   title: "title2",
+  //   shortDescription: "shortDescription2",
+  //   content: "content2",
+  //   bloggerId: 1,
+  //   bloggerName: "bloggerName1"
+  // },
+  // {
+  //   id: 3,
+  //   title: "title1",
+  //   shortDescription: "shortDescription1",
+  //   content: "content1",
+  //   bloggerId: 2,
+  //   bloggerName: "bloggerName2"
+  // }
 ];
 
 export const postsRepository = {

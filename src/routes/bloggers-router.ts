@@ -2,16 +2,15 @@ import {Request, Response, Router} from "express";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {ErrorMessagesType, errorsMessagesCreator} from "../helpers/errorMessagesCreator";
 import {bloggerErrorCreator} from "../helpers/bloggersHelpers";
-
+import {authValidationMiddleware} from "../middlewares/authValidationMiddleware";
 
 export const bloggersRouter = Router({});
-
 
 bloggersRouter.get("/", (req: Request, res: Response) => {
   const foundVideos = bloggersRepository.findAll();
   res.send(foundVideos);
 });
-bloggersRouter.post("/", (req: Request, res: Response) => {
+bloggersRouter.post("/", authValidationMiddleware, (req: Request, res: Response) => {
   let errors: ErrorMessagesType | undefined = undefined;
   errors = bloggerErrorCreator(errors, req.body.name, req.body.youtubeUrl);
 
@@ -30,7 +29,7 @@ bloggersRouter.get('/:id', (req: Request, res: Response) => {
   }
   res.status(404).send();
 });
-bloggersRouter.put('/:id', (req: Request, res: Response) => {
+bloggersRouter.put('/:id', authValidationMiddleware, (req: Request, res: Response) => {
   let errors: ErrorMessagesType | undefined;
   if (!+req.params.id || isNaN(+req.params.id)) {
     errors = errorsMessagesCreator(
@@ -52,7 +51,7 @@ bloggersRouter.put('/:id', (req: Request, res: Response) => {
   }
   res.status(404).send();
 });
-bloggersRouter.delete('/:id', (req: Request, res: Response) => {
+bloggersRouter.delete('/:id', authValidationMiddleware, (req: Request, res: Response) => {
   const isDeleted = bloggersRepository.delete(+req.params.id);
   if (isDeleted) {
     res.status(204).send();

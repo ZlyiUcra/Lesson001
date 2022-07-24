@@ -2,6 +2,7 @@ import {Request, Response, Router} from "express";
 import {postsRepository} from "../repositories/posts-repository";
 import {ErrorMessagesType, errorsMessagesCreator} from "../helpers/errorMessagesCreator";
 import {postsErrorCreator} from "../helpers/postsHelpers";
+import {authValidationMiddleware} from "../middlewares/authValidationMiddleware";
 
 export const postsRouter = Router({});
 
@@ -9,7 +10,7 @@ postsRouter.get('/', (req: Request, res: Response) => {
   const foundPosts = postsRepository.findAll();
   res.send(foundPosts);
 });
-postsRouter.post('/', (req: Request, res: Response) => {
+postsRouter.post('/', authValidationMiddleware, (req: Request, res: Response) => {
   let errors: ErrorMessagesType | undefined = undefined;
   errors = postsErrorCreator(errors, req.body.title,
     req.body.shortDescription, req.body.content, +req.body.bloggerId);
@@ -32,7 +33,7 @@ postsRouter.get('/:id', (req: Request, res: Response) => {
   }
   res.status(404).send();
 });
-postsRouter.put('/:id', (req: Request, res: Response) => {
+postsRouter.put('/:id', authValidationMiddleware, (req: Request, res: Response) => {
   let errors: ErrorMessagesType | undefined;
   if (!+req.params.id || isNaN(+req.params.id)) {
     errors = errorsMessagesCreator(
@@ -58,7 +59,7 @@ postsRouter.put('/:id', (req: Request, res: Response) => {
   res.status(404).send();
 
 });
-postsRouter.delete('/:id', (req: Request, res: Response) => {
+postsRouter.delete('/:id', authValidationMiddleware, (req: Request, res: Response) => {
   const isDeleted = postsRepository.delete(+req.params.id);
   if (isDeleted) {
     res.status(204).send();

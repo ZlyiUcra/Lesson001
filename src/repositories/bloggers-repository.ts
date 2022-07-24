@@ -4,16 +4,16 @@ type BloggerType = {
   youtubeUrl?: string
 }
 let bloggers: Array<BloggerType> = [
-  // {
-  //   "id": 1,
-  //   "name": "Blogger 1",
-  //   "youtubeUrl": "https://blogger1.com"
-  // },
-  // {
-  //   "id": 2,
-  //   "name": "Blogger 2",
-  //   "youtubeUrl": "https://blogger2.com"
-  // }
+  {
+    "id": 1,
+    "name": "Blogger 1",
+    "youtubeUrl": "https://blogger1.com"
+  },
+  {
+    "id": 2,
+    "name": "Blogger 2",
+    "youtubeUrl": "https://blogger2.com"
+  }
 ];
 
 export const bloggersRepository = {
