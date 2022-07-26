@@ -1,38 +1,30 @@
-const products = [{id: 1, title: "tomato"}, {id: 2, title: "orange"}];
+import {ObjectId} from "mongodb";
+import {ProductDBType, ProductType} from "../db/types";
+import {productsCollection} from "../db/db";
 
 export const productsRepository = {
-  findProducts(title: string | null | undefined) {
-    if (title) {
-      const filteredProducts = products.filter(product => product.title.includes(title));
-      return filteredProducts;
-    } else {
-      return products;
-    }
+  async getAll(): Promise<ProductDBType[]> {
+    return productsCollection.find({}).toArray();
   },
-  createProduct(title: string) {
-    const newProduct = {id: +(new Date()), title: title};
-    products.push(newProduct);
-    return newProduct;
+  async getById(id: string): Promise<ProductDBType | null> {
+    return await productsCollection.findOne({id: +id});
   },
-  findProductById(id: number) {
-    return products.find(product => product.id === id);
+  async create(product: ProductType): Promise<ProductDBType> {
+    const resultProduct: ProductDBType = {...product, _id: new ObjectId()}
+    const result = await productsCollection.insertOne(resultProduct);
+    return resultProduct;//;{_id: new ObjectId(), title, addedAt: new Date()}
   },
-  updateProduct(id: number, title: string) {
-    let product = products.find(product => product.id === id);
-    if (product) {
-      product.title = title;
-      return true
-    } else {
-      return false;
-    }
+  async update(id: string, title: string): Promise<boolean> {
+    const result = await productsCollection.updateOne(
+      {id: +id},
+      {$set: {title: title}})
+    return result.matchedCount === 1;
   },
-  deleteProduct(id: number) {
-    for (let i = 0; i < products.length; i++) {
-      if (products[i].id === id) {
-        products.splice(i, 1);
-        return true
-      }
-    }
-    return false;
+  /*
+  Delete user and all his photos
+   */
+  async delete(id: string): Promise<boolean> {
+    const result = await productsCollection.deleteOne({id: +id});
+    return result.deletedCount === 1;
   }
 }

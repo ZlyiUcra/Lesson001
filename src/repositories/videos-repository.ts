@@ -1,5 +1,10 @@
-import {VideoType} from "../db/types";
-import {videos} from "../db/db";
+export type VideoType = {
+  id: number,
+  title?: string,
+  author?: string
+}
+
+let videos: Array<VideoType> = []
 
 
 export const videosRepository = {

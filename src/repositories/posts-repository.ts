@@ -1,11 +1,4 @@
-type PostType = {
-  id: number,
-  title: string,
-  shortDescription: string,
-  content: string,
-  bloggerId: number,
-  bloggerName: string
-}
+import {PostType} from "../db/types";
 
 let posts: Array<PostType> = [
   // {

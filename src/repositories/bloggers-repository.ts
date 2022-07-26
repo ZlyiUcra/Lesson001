@@ -1,8 +1,5 @@
-type BloggerType = {
-  id: number,
-  name?: string,
-  youtubeUrl?: string
-}
+import {BloggerType} from "../db/types";
+
 let bloggers: Array<BloggerType> = [
   {
     "id": 1,
