@@ -4,8 +4,8 @@ import {BloggerDBType, PostDBType, ProductDBType} from "./types";
 // import {VideoType} from "./types";
 //
 // export let videos: Array<VideoType> = [];
-//const mongoUri = process.env.MONGODB_URI || "mongodb://0.0.0.0:27017"; //?/maxPoolSize=20&w=majority
-const mongoUri = process.env.MONGODB_URI || "mongodb+srv://Cluster33302:WV1BTERYTERQ@cluster33302.cxqtp.mongodb.net/?retryWrites=true&w=majority"
+const mongoUri = process.env.MONGODB_URI || "mongodb://0.0.0.0:27017"; //?/maxPoolSize=20&w=majority
+
 
 export const client = new MongoClient(mongoUri);
 
