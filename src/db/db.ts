@@ -11,8 +11,8 @@ export const client = new MongoClient(mongoUri);
 
 let db = client.db("instagram")
 
-export const bloggersCollection = db.collection<BloggerDBType>('photos')
-export const postsCollection = db.collection<PostDBType>('users')
+export const bloggersCollection = db.collection<BloggerDBType>('bloggers')
+export const postsCollection = db.collection<PostDBType>('posts')
 export const productsCollection = db.collection<ProductDBType>('products')
 
 export async function runDb() {

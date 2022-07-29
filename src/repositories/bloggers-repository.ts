@@ -1,46 +1,56 @@
-import {BloggerType} from "../db/types";
-
-let bloggers: Array<BloggerType> = [
-  {
-    "id": 1,
-    "name": "Blogger 1",
-    "youtubeUrl": "https://blogger1.com"
-  },
-  {
-    "id": 2,
-    "name": "Blogger 2",
-    "youtubeUrl": "https://blogger2.com"
-  }
-];
+import {BloggerDBType, BloggerPaginatorInput, SearchResultType, BloggerType, ProductDBType} from "../db/types";
+import {bloggersCollection} from "../db/db";
+import {DeleteResult, ObjectId, UpdateResult} from "mongodb";
 
 export const bloggersRepository = {
-  findAll() {
-    return bloggers;
+  async findAll(paginatorInput: BloggerPaginatorInput):
+    Promise<{ bloggersSearchResult: BloggerType[], bloggersCount: number }> {
+
+    const {searchNameTerm, pageNumber = 1, pageSize = 10} = paginatorInput;
+    const searchTermObject = searchNameTerm ? {name: {$regex: RegExp(searchNameTerm, 'i')}} : {};
+    const skip = pageSize * (pageNumber - 1);
+    const limit = pageSize;
+
+
+    const bloggersCount = await bloggersCollection.count(searchTermObject);
+    const bloggersSearch: BloggerDBType[] = await bloggersCollection
+      .find(searchTermObject)
+      .skip(skip).limit(limit)
+      .sort({id: 1}).toArray();
+
+
+    const bloggersSearchResult: BloggerType[] = bloggersSearch.map((e: BloggerDBType): BloggerType => {
+      const {_id, ...rest} = e;
+      return rest;
+    })
+
+    return {bloggersSearchResult, bloggersCount};
   },
-  create(name: string, youtubeUrl?: string) {
-    const newBlogger: BloggerType = {id: +(new Date()), name, youtubeUrl: youtubeUrl ? youtubeUrl : ''};
-    bloggers.push(newBlogger);
+  async create(newBlogger: BloggerType): Promise<BloggerType> {
+    const resultBlogger: BloggerDBType = {...newBlogger, _id: new ObjectId()}
+    const result = await bloggersCollection.insertOne(resultBlogger);
     return newBlogger;
   },
-  findById(id: number) {
-    return bloggers.find(b => b.id === id);
+  async findById(id: number): Promise<BloggerType | null> {
+    const result: BloggerDBType | null = await bloggersCollection.findOne({id});
+
+    if (!result) return null;
+
+    const {_id, ...blogger} = result;
+    return blogger;
   },
-  update(id: number, name: string, youtubeUrl: string) {
-    let blogger = bloggers.find(b => b.id === id);
-    if (blogger) {
-      blogger.name = name;
-      blogger.youtubeUrl = youtubeUrl;
+  async update(id: number, name: string, youtubeUrl: string): Promise<boolean> {
+    let result: UpdateResult =
+      await bloggersCollection.updateOne({id}, {$set: {name, youtubeUrl}});
+    if (result.modifiedCount) {
       return true;
     }
     return false;
   },
-  delete(id: number) {
-    for (let i = 0; i < bloggers.length; i++) {
-      if (bloggers[i].id === id) {
-        bloggers.splice(i, 1);
-        return true;
-      }
-    }
+  async delete(id: number): Promise<boolean> {
+    let result: DeleteResult = await bloggersCollection.deleteOne({id});
+    if (result.deletedCount) return true
+
     return false;
   }
 }

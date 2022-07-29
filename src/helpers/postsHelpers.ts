@@ -29,11 +29,11 @@ export const postsErrorCreator = (errors: ErrorMessagesType | undefined,
       "Content not correct",
       "content");
   }
-  const realBlogger = bloggerId && bloggersRepository.findById(bloggerId);
-  if (typeof bloggerId !== "number" || !realBlogger ) {
-    errors = errorsMessagesCreator(errors?.errorsMessages ? errors.errorsMessages : [],
-      "BloggerId not correct",
-      "bloggerId");
-  }
+  //const realBlogger = bloggerId && bloggersRepository.findById(bloggerId);
+  // if (typeof bloggerId !== "number" || !realBlogger ) {
+  //   errors = errorsMessagesCreator(errors?.errorsMessages ? errors.errorsMessages : [],
+  //     "BloggerId not correct",
+  //     "bloggerId");
+  // }
   return errors;
 }

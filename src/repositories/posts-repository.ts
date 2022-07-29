@@ -1,4 +1,6 @@
-import {PostType} from "../db/types";
+import {PostDBType, PostPaginatorInput, PostType} from "../db/types";
+import {postsCollection} from "../db/db";
+import {DeleteResult, ObjectId, UpdateResult} from "mongodb";
 
 let posts: Array<PostType> = [
   // {
@@ -28,49 +30,55 @@ let posts: Array<PostType> = [
 ];
 
 export const postsRepository = {
-  findAll() {
-    return posts;
-  },
-  create(title: string,
-         shortDescription: string,
-         content: string,
-         bloggerId: number) {
-    const id = +(new Date());
+  async findAll(paginatorInput: PostPaginatorInput):
+    Promise<{ postsSearchResult: PostType[], postsCount: number }> {
 
-    const newPost: PostType = {
-      id,
-      title,
-      shortDescription,
-      content, bloggerId,
-      bloggerName: `bloggerName_${id}`
+    const {pageNumber = 1, pageSize = 10} = paginatorInput;
+    const skip = pageSize * (pageNumber - 1);
+    const limit = pageSize;
+
+    const postsCount = await postsCollection.count({});
+    const postsSearch: PostDBType[] = await postsCollection
+      .find({})
+      .skip(skip).limit(limit)
+      .sort({id: 1}).toArray();
+
+    const postsSearchResult: PostType[] = postsSearch.map((e: PostDBType): PostType => {
+      const {_id, ...rest} = e;
+      return rest;
+    })
+
+    return {postsSearchResult, postsCount};
+  },
+  async create(newPost: PostType): Promise<PostType> {
+
+    const resultPost: PostDBType = {
+      ...newPost,
+      _id: new ObjectId()
     };
-    posts.push(newPost);
+    await postsCollection.insertOne(resultPost)
     return newPost;
   },
-  findById(id: number) {
-    return posts.find(p => p.id === id);
+  async findById(id: number): Promise<PostType | null> {
+    const result: PostDBType | null = await postsCollection.findOne({id});
+
+    if (!result) return null;
+    const {_id, ...post} = result;
+    return post;
+
   },
-  update(id: number, title: string,
-         shortDescription: string,
-         content: string,
-         bloggerId: number) {
-    let post = posts.find(p => p.id === id);
-    if (post) {
-      post.title = title;
-      post.shortDescription = shortDescription;
-      post.content = content;
-      post.bloggerId = bloggerId;
+  async update(newPost: PostType): Promise<boolean> {
+    const {id, ...rest} = newPost;
+    let result: UpdateResult =
+      await postsCollection.updateOne({id}, {$set: {...rest}})
+    if (result.modifiedCount) {
       return true;
     }
     return false;
   },
-  delete(id: number) {
-    for (let i = 0; i < posts.length; i++) {
-      if (posts[i].id === id) {
-        posts.splice(i, 1);
-        return true;
-      }
-    }
+  async delete(id: number): Promise<boolean> {
+    let result: DeleteResult = await postsCollection.deleteOne({id});
+    if (result.deletedCount) return true
     return false;
   }
 }

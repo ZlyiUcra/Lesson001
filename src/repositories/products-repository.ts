@@ -4,7 +4,7 @@ import {productsCollection} from "../db/db";
 
 export const productsRepository = {
   async getAll(): Promise<ProductDBType[]> {
-    return productsCollection.find({}).toArray();
+    return await productsCollection.find({}).toArray();
   },
   async getById(id: string): Promise<ProductDBType | null> {
     return await productsCollection.findOne({id: +id});
