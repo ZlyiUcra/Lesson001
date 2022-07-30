@@ -19,7 +19,7 @@ postsRouter.get('/', async (req: Request, res: Response) => {
 });
 postsRouter.post('/', authValidationMiddleware, async (req: Request, res: Response) => {
   let errors: ErrorMessagesType | undefined = undefined;
-  errors = postsErrorCreator(errors, req.body.title,
+  errors = await postsErrorCreator(errors, req.body.title,
     req.body.shortDescription, req.body.content, +req.body.bloggerId);
 
   if (errors?.errorsMessages?.length) {
@@ -49,7 +49,7 @@ postsRouter.put('/:id', authValidationMiddleware, async (req: Request, res: Resp
       "id");
   }
   ;
-  errors = postsErrorCreator(errors, req.body.title,
+  errors = await postsErrorCreator(errors, req.body.title,
     req.body.shortDescription, req.body.content, +req.body.bloggerId);
 
   if (errors?.errorsMessages?.length) {

@@ -93,7 +93,7 @@ bloggersRouter.post("/:bloggerId/posts",
   bloggerForPostMiddleware,
   async (req: Request, res: Response) => {
   let errors: ErrorMessagesType | undefined = undefined;
-    errors = postsErrorCreator(errors, req.body.title,
+    errors = await postsErrorCreator(errors, req.body.title,
       req.body.shortDescription, req.body.content, +req.params.bloggerId);
 
   if (errors?.errorsMessages?.length) {
