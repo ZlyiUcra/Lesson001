@@ -33,13 +33,15 @@ export const postsRepository = {
   async findAll(paginatorInput: PostPaginatorInput):
     Promise<{ postsSearchResult: PostType[], postsCount: number }> {
 
-    const {pageNumber = 1, pageSize = 10} = paginatorInput;
+    const {pageNumber = 1, pageSize = 10, bloggerId} = paginatorInput;
     const skip = pageSize * (pageNumber - 1);
     const limit = pageSize;
 
-    const postsCount = await postsCollection.count({});
+    const searchTerm =  bloggerId ? {bloggerId} : {}
+
+    const postsCount = await postsCollection.count(searchTerm);
     const postsSearch: PostDBType[] = await postsCollection
-      .find({})
+      .find(searchTerm)
       .skip(skip).limit(limit)
       .sort({id: 1}).toArray();
 

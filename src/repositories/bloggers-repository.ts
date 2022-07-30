@@ -1,6 +1,6 @@
 import {BloggerDBType, BloggerPaginatorInput, SearchResultType, BloggerType, ProductDBType} from "../db/types";
 import {bloggersCollection} from "../db/db";
-import {DeleteResult, ObjectId, UpdateResult} from "mongodb";
+import {DeleteResult, FindCursor, ObjectId, UpdateResult} from "mongodb";
 
 export const bloggersRepository = {
   async findAll(paginatorInput: BloggerPaginatorInput):
@@ -28,8 +28,9 @@ export const bloggersRepository = {
   },
   async create(newBlogger: BloggerType): Promise<BloggerType> {
     const resultBlogger: BloggerDBType = {...newBlogger, _id: new ObjectId()}
-    const result = await bloggersCollection.insertOne(resultBlogger);
-    return newBlogger;
+    await bloggersCollection.insertOne(resultBlogger);
+    const result = await bloggersCollection.findOne({id: newBlogger.id}, {projection: {_id: 0}}) as BloggerType;
+    return result;
   },
   async findById(id: number): Promise<BloggerType | null> {
     const result: BloggerDBType | null = await bloggersCollection.findOne({id});

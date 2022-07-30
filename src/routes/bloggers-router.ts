@@ -4,7 +4,10 @@ import {ErrorMessagesType, errorsMessagesCreator} from "../helpers/errorMessages
 import {bloggerErrorCreator} from "../helpers/bloggersHelpers";
 import {authValidationMiddleware} from "../middlewares/authValidationMiddleware";
 import {bloggersService} from "../domain/bloggers-services";
-import {BloggerPaginatorInput} from "../db/types";
+import {BloggerPaginatorInput, PostPaginatorInput} from "../db/types";
+import {bloggerForPostMiddleware} from "../middlewares/bloggerForPostsMIddleware";
+import {postsService} from "../domain/posts-services";
+import {postsErrorCreator} from "../helpers/postsHelpers";
 
 
 export const bloggersRouter = Router({});
@@ -72,4 +75,34 @@ bloggersRouter.delete('/:id', authValidationMiddleware, async (req: Request, res
     return;
   }
   res.status(404).send();
+});
+
+bloggersRouter.get('/:bloggerId/posts', bloggerForPostMiddleware, async (req: Request, res: Response) => {
+  const searchPostsTerm: PostPaginatorInput = {
+    pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 0),
+    pageSize: +(req.query.PageSize ? req.query.PageSize : 0),
+    bloggerId: req.params.bloggerId ? +(req.params.bloggerId) : undefined
+  };
+  const posts = await postsService.findAll(searchPostsTerm);
+  res.send(posts);
+
+});
+
+bloggersRouter.post("/:bloggerId/posts",
+  authValidationMiddleware,
+  bloggerForPostMiddleware,
+  async (req: Request, res: Response) => {
+  let errors: ErrorMessagesType | undefined = undefined;
+    errors = postsErrorCreator(errors, req.body.title,
+      req.body.shortDescription, req.body.content, +req.params.bloggerId);
+
+  if (errors?.errorsMessages?.length) {
+    res.status(400).send(errors);
+    return;
+  }
+    const newPost = await postsService.create(req.body.title,
+      req.body.shortDescription,
+      req.body.content,
+      +req.params.bloggerId);
+  res.status(201).send(newPost);
 });

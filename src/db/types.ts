@@ -11,7 +11,7 @@ export type BloggerDBType = WithId<{
   name?: string,
   youtubeUrl?: string
 }>
-export type BloggerType =  Omit<BloggerDBType, "_id">
+export type BloggerType = Omit<BloggerDBType, "_id">
 
 export type SearchResultType<T> = {
   pagesCount: number,
@@ -24,6 +24,7 @@ export type SearchResultType<T> = {
 export type PostPaginatorInput = {
   pageNumber: number;
   pageSize: number;
+  bloggerId?: number;
 }
 
 
@@ -37,6 +38,8 @@ export type PostDBType = WithId<{
 }>
 
 export type PostType = Omit<PostDBType, "_id">
+
+export type ShortPostType = Omit<PostType, "id" | "bloggerName">
 
 export type ProductDBType = WithId<{
   id: number;
