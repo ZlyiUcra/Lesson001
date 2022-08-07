@@ -12,7 +12,7 @@ export const loginAndPassValidationMiddleware = async (req: Request, res: Respon
   //errors = await userExistsCreator(errors, req.body.login);
 
   if (isErrorsPresent(errors)) {
-    return res.status(400).send(errors);
+    return res.status(401).send(errors);
   } else {
     next()
   }

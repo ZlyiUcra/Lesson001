@@ -1,8 +1,9 @@
 import {Request, Response, Router} from "express";
 import {usersService} from "../domain/users-services";
 import {LoginType, UserInputType} from "../db/types";
-import {authBasicValidationMiddleware} from "../middlewares/auth/authValidationMiddleware";
-import {loginAndPassValidationMiddleware} from "../middlewares/basicAuth/loginAndPassValidationMiddleware";
+import {loginAndPassValidationMiddleware} from "../middlewares/auth/loginAndPassValidationMiddleware";
+import {authBasicValidationMiddleware} from '../middlewares/basicAuth/authValidationMiddleware'
+import {userValidationMiddleware} from "../middlewares/user/userValidationMiddleware";
 
 export const usersRouter = Router({});
 
@@ -18,7 +19,7 @@ usersRouter.get('/', async (req: Request, res: Response) => {
 
 usersRouter.post("/",
   authBasicValidationMiddleware,
-  loginAndPassValidationMiddleware,
+  userValidationMiddleware,
   async (req: Request, res: Response) => {
     const credentials: LoginType = {login: req.body.login, password: req.body.password as string}
     const newUser = await usersService.create(credentials);

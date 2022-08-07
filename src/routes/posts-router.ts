@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import {authBasicValidationMiddleware} from "../middlewares/auth/authValidationMiddleware";
+import {authBasicValidationMiddleware} from "../middlewares/basicAuth/authValidationMiddleware";
 import {
   CommentContentType,
   PostCommentsInputType,

@@ -29,6 +29,6 @@ export const bearerPostCreatorValidationMiddleware = async (req: RequestWithUser
       }
     }
   }
-  res.status(401).send()
+  res.status(404).send()
 
 }
