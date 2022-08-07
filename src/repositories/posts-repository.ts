@@ -44,7 +44,7 @@ export const postsRepository = {
     const postsSearch: PostDBType[] = await postsCollection
       .find(searchTerm)
       .skip(skip).limit(limit)
-      .sort({id: 1}).toArray();
+      .toArray();
 
     const postsSearchResult: PostType[] = postsSearch.map((e: PostDBType): PostType => {
       const {_id, ...rest} = e;

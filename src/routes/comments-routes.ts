@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {commentsService} from "../domain/comments-services";
 import {CommentContentType, RequestWithUser} from "../db/types";
-import {bearerPostCreatorValidationMiddleware} from "../middlewares/bearerPostCreatorValidationMiddleware";
+import {bearerPostCreatorValidationMiddleware} from "../middlewares/bearerAuth/bearerPostCreatorValidationMiddleware";
 import {commentsMiddleware} from "../middlewares/commentsMiddleware";
 
 

@@ -32,7 +32,7 @@ export const postsErrorCreator = async (errors: ErrorMessagesType | undefined,
       "content");
   }
 
-  if (!bloggerId) {
+  if (!bloggerId || typeof bloggerId !== "string") {
     errors = errorsMessagesCreator(baseErrorList(errors),
       "BloggerId must be present",
       "bloggerId")

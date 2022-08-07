@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
-import {usersService} from "../domain/users-services";
-import {jwtHelper} from "../helpers/jwt/jwtHelper";
-import {RequestWithUser, UserType} from "../db/types";
+import {usersService} from "../../domain/users-services";
+import {jwtHelper} from "../../helpers/jwt/jwtHelper";
+import {RequestWithUser, UserType} from "../../db/types";
 
 
 export const bearerValidationMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {

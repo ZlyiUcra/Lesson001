@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {LoginType} from "../db/types";
 import {authService} from "../domain/auth-services";
-import {loginAndPassValidationMiddleware} from "../middlewares/loginAndPassValidationMiddleware";
+import {loginAndPassValidationMiddleware} from "../middlewares/basicAuth/loginAndPassValidationMiddleware";
 
 export const authRouter = Router({});
 

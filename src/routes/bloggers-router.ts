@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import {authBasicValidationMiddleware} from "../middlewares/authValidationMiddleware";
+import {authBasicValidationMiddleware} from "../middlewares/auth/authValidationMiddleware";
 import {bloggersService} from "../domain/bloggers-services";
 import {BloggerPaginatorInputType, PostPaginatorInputType} from "../db/types";
 import {

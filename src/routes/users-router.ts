@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {usersService} from "../domain/users-services";
 import {LoginType, UserInputType} from "../db/types";
-import {authBasicValidationMiddleware} from "../middlewares/authValidationMiddleware";
+import {authBasicValidationMiddleware} from "../middlewares/auth/authValidationMiddleware";
 
 export const usersRouter = Router({});
 

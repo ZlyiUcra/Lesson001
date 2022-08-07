@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import {authBasicValidationMiddleware} from "../middlewares/authValidationMiddleware";
+import {authBasicValidationMiddleware} from "../middlewares/auth/authValidationMiddleware";
 import {
   CommentContentType,
   PostCommentsInputType,
@@ -9,7 +9,7 @@ import {
 import {postsService} from "../domain/posts-services";
 import {postCorrectIdMiddleware, postMiddleware} from "../middlewares/postsMiddleware";
 import {commentsService} from "../domain/comments-services";
-import {bearerValidationMiddleware} from "../middlewares/bearerValidationMiddleware";
+import {bearerValidationMiddleware} from "../middlewares/bearerAuth/bearerValidationMiddleware";
 import {commentsMiddleware} from "../middlewares/commentsMiddleware";
 
 export const postsRouter = Router({});
