@@ -16,7 +16,7 @@ export const bloggersRepository = {
     const bloggersSearch: BloggerDBType[] = await bloggersCollection
       .find(searchTermObject)
       .skip(skip).limit(limit)
-      .sort({id: 1}).toArray();
+      .toArray();
 
 
     const bloggersSearchResult: BloggerType[] = bloggersSearch.map((e: BloggerDBType): BloggerType => {

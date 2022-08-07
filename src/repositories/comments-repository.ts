@@ -22,7 +22,8 @@ export const commentsRepository = {
     const commentsSearch: CommentDBType[] = await commentsCollection
       .find({postId})
       .skip(skip).limit(limit)
-      .sort({addedAt: -1}).toArray();
+      //.sort({addedAt: -1})
+      .toArray();
 
 
     const commentsSearchResult: CommentType[] = commentsSearch.map((e: CommentDBType): CommentType => {

@@ -14,7 +14,7 @@ export const usersRepository = {
       .find({})
       .skip(skip)
       .limit(limit)
-      .sort({createdAt: 1})
+      //.sort({createdAt: 1})
       .toArray()
 
     const usersSearchResult: UserType[] = usersSearch.map((u: UserDBType): UserType => {
