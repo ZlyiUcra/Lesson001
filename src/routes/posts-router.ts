@@ -10,7 +10,10 @@ import {postsService} from "../domain/posts-services";
 import {postCorrectIdMiddleware, postMiddleware} from "../middlewares/posts/postsMiddleware";
 import {commentsService} from "../domain/comments-services";
 import {bearerValidationMiddleware} from "../middlewares/bearerAuth/bearerValidationMiddleware";
-import {commentForPostMiddleware} from "../middlewares/comments/commentForPostMiddleware";
+import {
+  commentForPostMiddleware,
+  commentPostExistenceMiddleware
+} from "../middlewares/comments/commentForPostMiddleware";
 
 export const postsRouter = Router({});
 
@@ -36,7 +39,9 @@ postsRouter.post('/',
     res.status(201).send(newPost);
   });
 
-postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
+postsRouter.get("/:postId/comments",
+  commentPostExistenceMiddleware,
+  async (req: Request, res: Response) => {
   const searchPostComments: PostCommentsInputType = {
     pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 0),
     pageSize: +(req.query.PageSize ? req.query.PageSize : 0),

@@ -31,6 +31,14 @@ export const postsErrorCreator = async (errors: ErrorMessagesType | undefined,
       "Content not correct",
       "content");
   }
+  if(bloggerId) {
+      const blogger = await bloggersService.findById(bloggerId)
+      if (!blogger) {
+        errors = errorsMessagesCreator(baseErrorList(errors),
+          "BloggerId must be present and correct",
+          "bloggerId")
+      }
+  }
 
   // if (!bloggerId || typeof bloggerId !== "string") {
   //   errors = errorsMessagesCreator(baseErrorList(errors),

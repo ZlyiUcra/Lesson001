@@ -26,3 +26,15 @@ export const commentForPostMiddleware = async (req: RequestWithUser,
     next();
   }
 };
+
+export const commentPostExistenceMiddleware = async (req: RequestWithUser,
+                                                     res: Response,
+                                                     next: NextFunction) => {
+
+  const post = await postsService.findById(req.params.postId);
+  if (!post) {
+    res.status(404).send();
+    return;
+  }
+  next()
+};
