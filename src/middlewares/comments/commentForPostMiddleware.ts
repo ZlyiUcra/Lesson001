@@ -3,13 +3,14 @@ import {ErrorMessagesType, errorsMessagesCreator} from "../../helpers/errorCommo
 import {postsErrorCreator} from "../../helpers/posts/postsHelpers";
 import {RequestWithUser} from "../../db/types";
 import {commentCorrectPostIdValidator, commentErrorCreator} from "../../helpers/comments/commentsHelper";
+import {postsService} from "../../domain/posts-services";
 
 export const commentForPostMiddleware = async (req: RequestWithUser,
                                                res: Response,
                                                next: NextFunction) => {
 
-  const isValidPostId = await commentCorrectPostIdValidator(req.params.postId);
-  if (!isValidPostId) {
+  const post = await postsService.findById(req.params.postId);
+  if (!post) {
     res.status(404).send();
     return;
   }

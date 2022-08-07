@@ -76,7 +76,7 @@ postsRouter.put('/:id',
   async (req: Request, res: Response) => {
     const isUpdated = await postsService.update(req.params.id, req.body.title,
       req.body.shortDescription, req.body.content, req.body.bloggerId);
-    debugger;
+
     if (isUpdated) {
       res.status(204).send();
       return;
