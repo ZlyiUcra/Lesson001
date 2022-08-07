@@ -1,6 +1,6 @@
-import {ErrorMessagesType, errorsMessagesCreator, ErrorType} from "./errorCommon/errorMessagesCreator";
-import {bloggersService} from "../domain/bloggers-services";
-import {baseErrorList} from "./errorCommon/baseErrorListHelper";
+import {ErrorMessagesType, errorsMessagesCreator, ErrorType} from "../errorCommon/errorMessagesCreator";
+import {bloggersService} from "../../domain/bloggers-services";
+import {baseErrorList} from "../errorCommon/baseErrorListHelper";
 
 
 export const postsErrorCreator = async (errors: ErrorMessagesType | undefined,
@@ -47,3 +47,4 @@ export const postsErrorCreator = async (errors: ErrorMessagesType | undefined,
   // }
   return errors;
 }
+

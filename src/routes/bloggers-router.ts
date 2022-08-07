@@ -8,7 +8,7 @@ import {
   bloggersNameAndYoutubeMiddleware
 } from "../middlewares/bloggersMiddleware";
 import {postsService} from "../domain/posts-services";
-import {postMiddleware} from "../middlewares/postsMiddleware";
+import {postMiddleware} from "../middlewares/posts/postsMiddleware";
 
 
 export const bloggersRouter = Router({});

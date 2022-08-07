@@ -7,7 +7,7 @@ import {
   RequestWithUser
 } from "../db/types";
 import {postsService} from "../domain/posts-services";
-import {postCorrectIdMiddleware, postMiddleware} from "../middlewares/postsMiddleware";
+import {postCorrectIdMiddleware, postMiddleware} from "../middlewares/posts/postsMiddleware";
 import {commentsService} from "../domain/comments-services";
 import {bearerValidationMiddleware} from "../middlewares/bearerAuth/bearerValidationMiddleware";
 import {commentsMiddleware} from "../middlewares/commentsMiddleware";

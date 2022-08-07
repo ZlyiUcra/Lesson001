@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
-import {ErrorMessagesType, errorsMessagesCreator} from "../helpers/errorCommon/errorMessagesCreator";
-import {postsErrorCreator} from "../helpers/postsHelpers";
+import {ErrorMessagesType, errorsMessagesCreator} from "../../helpers/errorCommon/errorMessagesCreator";
+import {postsErrorCreator} from "../../helpers/posts/postsHelpers";
 
 export const postMiddleware = async (req: Request,
                                      res: Response,

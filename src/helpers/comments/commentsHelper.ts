@@ -1,7 +1,5 @@
 import {ErrorMessagesType, errorsMessagesCreator} from "../errorCommon/errorMessagesCreator";
 import {baseErrorList} from "../errorCommon/baseErrorListHelper";
-import {isValidUrl} from "../bloggers/bloggersHelpers";
-import {usersService} from "../../domain/users-services";
 import {postsService} from "../../domain/posts-services";
 
 export const commentErrorCreator = async (errors: ErrorMessagesType | undefined, content: string) => {
