@@ -36,13 +36,14 @@ export const postsErrorCreator = async (errors: ErrorMessagesType | undefined,
     errors = errorsMessagesCreator(baseErrorList(errors),
       "BloggerId must be present",
       "bloggerId")
-  } else {
-    const blogger = await bloggersService.findById(bloggerId)
-    if (!blogger) {
-      errors = errorsMessagesCreator(baseErrorList(errors),
-        "BloggerId must be present and correct",
-        "bloggerId")
-    }
   }
+  // else {
+  //   const blogger = await bloggersService.findById(bloggerId)
+  //   if (!blogger) {
+  //     errors = errorsMessagesCreator(baseErrorList(errors),
+  //       "BloggerId must be present and correct",
+  //       "bloggerId")
+  //   }
+  // }
   return errors;
 }
