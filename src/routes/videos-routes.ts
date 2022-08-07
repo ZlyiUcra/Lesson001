@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import {errorsMessagesCreator} from "../helpers/errorMessagesCreator";
+import {errorsMessagesCreator} from "../helpers/errorCommon/errorMessagesCreator";
 import {blacklistValidationMiddleware} from "../middlewares/blacklistValidaionMiddleware";
 import {videosRepository} from "../repositories/videos-repository";
 import {jsonValidationMiddleware} from "../middlewares/jsonValidationMiddleware";

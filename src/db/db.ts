@@ -1,16 +1,16 @@
 import { MongoClient } from "mongodb";
 
-import {BloggerDBType, PostDBType, ProductDBType} from "./types";
-// import {VideoType} from "./types";
-//
-// export let videos: Array<VideoType> = [];
-const mongoUri = process.env.MONGODB_URI || "mongodb://0.0.0.0:27017"; //?/maxPoolSize=20&w=majority
+import {BloggerDBType, CommentDBType, PostDBType, ProductDBType, UserDBType} from "./types";
+import {settings} from "../settings";
 
 
-export const client = new MongoClient(mongoUri);
+
+export const client = new MongoClient(settings.MONGO_URI);
 
 let db = client.db("instagram")
 
+export const commentsCollection = db.collection<CommentDBType>('comments')
+export const usersCollection = db.collection<UserDBType>('users')
 export const bloggersCollection = db.collection<BloggerDBType>('bloggers')
 export const postsCollection = db.collection<PostDBType>('posts')
 export const productsCollection = db.collection<ProductDBType>('products')
@@ -19,7 +19,7 @@ export async function runDb() {
   try {
     // Connect the client to the server
     await client.connect();
-    //await client.db("products").command({ping: 1});
+    await client.db("bloggers").command({ping: 1});
     console.log("Connected successfully to mongo server");
 
   } catch {

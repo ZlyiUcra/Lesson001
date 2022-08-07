@@ -1,10 +1,10 @@
-import {BloggerType, PostPaginatorInput, PostType, SearchResultType} from "../db/types";
+import {BloggerType, PostPaginatorInputType, PostType, SearchResultType} from "../db/types";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {postsRepository} from "../repositories/posts-repository";
-
+import {v4 as uuidv4} from "uuid";
 
 export const postsService = {
-  async findAll(paginatorInput: PostPaginatorInput):
+  async findAll(paginatorInput: PostPaginatorInputType):
     Promise<SearchResultType<PostType>> {
 
     if (!paginatorInput.pageNumber) paginatorInput.pageNumber = 1;
@@ -25,8 +25,8 @@ export const postsService = {
   async create(title: string,
                shortDescription: string,
                content: string,
-               bloggerId: number):Promise<PostType> {
-    const id = +(new Date());
+               bloggerId: string):Promise<PostType> {
+    const id = uuidv4();
 
     const blogger = await bloggersRepository.findById(bloggerId);
 
@@ -39,13 +39,13 @@ export const postsService = {
     };
     return await postsRepository.create(newPost)
   },
-  async findById(id: number): Promise<PostType | null> {
+  async findById(id: string): Promise<PostType | null> {
     return await postsRepository.findById(id);
   },
-  async update(id: number, title: string,
+  async update(id: string, title: string,
          shortDescription: string,
          content: string,
-         bloggerId: number): Promise<boolean> {
+         bloggerId: string): Promise<boolean> {
     const blogger = await bloggersRepository.findById(bloggerId);
     const newPost: PostType = {
       id,
@@ -56,7 +56,7 @@ export const postsService = {
     };
    return await postsRepository.update(newPost)
   },
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     return await postsRepository.delete(id)
   }
 }

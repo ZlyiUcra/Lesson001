@@ -7,7 +7,7 @@ export const productsRepository = {
     return await productsCollection.find({}).toArray();
   },
   async getById(id: string): Promise<ProductDBType | null> {
-    return await productsCollection.findOne({id: +id});
+    return await productsCollection.findOne({id: id});
   },
   async create(product: ProductType): Promise<ProductDBType> {
     const resultProduct: ProductDBType = {...product, _id: new ObjectId()}
@@ -16,7 +16,7 @@ export const productsRepository = {
   },
   async update(id: string, title: string): Promise<boolean> {
     const result = await productsCollection.updateOne(
-      {id: +id},
+      {id: id},
       {$set: {title: title}})
     return result.matchedCount === 1;
   },
@@ -24,7 +24,7 @@ export const productsRepository = {
   Delete user and all his photos
    */
   async delete(id: string): Promise<boolean> {
-    const result = await productsCollection.deleteOne({id: +id});
+    const result = await productsCollection.deleteOne({id: id});
     return result.deletedCount === 1;
   }
 }

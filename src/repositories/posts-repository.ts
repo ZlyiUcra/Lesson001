@@ -1,4 +1,4 @@
-import {PostDBType, PostPaginatorInput, PostType} from "../db/types";
+import {PostDBType, PostPaginatorInputType, PostType} from "../db/types";
 import {postsCollection} from "../db/db";
 import {DeleteResult, ObjectId, UpdateResult} from "mongodb";
 
@@ -30,7 +30,7 @@ let posts: Array<PostType> = [
 ];
 
 export const postsRepository = {
-  async findAll(paginatorInput: PostPaginatorInput):
+  async findAll(paginatorInput: PostPaginatorInputType):
     Promise<{ postsSearchResult: PostType[], postsCount: number }> {
 
     const {pageNumber = 1, pageSize = 10, bloggerId} = paginatorInput;
@@ -40,6 +40,7 @@ export const postsRepository = {
     const searchTerm =  bloggerId ? {bloggerId} : {}
 
     const postsCount = await postsCollection.count(searchTerm);
+    
     const postsSearch: PostDBType[] = await postsCollection
       .find(searchTerm)
       .skip(skip).limit(limit)
@@ -61,7 +62,7 @@ export const postsRepository = {
     await postsCollection.insertOne(resultPost)
     return newPost;
   },
-  async findById(id: number): Promise<PostType | null> {
+  async findById(id: string): Promise<PostType | null> {
     const result: PostDBType | null = await postsCollection.findOne({id});
 
     if (!result) return null;
@@ -78,7 +79,7 @@ export const postsRepository = {
     }
     return false;
   },
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     let result: DeleteResult = await postsCollection.deleteOne({id});
     if (result.deletedCount) return true
     return false;

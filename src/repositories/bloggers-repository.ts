@@ -1,9 +1,9 @@
-import {BloggerDBType, BloggerPaginatorInput, SearchResultType, BloggerType, ProductDBType} from "../db/types";
+import {BloggerDBType, BloggerPaginatorInputType, SearchResultType, BloggerType, ProductDBType} from "../db/types";
 import {bloggersCollection} from "../db/db";
 import {DeleteResult, FindCursor, ObjectId, UpdateResult} from "mongodb";
 
 export const bloggersRepository = {
-  async findAll(paginatorInput: BloggerPaginatorInput):
+  async findAll(paginatorInput: BloggerPaginatorInputType):
     Promise<{ bloggersSearchResult: BloggerType[], bloggersCount: number }> {
 
     const {searchNameTerm, pageNumber = 1, pageSize = 10} = paginatorInput;
@@ -32,7 +32,7 @@ export const bloggersRepository = {
     const result = await bloggersCollection.findOne({id: newBlogger.id}, {projection: {_id: 0}}) as BloggerType;
     return result;
   },
-  async findById(id: number): Promise<BloggerType | null> {
+  async findById(id: string): Promise<BloggerType | null> {
     const result: BloggerDBType | null = await bloggersCollection.findOne({id});
 
     if (!result) return null;
@@ -40,7 +40,7 @@ export const bloggersRepository = {
     const {_id, ...blogger} = result;
     return blogger;
   },
-  async update(id: number, name: string, youtubeUrl: string): Promise<boolean> {
+  async update(id: string, name: string, youtubeUrl: string): Promise<boolean> {
     let result: UpdateResult =
       await bloggersCollection.updateOne({id}, {$set: {name, youtubeUrl}});
     if (result.modifiedCount) {
@@ -48,7 +48,7 @@ export const bloggersRepository = {
     }
     return false;
   },
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     let result: DeleteResult = await bloggersCollection.deleteOne({id});
     if (result.deletedCount) return true
 

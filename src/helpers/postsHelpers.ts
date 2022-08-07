@@ -1,15 +1,13 @@
-import {ErrorMessagesType, errorsMessagesCreator, ErrorType} from "./errorMessagesCreator";
+import {ErrorMessagesType, errorsMessagesCreator, ErrorType} from "./errorCommon/errorMessagesCreator";
 import {bloggersService} from "../domain/bloggers-services";
+import {baseErrorList} from "./errorCommon/baseErrorListHelper";
 
-
-const baseErrorList = (errors: ErrorMessagesType | undefined): ErrorType[] =>
-  errors?.errorsMessages ? errors.errorsMessages : [];
 
 export const postsErrorCreator = async (errors: ErrorMessagesType | undefined,
                                         title?: string,
                                         shortDescription?: string,
                                         content?: string,
-                                        bloggerId?: number) => {
+                                        bloggerId?: string) => {
 
   if (!title || title.trim().length === 0 || title.length > 30) {
     errors = errorsMessagesCreator(baseErrorList(errors),
@@ -34,13 +32,13 @@ export const postsErrorCreator = async (errors: ErrorMessagesType | undefined,
       "content");
   }
 
-  if (typeof bloggerId !== "number") {
+  if (!bloggerId) {
     errors = errorsMessagesCreator(baseErrorList(errors),
-      "BloggerId must be present and correct",
+      "BloggerId must be present",
       "bloggerId")
   } else {
     const blogger = await bloggersService.findById(bloggerId)
-    if(!blogger){
+    if (!blogger) {
       errors = errorsMessagesCreator(baseErrorList(errors),
         "BloggerId must be present and correct",
         "bloggerId")

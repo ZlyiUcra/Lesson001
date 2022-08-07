@@ -1,4 +1,5 @@
-import {ErrorMessagesType, errorsMessagesCreator} from "./errorMessagesCreator";
+import {ErrorMessagesType, errorsMessagesCreator} from "../errorCommon/errorMessagesCreator";
+import {baseErrorList} from "../errorCommon/baseErrorListHelper";
 
 export const isValidUrl = (url: string) => {
   const check = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
@@ -7,15 +8,14 @@ export const isValidUrl = (url: string) => {
   return check.test(url);
 }
 export const bloggerErrorCreator = (errors: ErrorMessagesType | undefined, name: string, youtubeUrl?: string) => {
-  const baseErrorList = errors?.errorsMessages ? errors.errorsMessages : [];
   if (!name || name.trim().length === 0 || name.length > 15) {
-    errors = errorsMessagesCreator(baseErrorList,
+    errors = errorsMessagesCreator(baseErrorList(errors),
       "Name must be present and contain corresponding quantity of characters",
       "name"
     );
   }
   if (typeof youtubeUrl === "string" && !isValidUrl(youtubeUrl) || (youtubeUrl && youtubeUrl.length > 100)) {
-    errors = errorsMessagesCreator(errors?.errorsMessages ? errors.errorsMessages : [],
+    errors = errorsMessagesCreator(baseErrorList(errors),
       "Youtube URL must be correctly formatted",
       "youtubeUrl");
   }

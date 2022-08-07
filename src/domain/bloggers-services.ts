@@ -1,11 +1,12 @@
-import {BloggerDBType, BloggerPaginatorInput, SearchResultType, BloggerType} from "../db/types";
+import {BloggerDBType, BloggerPaginatorInputType, SearchResultType, BloggerType} from "../db/types";
 import {bloggersCollection} from "../db/db";
 import {bloggersRepository} from "../repositories/bloggers-repository";
+import {v4 as uuidv4} from "uuid";
 
 
 export const bloggersService = {
 
-  async findAll(paginatorInput: BloggerPaginatorInput):
+  async findAll(paginatorInput: BloggerPaginatorInputType):
     Promise<SearchResultType<BloggerType>> {
 
     if (!paginatorInput.pageNumber) paginatorInput.pageNumber = 1;
@@ -29,19 +30,19 @@ export const bloggersService = {
   async create(name: string, youtubeUrl?: string): Promise<BloggerType> {
     const newBlogger: BloggerType =
       {
-        id: +(new Date()),
+        id: uuidv4(),
         name,
         youtubeUrl: youtubeUrl ? youtubeUrl : ''
       };
     return await bloggersRepository.create(newBlogger);
   },
-  async findById(id: number): Promise<BloggerType | null> {
+  async findById(id: string): Promise<BloggerType | null> {
     return await bloggersRepository.findById(id);
   },
-  async update(id: number, name: string, youtubeUrl: string): Promise<boolean> {
+  async update(id: string, name: string, youtubeUrl: string): Promise<boolean> {
     return await bloggersRepository.update(id, name, youtubeUrl);
   },
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     return await bloggersRepository.delete(id);
   }
 }
