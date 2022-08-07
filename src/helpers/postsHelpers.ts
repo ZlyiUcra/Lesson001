@@ -32,11 +32,11 @@ export const postsErrorCreator = async (errors: ErrorMessagesType | undefined,
       "content");
   }
 
-  if (!bloggerId || typeof bloggerId !== "string") {
-    errors = errorsMessagesCreator(baseErrorList(errors),
-      "BloggerId must be present",
-      "bloggerId")
-  }
+  // if (!bloggerId || typeof bloggerId !== "string") {
+  //   errors = errorsMessagesCreator(baseErrorList(errors),
+  //     "BloggerId must be present",
+  //     "bloggerId")
+  // }
   // else {
   //   const blogger = await bloggersService.findById(bloggerId)
   //   if (!blogger) {
