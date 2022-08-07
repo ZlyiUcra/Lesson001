@@ -7,7 +7,6 @@ import {commentsService} from "../../domain/comments-services";
 
 export const bearerPostCreatorValidationMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   const auth = req.headers.authorization;
-
   if (auth) {
     const splitAuth = auth.split(" ")
     if (splitAuth[0] === "Bearer" && splitAuth[1]) {
@@ -24,11 +23,12 @@ export const bearerPostCreatorValidationMiddleware = async (req: RequestWithUser
             return
           } else {
             res.status(403).send();
+            return;
           }
         }
       }
     }
   }
-  res.status(404).send()
+  res.status(401).send()
 
 }

@@ -10,7 +10,7 @@ import {postsService} from "../domain/posts-services";
 import {postCorrectIdMiddleware, postMiddleware} from "../middlewares/posts/postsMiddleware";
 import {commentsService} from "../domain/comments-services";
 import {bearerValidationMiddleware} from "../middlewares/bearerAuth/bearerValidationMiddleware";
-import {commentsMiddleware} from "../middlewares/commentsMiddleware";
+import {commentForPostMiddleware} from "../middlewares/comments/commentForPostMiddleware";
 
 export const postsRouter = Router({});
 
@@ -48,7 +48,7 @@ postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
 
 postsRouter.post("/:postId/comments",
   bearerValidationMiddleware,
-  commentsMiddleware,
+  commentForPostMiddleware,
   async (req: RequestWithUser, res: Response) => {
 
     const commentContent: CommentContentType = {content: req.body.content};
@@ -76,7 +76,7 @@ postsRouter.put('/:id',
   async (req: Request, res: Response) => {
     const isUpdated = await postsService.update(req.params.id, req.body.title,
       req.body.shortDescription, req.body.content, req.body.bloggerId);
-
+    debugger;
     if (isUpdated) {
       res.status(204).send();
       return;

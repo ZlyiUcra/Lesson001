@@ -74,7 +74,7 @@ export const postsRepository = {
     const {id, ...rest} = newPost;
     let result: UpdateResult =
       await postsCollection.updateOne({id}, {$set: {...rest}})
-    if (result.modifiedCount) {
+    if (result.modifiedCount || (result.matchedCount && !result.modifiedCount)) {
       return true;
     }
     return false;

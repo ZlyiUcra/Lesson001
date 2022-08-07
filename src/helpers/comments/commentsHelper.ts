@@ -14,8 +14,9 @@ export const commentErrorCreator = async (errors: ErrorMessagesType | undefined,
 
 export const commentCorrectPostIdValidator = async (postId?: string) => {
   if (!postId) return false;
+
   const post = await postsService.findById(postId);
-  if (!post) {
+  if (post === null) {
     return false;
   }
   return true;

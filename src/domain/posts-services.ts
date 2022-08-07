@@ -52,7 +52,7 @@ export const postsService = {
       title,
       shortDescription,
       content, bloggerId,
-      bloggerName: blogger ? blogger.name : `bloggerName_${id}`
+      bloggerName: blogger ? blogger.name : ""
     };
    return await postsRepository.update(newPost)
   },
