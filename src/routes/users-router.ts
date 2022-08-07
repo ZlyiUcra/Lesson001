@@ -2,6 +2,7 @@ import {Request, Response, Router} from "express";
 import {usersService} from "../domain/users-services";
 import {LoginType, UserInputType} from "../db/types";
 import {authBasicValidationMiddleware} from "../middlewares/auth/authValidationMiddleware";
+import {loginAndPassValidationMiddleware} from "../middlewares/basicAuth/loginAndPassValidationMiddleware";
 
 export const usersRouter = Router({});
 
@@ -15,15 +16,18 @@ usersRouter.get('/', async (req: Request, res: Response) => {
   res.send(users)
 });
 
-usersRouter.post("/", authBasicValidationMiddleware, async (req: Request, res: Response) => {
-  const credentials: LoginType = {login: req.body.login, password: req.body.password as string}
-  const newUser = await usersService.create(credentials);
-  res.status(201).send(newUser)
-});
+usersRouter.post("/",
+  authBasicValidationMiddleware,
+  loginAndPassValidationMiddleware,
+  async (req: Request, res: Response) => {
+    const credentials: LoginType = {login: req.body.login, password: req.body.password as string}
+    const newUser = await usersService.create(credentials);
+    res.status(201).send(newUser)
+  });
 
 usersRouter.delete("/:id", authBasicValidationMiddleware, async (req: Request, res: Response) => {
   const isDeleted = await usersService.delete(req.params.id);
-  if(isDeleted){
+  if (isDeleted) {
     res.status(204).send()
   }
   res.status(404).send()
