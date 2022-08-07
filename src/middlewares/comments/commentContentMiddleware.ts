@@ -9,7 +9,6 @@ export const commentContentMiddleware = async (req: RequestWithUser,
                                                res: Response,
                                                next: NextFunction) => {
 
-
   let errors: ErrorMessagesType | undefined = undefined;
 
   errors = await commentErrorCreator(errors, req.body.content);
@@ -20,17 +19,5 @@ export const commentContentMiddleware = async (req: RequestWithUser,
   } else {
     next();
   }
-
 };
-export const commentExistMiddleware = async (req: RequestWithUser,
-                                             res: Response,
-                                             next: NextFunction) => {
 
-  const isValidComment = await commentsService.findById(req.params.commentId);
-
-  if (!isValidComment) {
-    res.status(404).send();
-    return;
-  }
-  next()
-}

@@ -15,7 +15,11 @@ export const bearerPostCreatorValidationMiddleware = async (req: RequestWithUser
 
       if (userId) {
         const user = await usersService.findById(userId);
-        const comment = await commentsService.findById(req.params.commentId)
+        const comment = await commentsService.findById(req.params.commentId);
+        if (!user  || !comment) {
+          res.status(404).send();
+          return;
+        }
         if (user && comment) {
           req.user = user;
           if (user.id === comment.userId) {

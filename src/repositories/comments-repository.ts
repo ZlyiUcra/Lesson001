@@ -54,7 +54,6 @@ export const commentsRepository = {
     return false;
   },
   async update(comment: CommentContentType, commentId: string) {
-    debugger;
     const result = await commentsCollection.updateOne(
       {id: commentId},
       {
