@@ -51,7 +51,8 @@ export type ProductType = Omit<ProductDBType, "_id">
 
 export type UserDBType = WithId<{
   id: string;
-  login: string
+  login: string;
+  email: string;
   passwordHash: string;
   createdAt: Date;
 }>
@@ -59,15 +60,16 @@ export type UserWithHashedPasswordType = Omit<UserDBType, "_id">
 
 export type UserType = Omit<UserDBType, "_id" | "passwordHash" | "createdAt">
 
-
-export type UserInputType ={
-  pageNumber: number;
-  pageSize: number;
-}
 export type LoginType = {
   login: string;
   password: string;
 }
+
+export type UserInputType = {
+  pageNumber: number;
+  pageSize: number;
+}
+export type CredentialType = LoginType & {email: string};
 
 export type JWTType = {
   token: string
@@ -93,6 +95,30 @@ export type CommentDBType = WithId<{
 
 export type CommentType = Omit<CommentDBType, "_id" | "postId">
 
+
+export type TokenDBType = WithId<{
+  id: string;
+  userId: string;
+  ip: string | null;
+  limitTimeCount: number;
+  confirmationToken: string;
+  createdAt: Date;
+  lastRequestedAt: Date;
+  tokenStatus: TOKEN_STATUS;
+  tokenJWT: string;
+}>
+
+export type TokenType = Omit<TokenDBType, "_id">
+
 export interface RequestWithUser extends Request {
   user?: UserType
+}
+
+export interface  RequestWithIP extends Request {
+  clientIP?: string | null;
+}
+export enum TOKEN_STATUS {
+  SENT= "Sent",
+  RESENT="Resent",
+  CONFIRMED= "Confirmed"
 }

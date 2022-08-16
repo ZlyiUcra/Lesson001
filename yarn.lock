@@ -125,6 +125,13 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.0.5.tgz#96be8113b014e9e7f0c3609c4a25afadd85ff659"
   integrity sha512-En7tneq+j0qAiVwysBD79y86MT3ModuoIJbe7JXp+sb5UAjInSShmK3nXXMioBzfF7rXC12hv12d4IyCVwN4dA==
 
+"@types/nodemailer@^6.4.5":
+  version "6.4.5"
+  resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-6.4.5.tgz#09011ac73259245475d1688e4ba101860567dc39"
+  integrity sha512-zuP3nBRQHI6M2PkXnGGy1Ww4VB+MyYHGgnfV2T+JR9KLkeWqPJuyVUgLpKXuFnA/b7pZaIDFh2sV4759B7jK1g==
+  dependencies:
+    "@types/node" "*"
+
 "@types/qs@*":
   version "6.9.7"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.7.tgz#63bb7d067db107cc1e457c303bc25d511febf6cb"
@@ -134,6 +141,13 @@
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.4.tgz#cd667bcfdd025213aafb7ca5915a932590acdcdc"
   integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
+
+"@types/request-ip@^0.0.37":
+  version "0.0.37"
+  resolved "https://registry.yarnpkg.com/@types/request-ip/-/request-ip-0.0.37.tgz#06decdcdeeaa834edf2b0a7dea0c1aefd5a04375"
+  integrity sha512-uw6/i3rQnpznxD7LtLaeuZytLhKZK6bRoTS6XVJlwxIOoOpEBU7bgKoVXDNtOg4Xl6riUKHa9bjMVrL6ESqYlQ==
+  dependencies:
+    "@types/node" "*"
 
 "@types/serve-static@*":
   version "1.13.10"
@@ -385,6 +399,11 @@ create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
+
+date-fns@^2.29.1:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.1.tgz#9667c2615525e552b5135a3116b95b1961456e60"
+  integrity sha512-dlLD5rKaKxpFdnjrs+5azHDFOPEu4ANy/LTh04A1DTzMM7qoajmKCBc8pkKRFT41CNzw+4gQh79X5C+Jq27HAw==
 
 debug@2.6.9:
   version "2.6.9"
@@ -932,6 +951,11 @@ node-fetch@^2.6.7:
   dependencies:
     whatwg-url "^5.0.0"
 
+nodemailer@^6.7.7:
+  version "6.7.7"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.7.7.tgz#e522fbd7507b81c51446d3f79c4603bf00083ddd"
+  integrity sha512-pOLC/s+2I1EXuSqO5Wa34i3kXZG3gugDssH+ZNCevHad65tc8vQlCQpOLaUjopvkRQKm2Cki2aME7fEOPRy3bA==
+
 nodemon@^2.0.19:
   version "2.0.19"
   resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.19.tgz#cac175f74b9cb8b57e770d47841995eebe4488bd"
@@ -1076,6 +1100,11 @@ readdirp@~3.6.0:
   integrity sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==
   dependencies:
     picomatch "^2.2.1"
+
+request-ip@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/request-ip/-/request-ip-3.3.0.tgz#863451e8fec03847d44f223e30a5d63e369fa611"
+  integrity sha512-cA6Xh6e0fDBBBwH77SLJaJPBmD3nWVAcF9/XAcsrIHdjhFzFiB5aNQFytdjCGPezU3ROwrR11IddKAM08vohxA==
 
 rimraf@^3.0.2:
   version "3.0.2"

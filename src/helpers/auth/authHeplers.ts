@@ -1,6 +1,8 @@
 import {ErrorMessagesType, errorsMessagesCreator} from "../errorCommon/errorMessagesCreator";
 import {baseErrorList} from "../errorCommon/baseErrorListHelper";
 import {usersService} from "../../domain/users-services";
+import {authService} from "../../domain/auth-services";
+
 
 export const loginPassErrorCreator = (errors: ErrorMessagesType | undefined,
                                       loginLength: number,
@@ -20,13 +22,34 @@ export const loginPassErrorCreator = (errors: ErrorMessagesType | undefined,
 
   return errors
 }
+
 export const userExistsCreator = async (errors: ErrorMessagesType | undefined, login: string) => {
   const user = await usersService.findByLogin(login);
-  if(user !== null){
+  if (user !== null) {
     errors = errorsMessagesCreator(baseErrorList(errors),
       "User with this login already exist in DB",
       "login"
     );
   }
   return errors;
+}
+export const loginAndEmailExistCreator = (errors: ErrorMessagesType | undefined) => {
+
+  errors = errorsMessagesCreator(baseErrorList(errors),
+    "Login and email already already exist in DB",
+    "login")
+  return errors;
+}
+
+export const userAlreadyRegistered = (errors: ErrorMessagesType | undefined) => {
+  errors = errorsMessagesCreator(baseErrorList(errors),
+    "User Already pass registration in DB",
+    "login"
+  );
+  return errors;
+}
+
+export const confirmationCodeErrorCreator = async (errors: ErrorMessagesType | undefined, code: string, ip: string) => {
+  const userAuth = await authService.findAuthByCodeAndIP(code, ip);
+
 }
