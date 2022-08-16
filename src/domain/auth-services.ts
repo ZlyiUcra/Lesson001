@@ -147,7 +147,7 @@ export const authService = {
     }
   },
   async emailConfirmedByCodeAndIP(confirmationToken: string, clientIP: string): Promise<boolean> {
-    const userAuth = await this.findAuthByCodeAndIP(confirmationToken, clientIP);
+    const userAuth = await this.updateStatusForCodeAndIP(confirmationToken, clientIP);
 
     if(userAuth){
       return true;
@@ -155,7 +155,10 @@ export const authService = {
     return false;
 
   },
-  async findAuthByCodeAndIP(code: string, clientIP: string): Promise<TokenType | null> {
+  async findByCodeAndIP(code: string, clientIP: string): Promise<TokenType | null> {
+    return await authRepository.findByCodeAndIP(code, clientIP);
+  },
+  async updateStatusForCodeAndIP(code: string, clientIP: string): Promise<TokenType | null> {
     let userAuth = await authRepository.findByCodeAndIP(code, clientIP);
     if(userAuth){
       if(userAuth.tokenStatus !== TOKEN_STATUS.CONFIRMED){

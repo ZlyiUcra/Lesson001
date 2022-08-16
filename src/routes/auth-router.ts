@@ -5,6 +5,7 @@ import {authService} from "../domain/auth-services";
 import {ipMiddleware} from "../middlewares/ipMiddlware/ipHandler";
 import {attemptsMiddleware} from "../middlewares/auth/attemptsMiddleware";
 import {
+  codeConfirmationValidation,
   emailNotInDBValidationMiddleware,
   loginAndPassAndEmailValidationMiddleware
 } from "../middlewares/auth/loginAndPassAndEmailValidationMiddleware";
@@ -53,11 +54,6 @@ authRouter.post('/registration',
   })
 
 
-// authRouter.get('/confirm-registration',
-//   (req: Request, res: Response) => {
-//     res.redirect(307, "registration-confirmation")
-//   })
-
 authRouter.use('/registration-email-resending',
   ipMiddleware,
   emailNotInDBValidationMiddleware,
@@ -72,9 +68,10 @@ authRouter.use('/registration-email-resending',
     }
     res.status(400).send();
   })
+
 authRouter.post('/registration-confirmation',
   ipMiddleware,
-  //codeConfirmationValidation,
+  codeConfirmationValidation,
   attemptsMiddleware,
   async (req: RequestWithIP, res: Response) => {
     const {code} = req.body;

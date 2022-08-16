@@ -7,8 +7,9 @@ import {postsRouter} from "./routes/posts-router";
 import {runDb} from "./db/db";
 import {authRouter} from './routes/auth-router';
 import {settings} from "./settings";
-import { usersRouter } from './routes/users-router';
+import {usersRouter} from './routes/users-router';
 import {commentsRouter} from "./routes/comments-routes";
+import {testingRouter} from './routes/testing-router';
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send(helloMessage)
 });
 
+app.use('/testing', testingRouter);
 app.use('/comments', commentsRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);

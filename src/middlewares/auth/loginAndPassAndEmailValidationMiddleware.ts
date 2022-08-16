@@ -40,29 +40,28 @@ export const loginAndPassAndEmailValidationMiddleware = async (req: Request, res
 
 };
 
-export const emailNotInDBValidationMiddleware = async (req: Request, res: Response, next: NextFunction ) => {
+export const emailNotInDBValidationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   let errors: ErrorMessagesType | undefined = undefined;
   const {email} = req.body;
   errors = await emailNotExistInDBCreator(errors, email);
-  if(errors){
+  if (errors) {
     res.status(400).send(errors);
     return
   } else {
     next()
   }
 }
- export const codeConfirmationValidation =  async (req: RequestWithIP, res: Response, next: NextFunction ) => {
-   let errors: ErrorMessagesType | undefined = undefined;
-   const {code, clientIP} = req.body;
 
-   //errors = await confirmationCodeErrorCreator(errors, code, clientIP);
+export const codeConfirmationValidation = async (req: RequestWithIP, res: Response, next: NextFunction) => {
+  let errors: ErrorMessagesType | undefined = undefined;
 
-   if(errors){
-     res.status(400).send(errors);
-     return
-   } else {
-     next()
-   }
+  errors = await confirmationCodeErrorCreator(errors, req.body.code, req.clientIP as string);
+
+  if (errors) {
+    return res.status(400).send(errors);
+  } else {
+    next()
+  }
 
 }
 

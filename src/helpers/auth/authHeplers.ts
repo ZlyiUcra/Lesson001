@@ -2,6 +2,7 @@ import {ErrorMessagesType, errorsMessagesCreator} from "../errorCommon/errorMess
 import {baseErrorList} from "../errorCommon/baseErrorListHelper";
 import {usersService} from "../../domain/users-services";
 import {authService} from "../../domain/auth-services";
+import {TOKEN_STATUS} from "../../db/types";
 
 
 export const loginPassErrorCreator = (errors: ErrorMessagesType | undefined,
@@ -33,6 +34,7 @@ export const userExistsCreator = async (errors: ErrorMessagesType | undefined, l
   }
   return errors;
 }
+
 export const loginAndEmailExistCreator = (errors: ErrorMessagesType | undefined) => {
 
   errors = errorsMessagesCreator(baseErrorList(errors),
@@ -50,6 +52,15 @@ export const userAlreadyRegistered = (errors: ErrorMessagesType | undefined) => 
 }
 
 export const confirmationCodeErrorCreator = async (errors: ErrorMessagesType | undefined, code: string, ip: string) => {
-  const userAuth = await authService.findAuthByCodeAndIP(code, ip);
-
+  const userAuth = await authService.findByCodeAndIP(code, ip);
+  if (!userAuth) {
+    errors = errorsMessagesCreator(baseErrorList(errors),
+      "Incorrect code information",
+      "code"
+    );
+  }
+  // if (userAuth?.tokenStatus === TOKEN_STATUS.CONFIRMED) {
+  //   errors = userAlreadyRegistered(errors)
+  // }
+  return errors;
 }

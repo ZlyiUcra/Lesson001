@@ -11,7 +11,7 @@ export const attemptsMiddleware = async (req: Request, res: Response, next: Next
   } else if(req.body.email) {
     auth = await authService.findByEmailAndIP(req.body.email, req.ip)
   } else if(req.body.code){
-    auth = await authService.findAuthByCodeAndIP(req.body.code, req.ip)
+    auth = await authService.updateStatusForCodeAndIP(req.body.code, req.ip)
   }
 
   if (auth) {

@@ -60,7 +60,7 @@ postsRouter.post("/:postId/comments",
     const user = req.user;
     if (user) {
       const comment = await commentsService.create(commentContent, user, req.params.postId);
-      res.status(201).send(comment);
+      return res.status(201).send(comment);
     }
     res.status(401).send();
   })
