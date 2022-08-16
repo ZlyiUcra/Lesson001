@@ -55,7 +55,7 @@ export const emailNotInDBValidationMiddleware = async (req: Request, res: Respon
    let errors: ErrorMessagesType | undefined = undefined;
    const {code, clientIP} = req.body;
 
-   errors = await confirmationCodeErrorCreator(errors, code, clientIP);
+   //errors = await confirmationCodeErrorCreator(errors, code, clientIP);
 
    if(errors){
      res.status(400).send(errors);

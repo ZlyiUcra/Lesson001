@@ -74,7 +74,7 @@ authRouter.use('/registration-email-resending',
   })
 authRouter.post('/registration-confirmation',
   ipMiddleware,
-  codeConfirmationValidation,
+  //codeConfirmationValidation,
   attemptsMiddleware,
   async (req: RequestWithIP, res: Response) => {
     const {code} = req.body;
