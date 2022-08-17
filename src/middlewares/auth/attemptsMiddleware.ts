@@ -11,15 +11,16 @@ export const attemptsMiddleware = async (req: Request, res: Response, next: Next
   } else if(req.body.email) {
     auth = await authService.findByEmailAndIP(req.body.email, req.ip)
   } else if(req.body.code){
-    auth = await authService.updateStatusForCodeAndIP(req.body.code, req.ip)
+    auth = await authService.findByCodeAndIP(req.body.code, req.ip)
   }
 
   if (auth) {
     const timeDifference = differenceInSeconds(new Date(), auth.lastRequestedAt);
     if (timeDifference < 10) {
       if (auth.limitTimeCount >= 5) {
-        res.status(429).send();
-        return;
+        return res.status(429).send();
+      } else {
+        await authService.updateAttemptsInfo(auth)
       }
     }
   }

@@ -23,18 +23,6 @@ export const authService = {
       if (isCorrectUserPassword) {
         const token = await jwtUtility.createJWT(user);
 
-        // const authToken: TokenType = {
-        //   id: uuidv4(),
-        //   userId: user.id,
-        //   ip,
-        //   limitTimeCount: 0,
-        //   token: token,
-        //   confirmationToken: uuidv4(),
-        //   createdAt: new Date(),
-        //   lastRequestedAt: new Date()
-        // }
-        //const authTokenInfo = await authRepository.create(authToken);
-
         return {token}
 
       }
@@ -47,36 +35,36 @@ export const authService = {
     const user = await usersService.create(credentials);
     if (user) {
 
-        const confirmationToken = uuidv4();
+      const confirmationToken = uuidv4();
 
-        const authToken: TokenType = {
-          id: uuidv4(),
-          userId: user.id,
-          ip: ip ? ip : null,
-          limitTimeCount: 0,
-          confirmationToken,
-          createdAt: new Date(),
-          lastRequestedAt: new Date(),
-          tokenStatus: TOKEN_STATUS.SENT,
-          tokenJWT: ''
-        }
-
-        const message = `Please confirm you email cliking on this <a href="http://localhost:5000/auth/confirm-registration?code=${authToken.confirmationToken}"><b>LINK</b></a>`;
-        const authUser = await this.findByUserId(user.id);
-        try {
-          /* TODO:  Parsing of infoEmail must be implemented */
-          // Returned value
-          if (!authUser) {
-            const infoEmail = await emailAdapter.sendEmail(credentials.email, "Registration's confirmation", message);
-            await authRepository.create(authToken);
-          } else {
-            await this.updateRequestInfo(authUser);
-          }
-          return true
-        } catch (err) {
-          return false
-        }
+      const authToken: TokenType = {
+        id: uuidv4(),
+        userId: user.id,
+        ip: ip ? ip : null,
+        limitTimeCount: 0,
+        confirmationToken,
+        createdAt: new Date(),
+        lastRequestedAt: new Date(),
+        tokenStatus: TOKEN_STATUS.SENT,
+        tokenJWT: ''
       }
+
+      const message = `${authToken.confirmationToken}`;
+      const authUser = await this.findByUserId(user.id);
+      try {
+        /* TODO:  Parsing of infoEmail must be implemented */
+        // Returned value
+        if (!authUser) {
+          const infoEmail = await emailAdapter.sendEmail(credentials.email, "Registration's confirmation", message);
+          await authRepository.create(authToken);
+        } else {
+          return false;
+        }
+        return true
+      } catch (err) {
+        return false
+      }
+    }
 
     return false
   },
@@ -101,7 +89,7 @@ export const authService = {
             await emailAdapter.sendEmail(email, "Email Resending", message);
             await authRepository.emailResending(newAuthUser);
           } else {
-            await this.updateRequestInfo(authUser);
+            return false
           }
           // Returned value
           return true;
@@ -137,7 +125,7 @@ export const authService = {
     return null
   },
 
-  async updateRequestInfo(authUser: TokenType): Promise<void> {
+  async updateAttemptsInfo(authUser: TokenType): Promise<void> {
     const timeDifference = differenceInSeconds(new Date(), authUser.lastRequestedAt);
     if (timeDifference < 10) {
       await authRepository.updateAttemptsShortTimeCounter(authUser.userId, authUser.limitTimeCount + 1);
@@ -148,7 +136,7 @@ export const authService = {
   async emailConfirmedByCodeAndIP(confirmationToken: string, clientIP: string): Promise<boolean> {
     const userAuth = await this.updateStatusForCodeAndIP(confirmationToken, clientIP);
 
-    if(userAuth){
+    if (userAuth) {
       return true;
     }
     return false;
@@ -159,8 +147,8 @@ export const authService = {
   },
   async updateStatusForCodeAndIP(code: string, clientIP: string): Promise<TokenType | null> {
     let userAuth = await authRepository.findByCodeAndIP(code, clientIP);
-    if(userAuth){
-      if(userAuth.tokenStatus !== TOKEN_STATUS.CONFIRMED){
+    if (userAuth) {
+      if (userAuth.tokenStatus !== TOKEN_STATUS.CONFIRMED) {
 
         const newUserAuth = {
           ...userAuth,
@@ -172,7 +160,7 @@ export const authService = {
         return this.findById(newUserAuth.id);
 
       } else {
-        await this.updateRequestInfo(userAuth)
+        return null
       }
 
     }
