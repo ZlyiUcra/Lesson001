@@ -34,13 +34,7 @@ export const usersRepository = {
 
   },
   async findByLogin(login: string): Promise<UserWithHashedPasswordType | null> {
-    const userDB = await usersCollection.findOne({login});
-
-    if (userDB) {
-      const {_id, ...user} = userDB;
-      return user;
-    }
-    return null;
+    return await usersCollection.findOne({login}, {projection: {_id: 0}});
   },
   async findByLoginAndEmail(login: string, email: string): Promise<UserWithHashedPasswordType | null> {
 

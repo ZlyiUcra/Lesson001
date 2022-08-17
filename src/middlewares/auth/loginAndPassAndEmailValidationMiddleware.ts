@@ -25,12 +25,12 @@ export const loginAndPassAndEmailValidationMiddleware = async (req: Request, res
   const userWithLogin = await usersService.findByLogin(login);
   const userWithEmail = await usersService.findByEmail(email);
 
-  if (userWithLogin ) {
-    errors = userAlreadyRegistered(errors, login);
+  if (userWithLogin) {
+    errors = userAlreadyRegistered(errors, "login");
   }
 
   if (userWithEmail) {
-    errors = userAlreadyRegistered(errors, email);
+    errors = userAlreadyRegistered(errors, "email");
   }
 
 
