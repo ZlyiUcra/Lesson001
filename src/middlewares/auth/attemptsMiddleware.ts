@@ -11,7 +11,14 @@ export const attemptsRegistrationMiddleware = async (req: RequestWithIP, res: Re
   }
 
   if (auth) {
-    await authAttempts(auth, res)
+    const timeDifference = differenceInSeconds(new Date(), auth.lastRequestedAt);
+    if (timeDifference < 10) {
+      if (auth.limitTimeCount >= 5) {
+        return res.status(429).send();
+      } else {
+        await authService.updateAttemptsInfo(auth)
+      }
+    }
   }
   next();
 }
@@ -23,7 +30,14 @@ export const attemptsRegistrationConfirmationMiddleware = async (req: RequestWit
   }
 
   if (auth) {
-    await authAttempts(auth, res)
+    const timeDifference = differenceInSeconds(new Date(), auth.lastRequestedAt);
+    if (timeDifference < 10) {
+      if (auth.limitTimeCount >= 5) {
+        return res.status(429).send();
+      } else {
+        await authService.updateAttemptsInfo(auth)
+      }
+    }
   }
   next();
 }
@@ -35,7 +49,14 @@ export const attemptsEmailResendingMiddleware = async (req: RequestWithIP, res: 
   }
 
   if (auth) {
-    await authAttempts(auth, res)
+    const timeDifference = differenceInSeconds(new Date(), auth.lastRequestedAt);
+    if (timeDifference < 10) {
+      if (auth.limitTimeCount >= 5) {
+        return res.status(429).send();
+      } else {
+        await authService.updateAttemptsInfo(auth)
+      }
+    }
   }
   next();
 }

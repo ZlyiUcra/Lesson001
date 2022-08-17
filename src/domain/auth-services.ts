@@ -40,7 +40,7 @@ export const authService = {
         id: uuidv4(),
         userId: user.id,
         ip: ip ? ip : null,
-        limitTimeCount: 0,
+        limitTimeCount: 1,
         confirmationToken,
         createdAt: new Date(),
         lastRequestedAt: new Date(),
@@ -48,13 +48,16 @@ export const authService = {
         tokenJWT: ''
       }
       const message = `${authToken.confirmationToken}`;
+
       try {
         /* TODO:  Parsing of infoEmail must be implemented */
         // Returned value
-        const infoEmail = await emailAdapter.sendEmail(credentials.email, "Registration's confirmation", message);
-        await authRepository.create(authToken);
+        await emailAdapter.sendEmail(credentials.email, "Registration's confirmation", message);
+        const token = await authRepository.create(authToken);
+        console.log("2 - token:", token)
         return true
       } catch (err) {
+        console.log("3 - err:", err)
         return false
       }
     }
