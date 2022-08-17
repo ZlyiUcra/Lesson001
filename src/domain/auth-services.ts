@@ -43,10 +43,9 @@ export const authService = {
   },
 
   async registration(credentials: CredentialType, ip?: string | null): Promise<boolean> {
-    const user = await usersService.findByLoginAndEmail(credentials.login, credentials.email);
+    //const user = await usersService.findByLoginAndEmail(credentials.login, credentials.email);
+    const user = await usersService.create(credentials);
     if (user) {
-      const isCorrectUserPassword = await this.isPasswordCorrect(credentials.password, user.passwordHash);
-      if (isCorrectUserPassword) {
 
         const confirmationToken = uuidv4();
 
@@ -78,7 +77,7 @@ export const authService = {
           return false
         }
       }
-    }
+
     return false
   },
 
