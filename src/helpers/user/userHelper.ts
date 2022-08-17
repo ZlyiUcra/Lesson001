@@ -3,6 +3,7 @@ import {baseErrorList} from "../errorCommon/baseErrorListHelper";
 import {usersService} from "../../domain/users-services";
 import {loginPassErrorCreator} from "../auth/authHeplers";
 import {authService} from "../../domain/auth-services";
+import {TOKEN_STATUS} from "../../db/types";
 
 export const isValidEmail = (email: string) => {
   const check = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -33,6 +34,11 @@ export const emailNotExistInDBCreator = async (errors: ErrorMessagesType | undef
       errors = errorsMessagesCreator(baseErrorList(errors),
         "Register email wasn't send for user",
         "email"
+      );
+    } else if (authUser.tokenStatus === TOKEN_STATUS.CONFIRMED){
+      errors = errorsMessagesCreator(baseErrorList(errors),
+        "Authentication already passed",
+        "code"
       );
     }
   }

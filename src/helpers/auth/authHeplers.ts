@@ -58,9 +58,12 @@ export const confirmationCodeErrorCreator = async (errors: ErrorMessagesType | u
       "Incorrect code information",
       "code"
     );
+  } else if(userAuth.tokenStatus === TOKEN_STATUS.CONFIRMED) {
+    errors = errorsMessagesCreator(baseErrorList(errors),
+      "Authentication already passed",
+      "code"
+    );
   }
-  // if (userAuth?.tokenStatus === TOKEN_STATUS.CONFIRMED) {
-  //   errors = userAlreadyRegistered(errors)
-  // }
+
   return errors;
 }
