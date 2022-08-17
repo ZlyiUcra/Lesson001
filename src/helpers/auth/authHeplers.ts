@@ -43,10 +43,10 @@ export const loginAndEmailExistCreator = (errors: ErrorMessagesType | undefined)
   return errors;
 }
 
-export const userAlreadyRegistered = (errors: ErrorMessagesType | undefined) => {
+export const userAlreadyRegistered = (errors: ErrorMessagesType | undefined, field: string) => {
   errors = errorsMessagesCreator(baseErrorList(errors),
-    "User Already pass registration in DB",
-    "login"
+    `User with ${field} already exists in DB`,
+    field
   );
   return errors;
 }

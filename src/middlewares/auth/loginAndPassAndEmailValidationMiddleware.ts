@@ -22,15 +22,17 @@ export const loginAndPassAndEmailValidationMiddleware = async (req: Request, res
   errors = loginPassEmailErrorCreator(errors, loginLength, passLength, email);
 
   // login and email presence in DB validation
-  // const user = await usersService.findByLoginAndEmail(login, email);
+  const userWithLogin = await usersService.findByLogin(login);
+  const userWithEmail = await usersService.findByEmail(email);
 
-  // if (user) {
-  //   //errors = loginAndEmailExistCreator(errors);
-  //   const authUser = await authService.findByUserId(user.id);
-  //   if(authUser) {
-  //     errors = userAlreadyRegistered(errors);
-  //   }
-  // };
+  if (userWithLogin ) {
+    errors = userAlreadyRegistered(errors, login);
+  }
+
+  if (userWithEmail) {
+    errors = userAlreadyRegistered(errors, email);
+  }
+
 
   if (isErrorsPresent(errors)) {
     return res.status(400).send(errors);

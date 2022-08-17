@@ -34,7 +34,7 @@ authRouter.post('/login',
   });
 
 authRouter.post('/registration',
-  // loginAndPassAndEmailValidationMiddleware,
+  loginAndPassAndEmailValidationMiddleware,
   ipMiddleware,
   attemptsMiddleware,
   async (req: RequestWithIP, res: Response) => {
