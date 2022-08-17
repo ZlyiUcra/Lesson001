@@ -4,7 +4,7 @@ import {isErrorsPresent} from "../../helpers/errorCommon/isErrorPresente";
 import {confirmationCodeErrorCreator, userAlreadyRegistered} from "../../helpers/auth/authHeplers";
 import {usersService} from "../../domain/users-services";
 import {
-  emailNotExistInDBCreator,
+  emailValidationCreator,
   loginPassEmailErrorCreator,
 } from "../../helpers/user/userHelper";
 import {authService} from "../../domain/auth-services";
@@ -41,10 +41,10 @@ export const loginAndPassAndEmailValidationMiddleware = async (req: Request, res
 
 };
 
-export const emailNotInDBValidationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export const emailValidationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   let errors: ErrorMessagesType | undefined = undefined;
   const {email} = req.body;
-  errors = await emailNotExistInDBCreator(errors, email);
+  errors = await emailValidationCreator(errors, email);
   if (errors) {
     res.status(400).send(errors);
     return

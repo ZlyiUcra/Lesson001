@@ -21,7 +21,7 @@ export const emailErrorCreator = (errors: ErrorMessagesType | undefined, email: 
   return errors;
 
 }
-export const emailNotExistInDBCreator = async (errors: ErrorMessagesType | undefined, email: string) => {
+export const emailValidationCreator = async (errors: ErrorMessagesType | undefined, email: string) => {
   const user = await usersService.findByEmail(email);
   if (!user) {
     errors = errorsMessagesCreator(baseErrorList(errors),
@@ -38,7 +38,7 @@ export const emailNotExistInDBCreator = async (errors: ErrorMessagesType | undef
     } else if (authUser.tokenStatus === TOKEN_STATUS.CONFIRMED){
       errors = errorsMessagesCreator(baseErrorList(errors),
         "Authentication already passed",
-        "code"
+        "email"
       );
     }
   }

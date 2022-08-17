@@ -10,7 +10,7 @@ import {
 } from "../middlewares/auth/attemptsMiddleware";
 import {
   codeConfirmationValidation,
-  emailNotInDBValidationMiddleware,
+  emailValidationMiddleware,
   loginAndPassAndEmailValidationMiddleware
 } from "../middlewares/auth/loginAndPassAndEmailValidationMiddleware";
 import {userValidationMiddleware} from "../middlewares/users/userValidationMiddleware";
@@ -58,7 +58,7 @@ authRouter.post('/registration',
 
 authRouter.use('/registration-email-resending',
   ipMiddleware,
-  emailNotInDBValidationMiddleware,
+  emailValidationMiddleware,
   attemptsEmailResendingMiddleware,
   async (req: RequestWithIP, res: Response) => {
     const {email} = req.body;

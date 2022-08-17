@@ -51,7 +51,7 @@ export const authService = {
       try {
         /* TODO:  Parsing of infoEmail must be implemented */
         // Returned value
-        const infoEmail = emailAdapter.sendEmail(credentials.email, "Registration's confirmation", message);
+        const infoEmail = await emailAdapter.sendEmail(credentials.email, "Registration's confirmation", message);
         await authRepository.create(authToken);
         return true
       } catch (err) {
