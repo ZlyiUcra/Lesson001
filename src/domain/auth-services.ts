@@ -31,7 +31,6 @@ export const authService = {
   },
 
   async registration(credentials: CredentialType, ip?: string | null): Promise<boolean> {
-    //const user = await usersService.findByLoginAndEmail(credentials.login, credentials.email);
     const user = await usersService.create(credentials);
     if (user) {
 
@@ -48,24 +47,17 @@ export const authService = {
         tokenStatus: TOKEN_STATUS.SENT,
         tokenJWT: ''
       }
-
       const message = `${authToken.confirmationToken}`;
-      const authUser = await this.findByUserId(user.id);
       try {
         /* TODO:  Parsing of infoEmail must be implemented */
         // Returned value
-        if (!authUser) {
-          const infoEmail = await emailAdapter.sendEmail(credentials.email, "Registration's confirmation", message);
-          await authRepository.create(authToken);
-        } else {
-          return false;
-        }
+        const infoEmail = emailAdapter.sendEmail(credentials.email, "Registration's confirmation", message);
+        await authRepository.create(authToken);
         return true
       } catch (err) {
         return false
       }
     }
-
     return false
   },
 

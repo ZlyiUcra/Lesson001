@@ -38,20 +38,23 @@ export const usersRepository = {
   },
   async findByLoginAndEmail(login: string, email: string): Promise<UserWithHashedPasswordType | null> {
 
-    const userDB = await usersCollection.findOne({
+    return await usersCollection.findOne({
       $and: [{login}, {email}]
-    }, {projection:{ _id: 0 }});
-    if (userDB) {
-      return userDB;
-    }
-    return null;
+    }, {projection: {_id: 0}});
+
   },
 
   async create(user: UserWithHashedPasswordType): Promise<UserType> {
     const userToInsert: UserDBType = {...user, _id: new ObjectId()};
     await usersCollection.insertOne(userToInsert);
 
-    return await usersCollection.findOne({id: user.id}, {projection:{ _id: 0, passwordHash: 0, createdAt: 0 }}) as UserType;
+    return await usersCollection.findOne({id: user.id}, {
+      projection: {
+        _id: 0,
+        passwordHash: 0,
+        createdAt: 0
+      }
+    }) as UserType;
   },
 
   async delete(id: string): Promise<boolean> {
@@ -60,8 +63,8 @@ export const usersRepository = {
     return false;
   },
 
-  async findByEmail(email: string):Promise<UserType | null> {
-    return usersCollection.findOne({email},{projection:{_id: 0, passwordHash: 0, createdAt: 0}});
+  async findByEmail(email: string): Promise<UserType | null> {
+    return usersCollection.findOne({email}, {projection: {_id: 0, passwordHash: 0, createdAt: 0}});
   }
 }
 

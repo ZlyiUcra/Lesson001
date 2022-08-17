@@ -3,7 +3,11 @@ import {CredentialType, LoginType, RequestWithIP} from "../db/types";
 import {authService} from "../domain/auth-services";
 
 import {ipMiddleware} from "../middlewares/ipMiddlware/ipHandler";
-import {attemptsMiddleware} from "../middlewares/auth/attemptsMiddleware";
+import {
+  attemptsEmailResendingMiddleware,
+  attemptsRegistrationConfirmationMiddleware,
+  attemptsRegistrationMiddleware
+} from "../middlewares/auth/attemptsMiddleware";
 import {
   codeConfirmationValidation,
   emailNotInDBValidationMiddleware,
@@ -16,7 +20,7 @@ export const authRouter = Router({});
 
 authRouter.post('/login',
   userValidationMiddleware,
-  attemptsMiddleware,
+  attemptsRegistrationMiddleware,
   async (req: Request, res: Response) => {
     const credentials: LoginType = {
       login: req.body.login,
@@ -36,16 +40,14 @@ authRouter.post('/login',
 authRouter.post('/registration',
   loginAndPassAndEmailValidationMiddleware,
   ipMiddleware,
-  attemptsMiddleware,
+  attemptsRegistrationMiddleware,
   async (req: RequestWithIP, res: Response) => {
     const credentials: CredentialType = {
       login: req.body.login,
       email: req.body.email,
       password: req.body.password
     }
-
     const result = await authService.registration(credentials, req.clientIP);
-
     if (result) {
       res.status(204).send();
       return;
@@ -57,7 +59,7 @@ authRouter.post('/registration',
 authRouter.use('/registration-email-resending',
   ipMiddleware,
   emailNotInDBValidationMiddleware,
-  attemptsMiddleware,
+  attemptsEmailResendingMiddleware,
   async (req: RequestWithIP, res: Response) => {
     const {email} = req.body;
 
@@ -72,7 +74,7 @@ authRouter.use('/registration-email-resending',
 authRouter.post('/registration-confirmation',
   ipMiddleware,
   codeConfirmationValidation,
-  attemptsMiddleware,
+  attemptsRegistrationConfirmationMiddleware,
   async (req: RequestWithIP, res: Response) => {
     const {code} = req.body;
     const isConfirmed = await authService.emailConfirmedByCodeAndIP(code, req.clientIP as string);
