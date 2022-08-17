@@ -50,7 +50,7 @@ authRouter.post('/registration',
     console.log("1 - credentials:", credentials)
     const result = await authService.registration(credentials, req.clientIP);
     if (result) {
-      res.status(200).send("Input data is accepted. Email with confirmation code will be send to passed email address");
+      res.status(204).send("Input data is accepted. Email with confirmation code will be send to passed email address");
       return
     }
     res.status(401).send();
