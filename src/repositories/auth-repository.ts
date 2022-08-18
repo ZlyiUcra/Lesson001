@@ -8,8 +8,8 @@ export const authRepository = {
     return  await authCollection.findOne({id: authToken.id}, {projection: {_id: 0}}) as TokenType;
 
   },
-  async findByUserId(userId: string, ip: string): Promise<TokenType | null> {
-    const authUser = await authCollection.findOne({$and: [{userId}, {ip}]}, {projection: {_id: 0}});
+  async findByUserId(userId: string): Promise<TokenType | null> {
+    const authUser = await authCollection.findOne({$and: [{userId}]}, {projection: {_id: 0}});
 
     if (authUser) {
       return authUser;
