@@ -39,11 +39,8 @@ export const authService = {
       const authToken: TokenType = {
         id: uuidv4(),
         userId: user.id,
-        ip: ip ? ip : null,
-        limitTimeCount: 1,
         confirmationToken,
         createdAt: new Date(),
-        lastRequestedAt: new Date(),
         tokenStatus: TOKEN_STATUS.SENT,
         tokenJWT: ''
       }
@@ -54,10 +51,8 @@ export const authService = {
         // Returned value
         await emailAdapter.sendEmail(credentials.email, "Registration's confirmation", message);
         const token = await authRepository.create(authToken);
-        console.log("2 - token:", token)
         return true
       } catch (err) {
-        console.log("3 - err:", err)
         return false
       }
     }
@@ -67,7 +62,7 @@ export const authService = {
   async emailResending(email: string, ip: string): Promise<boolean> {
     const user = await usersService.findByEmail(email);
     if (user) {
-      let authUser = await this.findByUserIdAndIP(user.id, ip);
+      let authUser = await this.findByUserId(user.id);
       if (authUser) {
         const confirmationToken = uuidv4();
         const message = `Please confirm you email cliking on this <a href="http://localhost:5000/auth/confirm-registration?code=${confirmationToken}"><b>LINK</b></a>`;
@@ -76,7 +71,6 @@ export const authService = {
           ...authUser,
           tokenStatus: TOKEN_STATUS.RESENT,
           confirmationToken,
-          limitTimeCount: 1
         }
         try {
           /* TODO:  Parsing of infoEmail must be implemented */
@@ -96,37 +90,18 @@ export const authService = {
     return false
   },
 
-  async findByUserIdAndIP(userId: string, ip: string): Promise<TokenType | null> {
-    return authRepository.findByUserIdAndIP(userId, ip);
+  async findByUserId(userId: string): Promise<TokenType | null> {
+    return authRepository.findByUserId(userId);
   },
   async findByLoginAndIP(login: string, ip: string): Promise<TokenType | null> {
     const userAuth = await usersService.findByLogin(login);
     if (userAuth) {
-      return await this.findByUserIdAndIP(userAuth.id, ip);
+      return await this.findByUserId(userAuth.id);
     }
     return null
-  },
-  async findByUserId(userId: string): Promise<TokenType | null> {
-    return await authRepository.findByUserId(userId);
   },
   async findById(id: string): Promise<TokenType | null> {
     return await authRepository.findById(id);
-  },
-  async findByEmailAndIP(email: string, ip: string): Promise<TokenType | null> {
-    const userAuth = await usersService.findByEmail(email);
-    if (userAuth) {
-      return await this.findByUserIdAndIP(userAuth.id, ip);
-    }
-    return null
-  },
-
-  async updateAttemptsInfo(authUser: TokenType): Promise<void> {
-    const timeDifference = differenceInSeconds(new Date(), authUser.lastRequestedAt);
-    if (timeDifference < 10) {
-      await authRepository.updateAttemptsShortTimeCounter(authUser.userId, authUser.limitTimeCount + 1);
-    } else if (timeDifference > 30) {
-      await authRepository.updateAttemptsShortTimeCounter(authUser.userId, 1);
-    }
   },
   async emailConfirmedByCodeAndIP(confirmationToken: string, clientIP: string): Promise<boolean> {
     const userAuth = await this.updateStatusForCodeAndIP(confirmationToken, clientIP);
@@ -137,11 +112,11 @@ export const authService = {
     return false;
 
   },
-  async findByCodeAndIP(code: string, clientIP: string): Promise<TokenType | null> {
-    return await authRepository.findByCodeAndIP(code, clientIP);
+  async findByCodeAndIP(code: string): Promise<TokenType | null> {
+    return await authRepository.findByCode(code);
   },
   async updateStatusForCodeAndIP(code: string, clientIP: string): Promise<TokenType | null> {
-    let userAuth = await authRepository.findByCodeAndIP(code, clientIP);
+    let userAuth = await authRepository.findByCode(code);
     if (userAuth) {
       if (userAuth.tokenStatus !== TOKEN_STATUS.CONFIRMED) {
 

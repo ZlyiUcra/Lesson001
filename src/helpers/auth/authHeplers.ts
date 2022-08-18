@@ -52,7 +52,7 @@ export const userAlreadyRegistered = (errors: ErrorMessagesType | undefined, fie
 }
 
 export const confirmationCodeErrorCreator = async (errors: ErrorMessagesType | undefined, code: string, ip: string) => {
-  const userAuth = await authService.findByCodeAndIP(code, ip);
+  const userAuth = await authService.findByCodeAndIP(code);
   if (!userAuth) {
     errors = errorsMessagesCreator(baseErrorList(errors),
       "Incorrect code information",

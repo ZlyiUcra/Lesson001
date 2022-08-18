@@ -4,9 +4,7 @@ import {authService} from "../domain/auth-services";
 
 import {ipMiddleware} from "../middlewares/ipMiddlware/ipHandler";
 import {
-  attemptsEmailResendingMiddleware,
-  attemptsRegistrationConfirmationMiddleware,
-  attemptsRegistrationMiddleware
+  attemptsMiddleware
 } from "../middlewares/auth/attemptsMiddleware";
 import {
   codeConfirmationValidation,
@@ -19,7 +17,8 @@ import {userValidationMiddleware} from "../middlewares/users/userValidationMiddl
 export const authRouter = Router({});
 
 authRouter.post('/login',
-  attemptsRegistrationMiddleware,
+  ipMiddleware,
+  attemptsMiddleware,
   userValidationMiddleware,
   async (req: Request, res: Response) => {
     const credentials: LoginType = {
@@ -39,7 +38,7 @@ authRouter.post('/login',
 
 authRouter.post('/registration',
   ipMiddleware,
-  attemptsRegistrationMiddleware,
+  attemptsMiddleware,
   loginAndPassAndEmailValidationMiddleware,
   async (req: RequestWithIP, res: Response) => {
     const credentials: CredentialType = {
@@ -47,7 +46,6 @@ authRouter.post('/registration',
       email: req.body.email,
       password: req.body.password
     }
-    console.log("1 - credentials:", credentials)
     const result = await authService.registration(credentials, req.clientIP);
     if (result) {
       res.status(204).send("Input data is accepted. Email with confirmation code will be send to passed email address");
@@ -59,7 +57,7 @@ authRouter.post('/registration',
 
 authRouter.post('/registration-email-resending',
   ipMiddleware,
-  attemptsEmailResendingMiddleware,
+  attemptsMiddleware,
   emailValidationMiddleware,
   async (req: RequestWithIP, res: Response) => {
     const {email} = req.body;
@@ -74,7 +72,7 @@ authRouter.post('/registration-email-resending',
 
 authRouter.post('/registration-confirmation',
   ipMiddleware,
-  attemptsRegistrationConfirmationMiddleware,
+  attemptsMiddleware,
   codeConfirmationValidation,
   async (req: RequestWithIP, res: Response) => {
     const {code} = req.body;

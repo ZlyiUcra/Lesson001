@@ -1,73 +1,20 @@
-import {NextFunction, Request, Response} from "express";
-import {authService} from "../../domain/auth-services";
+import {NextFunction, Response} from "express";
 import differenceInSeconds from "date-fns/differenceInSeconds";
-import {RequestWithIP, TokenType} from "../../db/types";
+import {AttemptsType, RequestWithIP, } from "../../db/types";
+import {attemptsService} from "../../domain/attempts-service";
 
-export const attemptsRegistrationMiddleware = async (req: RequestWithIP, res: Response, next: NextFunction) => {
-  let auth: TokenType | null = null;
+export const attemptsMiddleware = async (req: RequestWithIP, res: Response, next: NextFunction) => {
 
-  if (req.body.login) {
-    auth = await authService.findByLoginAndIP(req.body.login, req.clientIP as string)
-  }
+  let attempts: AttemptsType | null = await attemptsService.find(req.clientIP as string);
 
-  if (auth) {
-    const timeDifference = differenceInSeconds(new Date(), auth.lastRequestedAt);
+  if (attempts) {
+    const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
     if (timeDifference < 10) {
-      if (auth.limitTimeCount >= 5) {
+      if (attempts.limitTimeCount > 5) {
         return res.status(429).send();
-      } else {
-        await authService.updateAttemptsInfo(auth)
-      }
-    }
-  }
-  next();
-}
-export const attemptsRegistrationConfirmationMiddleware = async (req: RequestWithIP, res: Response, next: NextFunction) => {
-  let auth: TokenType | null = null;
-
-  if (req.body.code) {
-    auth = await authService.findByCodeAndIP(req.body.code, req.clientIP as string)
-  }
-
-  if (auth) {
-    const timeDifference = differenceInSeconds(new Date(), auth.lastRequestedAt);
-    if (timeDifference < 10) {
-      if (auth.limitTimeCount >= 5) {
-        return res.status(429).send();
-      } else {
-        await authService.updateAttemptsInfo(auth)
-      }
-    }
-  }
-  next();
-}
-export const attemptsEmailResendingMiddleware = async (req: RequestWithIP, res: Response, next: NextFunction) => {
-  let auth: TokenType | null = null;
-
-  if (req.body.email) {
-    auth = await authService.findByEmailAndIP(req.body.email, req.clientIP as string)
-  }
-
-  if (auth) {
-    const timeDifference = differenceInSeconds(new Date(), auth.lastRequestedAt);
-    if (timeDifference < 10) {
-      if (auth.limitTimeCount >= 5) {
-        return res.status(429).send();
-      } else {
-        await authService.updateAttemptsInfo(auth)
       }
     }
   }
   next();
 }
 
-const authAttempts = async (auth: TokenType, res: Response,) => {
-  const timeDifference = differenceInSeconds(new Date(), auth.lastRequestedAt);
-  if (timeDifference < 10) {
-    if (auth.limitTimeCount >= 5) {
-      return res.status(429).send();
-    } else {
-      await authService.updateAttemptsInfo(auth)
-    }
-  }
-}

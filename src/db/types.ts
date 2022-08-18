@@ -99,11 +99,8 @@ export type CommentType = Omit<CommentDBType, "_id" | "postId">
 export type TokenDBType = WithId<{
   id: string;
   userId: string;
-  ip: string | null;
-  limitTimeCount: number;
   confirmationToken: string;
   createdAt: Date;
-  lastRequestedAt: Date;
   tokenStatus: TOKEN_STATUS;
   tokenJWT: string;
 }>
@@ -122,3 +119,9 @@ export enum TOKEN_STATUS {
   RESENT="Resent",
   CONFIRMED= "Confirmed"
 }
+export type AttemptsDBType = WithId<{
+  ip: string | null;
+  limitTimeCount: number;
+  lastRequestedAt: Date;
+}>
+export type AttemptsType = Omit<AttemptsDBType, "_id">

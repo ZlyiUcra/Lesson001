@@ -8,29 +8,13 @@ export const authRepository = {
     return  await authCollection.findOne({id: authToken.id}, {projection: {_id: 0}}) as TokenType;
 
   },
-  async findByUserIdAndIP(userId: string, ip: string): Promise<TokenType | null> {
+  async findByUserId(userId: string, ip: string): Promise<TokenType | null> {
     const authUser = await authCollection.findOne({$and: [{userId}, {ip}]}, {projection: {_id: 0}});
 
     if (authUser) {
       return authUser;
     }
     return null
-  },
-  async updateAttemptsShortTimeCounter(userId: string, attemptsCount: number): Promise<boolean> {
-    const result = await authCollection.updateOne(
-      {userId},
-      {
-        $set: {
-          limitTimeCount: attemptsCount,
-          lastRequestedAt: new Date()
-        }
-      });
-
-    if (result.matchedCount) {
-      return true
-    }
-
-    return false
   },
   async emailResending(authUser: TokenType): Promise<boolean> {
     const result = await authCollection.updateOne({userId: authUser.userId}, {
@@ -39,12 +23,8 @@ export const authRepository = {
     if (result.matchedCount) return true
     return false
   },
-  async findByUserId(userId: string): Promise<TokenType | null> {
-    const authUser = await authCollection.findOne({userId}, {projection: {_id: 0}})
-    return authUser;
-  },
-  async findByCodeAndIP(confirmationToken: string, ip: string): Promise<TokenType | null> {
-    const authUser = await authCollection.findOne({$and: [{confirmationToken}, {ip}]}, {projection: {_id: 0}});
+  async findByCode(confirmationToken: string): Promise<TokenType | null> {
+    const authUser = await authCollection.findOne({confirmationToken}, {projection: {_id: 0}});
     return authUser
   },
   async update(userAuth: TokenType): Promise<boolean> {
