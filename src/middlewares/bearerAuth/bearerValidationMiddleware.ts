@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {usersService} from "../../domain/users-services";
-import {RequestWithUser, UserType} from "../../db/types";
+import {RequestWithUser} from "../../db/types";
 import {jwtUtility} from "../../application/jwt-utility";
 
 
@@ -14,7 +14,7 @@ export const bearerValidationMiddleware = async (req: RequestWithUser, res: Resp
       if (userId) {
         const user = await usersService.findById(userId);
         if (user) {
-          req.user = user;
+          req.user = {id: user.id, login: user.credentials.login};
           next();
           return;
         }
@@ -22,5 +22,4 @@ export const bearerValidationMiddleware = async (req: RequestWithUser, res: Resp
     }
   }
   res.status(401).send()
-
 }

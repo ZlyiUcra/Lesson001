@@ -1,7 +1,6 @@
 import express, {Request, Response} from 'express';
 import cors from 'cors'
 import bodyParser from 'body-parser';
-import {addressesRouter} from "./routes/addresses-router";
 import {bloggersRouter} from "./routes/bloggers-router";
 import {postsRouter} from "./routes/posts-router";
 import {runDb} from "./db/db";
@@ -27,7 +26,6 @@ app.use('/testing', testingRouter);
 app.use('/comments', commentsRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
-app.use('/addresses', addressesRouter);
 app.use('/bloggers', bloggersRouter);
 app.use('/posts', postsRouter);
 

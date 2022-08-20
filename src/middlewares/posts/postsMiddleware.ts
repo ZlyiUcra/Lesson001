@@ -1,13 +1,33 @@
 import {NextFunction, Request, Response} from "express";
 import {ErrorMessagesType, errorsMessagesCreator} from "../../helpers/errorCommon/errorMessagesCreator";
-import {postsErrorCreator} from "../../helpers/posts/postsHelpers";
+import {
+  postsTitleShorDescriptionContentBloggerIdErrorCreator,
+  postsTitleShorDescriptionContentErrorCreator
+} from "../../helpers/posts/postsHelpers";
+import {postsService} from "../../domain/posts-services";
 
-export const postMiddleware = async (req: Request,
-                                     res: Response,
-                                     next: NextFunction) => {
+export const postTitleShorDescriptionContentMiddleware = async (req: Request,
+                                                                res: Response,
+                                                                next: NextFunction) => {
   let errors: ErrorMessagesType | undefined = undefined;
 
-  errors = await postsErrorCreator(errors, req.body.title,
+  errors = postsTitleShorDescriptionContentErrorCreator(errors, req.body.title,
+    req.body.shortDescription, req.body.content);
+
+  if (errors?.errorsMessages?.length) {
+    res.status(400).send(errors);
+    return;
+  } else {
+    next();
+  }
+};
+
+export const postTitleShorDescriptionContentBloggerIdMiddleware = async (req: Request,
+                                                                res: Response,
+                                                                next: NextFunction) => {
+  let errors: ErrorMessagesType | undefined = undefined;
+
+  errors = await postsTitleShorDescriptionContentBloggerIdErrorCreator(errors, req.body.title,
     req.body.shortDescription, req.body.content, req.body.bloggerId);
 
   if (errors?.errorsMessages?.length) {
@@ -18,22 +38,39 @@ export const postMiddleware = async (req: Request,
   }
 };
 
-export const postCorrectIdMiddleware = async (req: Request,
-                                              res: Response,
-                                              next: NextFunction) => {
-  let errors: ErrorMessagesType | undefined;
-  if (!req.params.id) {
+export const postIdMiddleware = async (req: Request,
+                                       res: Response,
+                                       next: NextFunction) => {
+  let errors: ErrorMessagesType | undefined = undefined;
+  const post = await postsService.findById(req.params.id)
+  if (! post) {
     errors = errorsMessagesCreator(
       [],
-      "Incorrect post's Id",
+      "Incorrect post Id",
       "id");
-  }
-  ;
-  errors = await postsErrorCreator(errors, req.body.title,
-    req.body.shortDescription, req.body.content, req.body.bloggerId);
+  };
 
   if (errors?.errorsMessages?.length) {
     res.status(400).send(errors);
+    return;
+  } else {
+    next();
+  }
+}
+export const postIdDeleteMiddleware = async (req: Request,
+                                       res: Response,
+                                       next: NextFunction) => {
+  let errors: ErrorMessagesType | undefined = undefined;
+  const post = await postsService.findById(req.params.id)
+  if (! post) {
+    errors = errorsMessagesCreator(
+      [],
+      "Post id doesn't exist",
+      "id");
+  };
+
+  if (errors?.errorsMessages?.length) {
+    res.status(404).send();
     return;
   } else {
     next();

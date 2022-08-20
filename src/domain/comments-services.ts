@@ -1,5 +1,5 @@
 import {
-  CommentType, CommentContentType, UserType, PostCommentsInputType, SearchResultType
+  CommentType, CommentContentType, PostCommentsInputType, SearchResultType, UserShortType, CommentsPaginatorType
 } from "../db/types";
 
 import {v4 as uuidv4} from "uuid";
@@ -8,27 +8,30 @@ import {commentsRepository} from "../repositories/comments-repository";
 
 export const commentsService = {
 
-  async findAll(searchPostComments: PostCommentsInputType): Promise<SearchResultType<CommentType>> {
+  async getAll(searchPostComments: PostCommentsInputType): Promise<SearchResultType<CommentType>> {
+    const {pageNumber, pageSize, postId} = searchPostComments;
 
-    if (!searchPostComments.pageNumber) searchPostComments.pageNumber = 1;
-    if (!searchPostComments.pageSize) searchPostComments.pageSize = 10;
+    const skip = pageSize * (pageNumber - 1);
+    const limit = pageSize;
 
-    const {commentsSearchResult, commentsCount} =
-      await commentsRepository.findAll(searchPostComments);
+    const commentsPaginator: CommentsPaginatorType = {postId, skip, limit};
+
+    const {commentsSearch, commentsCount} =
+      await commentsRepository.getAll(commentsPaginator);
 
     const result: SearchResultType<CommentType> = {
-      pagesCount: Math.ceil(commentsCount / searchPostComments.pageSize),
-      page: searchPostComments.pageNumber,
-      pageSize: searchPostComments.pageSize,
+      pagesCount: Math.ceil(commentsCount / pageSize),
+      page: pageNumber,
+      pageSize: pageSize,
       totalCount: commentsCount,
-      items: commentsSearchResult
+      items: commentsSearch
     }
 
     return result;
 
   },
 
-  async create(commentContent: CommentContentType, user: UserType, postId: string): Promise<CommentType> {
+  async create(commentContent: CommentContentType, user: UserShortType, postId: string): Promise<CommentType> {
     const comment: CommentType = {
       id: uuidv4(),
       content: commentContent.content,
@@ -36,17 +39,18 @@ export const commentsService = {
       userLogin: user.login,
       addedAt: new Date(),
     }
+
     return await commentsRepository.create(comment, postId)
   },
 
-  async findById(id: string): Promise<CommentType | null>  {
+  async findById(id: string): Promise<CommentType | null> {
     return await commentsRepository.findById(id);
+  },
+  async update(comment: CommentContentType, commentId: string): Promise<boolean> {
+    return await commentsRepository.update(comment, commentId);
   },
 
   async delete(id: string): Promise<boolean> {
     return await commentsRepository.delete(id)
-  },
-  async update(comment: CommentContentType, commentId: string): Promise<boolean> {
-    return await commentsRepository.update(comment, commentId);
   }
 }

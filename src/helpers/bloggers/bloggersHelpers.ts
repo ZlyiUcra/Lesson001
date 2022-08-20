@@ -7,14 +7,14 @@ export const isValidUrl = (url: string) => {
   //const check = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
   return check.test(url);
 }
-export const bloggerErrorCreator = (errors: ErrorMessagesType | undefined, name: string, youtubeUrl?: string) => {
+export const bloggerNameAndYoutubeURLErrorCreator = (errors: ErrorMessagesType | undefined, name: string, youtubeUrl?: string) => {
   if (!name || name.trim().length === 0 || name.length > 15) {
     errors = errorsMessagesCreator(baseErrorList(errors),
       "Name must be present and contain corresponding quantity of characters",
       "name"
     );
   }
-  if (typeof youtubeUrl === "string" && !isValidUrl(youtubeUrl) || (youtubeUrl && youtubeUrl.length > 100)) {
+  if (!youtubeUrl || !isValidUrl(youtubeUrl) || youtubeUrl.length > 100) {
     errors = errorsMessagesCreator(baseErrorList(errors),
       "Youtube URL must be correctly formatted",
       "youtubeUrl");

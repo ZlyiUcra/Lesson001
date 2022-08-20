@@ -6,6 +6,11 @@ export type BloggerPaginatorInputType = {
   pageNumber: number;
   pageSize: number;
 }
+export type BloggerPaginatorType = {
+  searchNameTerm?: string;
+  skip: number;
+  limit: number;
+}
 
 export type BloggerDBType = WithId<{
   id: string,
@@ -28,6 +33,11 @@ export type PostPaginatorInputType = {
   bloggerId?: string;
 }
 
+export type PostPaginatorType = {
+  bloggerId?: string;
+  skip: number;
+  limit: number;
+}
 
 export type PostDBType = WithId<{
   id: string,
@@ -40,25 +50,31 @@ export type PostDBType = WithId<{
 
 export type PostType = Omit<PostDBType, "_id">
 
-export type ShortPostType = Omit<PostType, "id" | "bloggerName">
-
-export type ProductDBType = WithId<{
-  id: string;
-  title: string;
-  addedAt: Date;
-}>
-export type ProductType = Omit<ProductDBType, "_id">
+export type PostCreateType = Omit<PostType, "id" | "bloggerName">
+export type PostUpdateType = Omit<PostType, "bloggerName">
 
 export type UserDBType = WithId<{
   id: string;
-  login: string;
-  email: string;
-  passwordHash: string;
+  credentials: CredentialType;
+  token: TokenType;
   createdAt: Date;
 }>
-export type UserWithHashedPasswordType = Omit<UserDBType, "_id">
+export type CredentialType = {
+  login: string;
+  email: string;
+  password: string;
+};
 
-export type UserType = Omit<UserDBType, "_id" | "passwordHash" | "createdAt">
+export type TokenType = {
+  confirmationToken: string;
+  tokenStatus: TOKEN_STATUS;
+  tokenJWT: string;
+}
+export type UserShortType = {
+  id: string;
+  login: string;
+}
+export type UserFullType = Omit<UserDBType, "_id">
 
 export type LoginType = {
   login: string;
@@ -69,7 +85,6 @@ export type UserInputType = {
   pageNumber: number;
   pageSize: number;
 }
-export type CredentialType = LoginType & {email: string};
 
 export type JWTType = {
   token: string
@@ -80,6 +95,12 @@ export type PostCommentsInputType = {
   pageSize: number;
   postId: string;
 }
+export type CommentsPaginatorType = {
+  skip: number;
+  limit: number;
+  postId: string;
+}
+
 
 export type CommentContentType = {
   content: string;
@@ -95,33 +116,28 @@ export type CommentDBType = WithId<{
 
 export type CommentType = Omit<CommentDBType, "_id" | "postId">
 
-
-export type TokenDBType = WithId<{
-  id: string;
-  userId: string;
-  confirmationToken: string;
-  createdAt: Date;
-  tokenStatus: TOKEN_STATUS;
-  tokenJWT: string;
-}>
-
-export type TokenType = Omit<TokenDBType, "_id">
-
 export interface RequestWithUser extends Request {
-  user?: UserType
+  user?: UserShortType
 }
 
-export interface  RequestWithIP extends Request {
+export interface RequestWithIP extends Request {
   clientIP?: string | null;
 }
+
 export enum TOKEN_STATUS {
-  SENT= "Sent",
-  RESENT="Resent",
-  CONFIRMED= "Confirmed"
+  SENT = "Sent",
+  RESENT = "Resent",
+  CONFIRMED = "Confirmed"
 }
+
 export type AttemptsDBType = WithId<{
   ip: string | null;
   limitTimeCount: number;
   lastRequestedAt: Date;
 }>
 export type AttemptsType = Omit<AttemptsDBType, "_id">
+
+export type PaginatorParamsType = {
+  skip: number,
+  limit: number
+}

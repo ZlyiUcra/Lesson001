@@ -2,60 +2,68 @@ import {Request, Response, Router} from "express";
 import {authBasicValidationMiddleware} from "../middlewares/basicAuth/authValidationMiddleware";
 import {
   CommentContentType,
-  PostCommentsInputType,
-  PostPaginatorInputType,
+  PostCommentsInputType, PostCreateType,
+  PostPaginatorInputType, PostUpdateType,
   RequestWithUser
 } from "../db/types";
 import {postsService} from "../domain/posts-services";
-import {postCorrectIdMiddleware, postMiddleware} from "../middlewares/posts/postsMiddleware";
+import {
+  postIdDeleteMiddleware,
+  postIdMiddleware,
+  postTitleShorDescriptionContentBloggerIdMiddleware
+} from "../middlewares/posts/postsMiddleware";
 import {commentsService} from "../domain/comments-services";
 import {bearerValidationMiddleware} from "../middlewares/bearerAuth/bearerValidationMiddleware";
 import {
   commentForPostMiddleware,
-  commentPostExistenceMiddleware
-} from "../middlewares/comments/commentForPostMiddleware";
+  commentPostIdMiddleware
+} from "../middlewares/comments/commentsMiddleware";
 
 export const postsRouter = Router({});
 
 postsRouter.get('/',
   async (req: Request, res: Response) => {
     const searchPostsTerm: PostPaginatorInputType = {
-      pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 0),
-      pageSize: +(req.query.PageSize ? req.query.PageSize : 0)
+      pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 1),
+      pageSize: +(req.query.PageSize ? req.query.PageSize : 10)
     }
-    const posts = await postsService.findAll(searchPostsTerm);
+    const posts = await postsService.getAll(searchPostsTerm);
     res.send(posts);
   });
 
 postsRouter.post('/',
   authBasicValidationMiddleware,
-  postMiddleware,
+  postTitleShorDescriptionContentBloggerIdMiddleware,
   async (req: Request, res: Response) => {
+    const postCreate: PostCreateType =
+      {
+        title: req.body.title,
+        shortDescription: req.body.shortDescription,
+        content: req.body.content,
+        bloggerId: req.body.bloggerId
+      }
+    const post = await postsService.create(postCreate);
 
-    const newPost = await postsService.create(req.body.title,
-      req.body.shortDescription,
-      req.body.content,
-      req.body.bloggerId);
-    res.status(201).send(newPost);
+    return res.status(201).send(post);
   });
 
 postsRouter.get("/:postId/comments",
-  commentPostExistenceMiddleware,
+  commentPostIdMiddleware,
   async (req: Request, res: Response) => {
-  const searchPostComments: PostCommentsInputType = {
-    pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 0),
-    pageSize: +(req.query.PageSize ? req.query.PageSize : 0),
-    postId: req.params.postId
-  }
-  const comments = await commentsService.findAll(searchPostComments);
-  res.send(comments)
-});
+    const searchPostComments: PostCommentsInputType = {
+      pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 1),
+      pageSize: +(req.query.PageSize ? req.query.PageSize : 10),
+      postId: req.params.postId
+    }
+    const comments = await commentsService.getAll(searchPostComments);
+    res.send(comments)
+  });
 
 postsRouter.post("/:postId/comments",
   bearerValidationMiddleware,
   commentForPostMiddleware,
+  commentPostIdMiddleware,
   async (req: RequestWithUser, res: Response) => {
-
     const commentContent: CommentContentType = {content: req.body.content};
     const user = req.user;
     if (user) {
@@ -66,36 +74,42 @@ postsRouter.post("/:postId/comments",
   })
 
 postsRouter.get('/:id',
+  postIdMiddleware,
   async (req: Request, res: Response) => {
     const post = await postsService.findById(req.params.id);
     if (post) {
-      res.send(post);
-      return;
+      return res.status(200).send(post);
     }
     res.status(404).send();
   });
 
 postsRouter.put('/:id',
   authBasicValidationMiddleware,
-  postCorrectIdMiddleware,
+  postIdMiddleware,
+  postTitleShorDescriptionContentBloggerIdMiddleware,
   async (req: Request, res: Response) => {
-    const isUpdated = await postsService.update(req.params.id, req.body.title,
-      req.body.shortDescription, req.body.content, req.body.bloggerId);
+    const post: PostUpdateType = {
+      id: req.params.id,
+      title: req.body.title,
+      shortDescription: req.body.shortDescription,
+      content: req.body.content,
+      bloggerId: req.body.bloggerId
+    }
+    const isUpdated = await postsService.update(post);
 
     if (isUpdated) {
-      res.status(204).send();
-      return;
+      return res.status(204).send();
     }
     res.status(404).send();
-
   });
+
 postsRouter.delete('/:id',
   authBasicValidationMiddleware,
+  postIdDeleteMiddleware,
   async (req: Request, res: Response) => {
     const isDeleted = await postsService.delete(req.params.id);
     if (isDeleted) {
-      res.status(204).send();
-      return;
+      return res.status(204).send();
     }
     res.status(404).send();
   });

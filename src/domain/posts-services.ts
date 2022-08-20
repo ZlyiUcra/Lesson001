@@ -1,33 +1,40 @@
-import {BloggerType, PostPaginatorInputType, PostType, SearchResultType} from "../db/types";
+import {
+  BloggerType,
+  PostCreateType,
+  PostPaginatorInputType,
+  PostType,
+  PostUpdateType,
+  SearchResultType
+} from "../db/types";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {postsRepository} from "../repositories/posts-repository";
 import {v4 as uuidv4} from "uuid";
 
 export const postsService = {
-  async findAll(paginatorInput: PostPaginatorInputType):
+  async getAll(paginatorInput: PostPaginatorInputType):
     Promise<SearchResultType<PostType>> {
 
-    if (!paginatorInput.pageNumber) paginatorInput.pageNumber = 1;
-    if (!paginatorInput.pageSize) paginatorInput.pageSize = 10;
+    const {pageNumber, pageSize, bloggerId} = paginatorInput;
 
-    const {postsSearchResult, postsCount} =
-      await postsRepository.findAll(paginatorInput);
+    const skip = pageSize * (pageNumber - 1);
+    const limit = pageSize;
+
+    const postPaginator = {skip, limit, bloggerId}
+
+    const {postsSearch, postsCount} =
+      await postsRepository.getAll(postPaginator);
 
     const result: SearchResultType<PostType> = {
-      pagesCount: Math.ceil(postsCount / paginatorInput.pageSize),
-      page: paginatorInput.pageNumber,
-      pageSize: paginatorInput.pageSize,
+      pagesCount: Math.ceil(postsCount / pageSize),
+      page: pageNumber,
+      pageSize: pageSize,
       totalCount: postsCount,
-      items: postsSearchResult
+      items: postsSearch
     }
     return result;
   },
-  async create(title: string,
-               shortDescription: string,
-               content: string,
-               bloggerId: string):Promise<PostType> {
+  async create({ title, shortDescription, content, bloggerId }: PostCreateType): Promise<PostType> {
     const id = uuidv4();
-
     const blogger = await bloggersRepository.findById(bloggerId);
 
     const newPost: PostType = {
@@ -42,19 +49,12 @@ export const postsService = {
   async findById(id: string): Promise<PostType | null> {
     return await postsRepository.findById(id);
   },
-  async update(id: string, title: string,
-         shortDescription: string,
-         content: string,
-         bloggerId: string): Promise<boolean> {
+  async update({id, title, shortDescription, content, bloggerId
+               }: PostUpdateType): Promise<boolean> {
     const blogger = await bloggersRepository.findById(bloggerId);
-    const newPost: PostType = {
-      id,
-      title,
-      shortDescription,
-      content, bloggerId,
-      bloggerName: blogger ? blogger.name : ""
-    };
-   return await postsRepository.update(newPost)
+    const bloggerName = blogger ? blogger.name : ""
+    const post: PostType = { id, title, shortDescription, content, bloggerId, bloggerName };
+   return await postsRepository.update(post)
   },
   async delete(id: string): Promise<boolean> {
     return await postsRepository.delete(id)

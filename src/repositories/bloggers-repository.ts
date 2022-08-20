@@ -1,30 +1,23 @@
-import {BloggerDBType, BloggerPaginatorInputType, SearchResultType, BloggerType, ProductDBType} from "../db/types";
+import {BloggerDBType, BloggerPaginatorInputType, BloggerPaginatorType, BloggerType} from "../db/types";
 import {bloggersCollection} from "../db/db";
-import {DeleteResult, FindCursor, ObjectId, UpdateResult} from "mongodb";
+import {DeleteResult, ObjectId, UpdateResult} from "mongodb";
 
 export const bloggersRepository = {
-  async findAll(paginatorInput: BloggerPaginatorInputType):
-    Promise<{ bloggersSearchResult: BloggerType[], bloggersCount: number }> {
+  async getAll(paginatorInput: BloggerPaginatorType):
+    Promise<{ bloggersSearch: BloggerType[], bloggersCount: number }> {
 
-    const {searchNameTerm, pageNumber = 1, pageSize = 10} = paginatorInput;
+    const {searchNameTerm, skip, limit} = paginatorInput;
     const searchTermObject = searchNameTerm ? {name: {$regex: RegExp(searchNameTerm, 'i')}} : {};
-    const skip = pageSize * (pageNumber - 1);
-    const limit = pageSize;
 
 
     const bloggersCount = await bloggersCollection.count(searchTermObject);
     const bloggersSearch: BloggerDBType[] = await bloggersCollection
-      .find(searchTermObject)
+      .find(searchTermObject, {projection: {_id: 0}})
       .skip(skip).limit(limit)
       .toArray();
 
 
-    const bloggersSearchResult: BloggerType[] = bloggersSearch.map((e: BloggerDBType): BloggerType => {
-      const {_id, ...rest} = e;
-      return rest;
-    })
-
-    return {bloggersSearchResult, bloggersCount};
+    return {bloggersSearch, bloggersCount};
   },
   async create(newBlogger: BloggerType): Promise<BloggerType> {
     const resultBlogger: BloggerDBType = {...newBlogger, _id: new ObjectId()}
@@ -33,17 +26,12 @@ export const bloggersRepository = {
     return result;
   },
   async findById(id: string): Promise<BloggerType | null> {
-    const result: BloggerDBType | null = await bloggersCollection.findOne({id});
-
-    if (!result) return null;
-
-    const {_id, ...blogger} = result;
-    return blogger;
+    return await bloggersCollection.findOne({id}, {projection: {_id: 0}});
   },
-  async update(id: string, name: string, youtubeUrl: string): Promise<boolean> {
+  async update({id, name, youtubeUrl}: BloggerType): Promise<boolean> {
     let result: UpdateResult =
       await bloggersCollection.updateOne({id}, {$set: {name, youtubeUrl}});
-    if (result.modifiedCount) {
+    if (result.matchedCount) {
       return true;
     }
     return false;

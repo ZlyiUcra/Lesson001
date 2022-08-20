@@ -1,10 +1,10 @@
 import {
-  CredentialType,
-  LoginType,
+  CredentialType, PaginatorParamsType,
   SearchResultType,
-  UserInputType,
-  UserType,
-  UserWithHashedPasswordType
+  TOKEN_STATUS,
+  TokenType,
+  UserFullType,
+  UserInputType, UserShortType,
 } from "../db/types";
 import {usersRepository} from "../repositories/users-repository";
 import {v4 as uuidv4} from 'uuid';
@@ -12,51 +12,67 @@ import {authService} from "./auth-services";
 
 export const usersService = {
 
-  async getAllUsers(userInput: UserInputType): Promise<SearchResultType<UserType>> {
+  async getAll(userInput: UserInputType): Promise<SearchResultType<UserShortType>> {
 
-    if (!userInput.pageNumber) userInput.pageNumber = 1;
-    if (!userInput.pageSize) userInput.pageSize = 10;
+    let {pageNumber, pageSize} = userInput;
 
-    const {usersSearchResult, usersCount} = await usersRepository.findAll(userInput);
+    const paginator: PaginatorParamsType = {
+      skip: pageSize * (pageNumber - 1),
+      limit: pageSize
+    };
 
-    const result: SearchResultType<UserType> = {
-      pagesCount: Math.ceil(usersCount / userInput.pageSize),
-      page: userInput.pageNumber,
-      pageSize: userInput.pageSize,
+    const {usersSearch, usersCount} = await usersRepository.findAll(paginator);
+
+    const usersSearchResult: UserShortType[] = usersSearch.map((user: UserFullType): UserShortType => {
+      return {id: user.id, login: user.credentials.login}
+    });
+
+    const result: SearchResultType<UserShortType> = {
+      pagesCount: Math.ceil(usersCount / pageSize),
+      page: pageNumber,
+      pageSize,
       totalCount: usersCount,
       items: usersSearchResult
-    }
+    };
 
     return result;
   },
 
-  async findById(id: string): Promise<UserType | null> {
+  async findById(id: string): Promise<UserFullType | null> {
     return await usersRepository.findById(id)
   },
 
-  async findByLogin(login: string): Promise<UserWithHashedPasswordType | null> {
-    return await usersRepository.findByLogin(login);
-  },
+  async create(userCredentials: CredentialType): Promise<UserShortType> {
+    const passwordHash = await authService.generateHash(userCredentials.password);
 
-  async create(credentials: CredentialType): Promise<UserType> {
-    const passwordHash = await authService.generateHash(credentials.password);
-    const user = {
+    const credentials: CredentialType = {
+      login: userCredentials.login,
+      email: userCredentials.email,
+      password: passwordHash,
+    };
+
+    const token: TokenType = {
+      confirmationToken: uuidv4(),
+      tokenStatus: TOKEN_STATUS.SENT,
+      tokenJWT: ''
+    }
+    const user: UserFullType = {
       id: uuidv4(),
-      login: credentials.login,
-      email: credentials.email,
-      passwordHash,
+      credentials,
+      token,
       createdAt: new Date()
     }
-    return usersRepository.create(user)
-  },
+    const userFromDB = await usersRepository.create(user);
 
+    return {id: userFromDB.id, login: userFromDB.credentials.login}
+  },
+  async findByLogin(login: string): Promise<UserFullType | null> {
+    return await usersRepository.findByLogin(login)
+  },
+  async findByEmail(email: string): Promise<UserFullType | null> {
+    return await usersRepository.findByEmail(email)
+  },
   async delete(id: string): Promise<boolean> {
     return await usersRepository.delete(id);
-  },
-  async findByLoginAndEmail(login: string, email: string): Promise<UserWithHashedPasswordType | null> {
-    return usersRepository.findByLoginAndEmail(login, email);
-  },
-  findByEmail(email: string): Promise<UserType | null> {
-    return usersRepository.findByEmail(email);
   }
 }

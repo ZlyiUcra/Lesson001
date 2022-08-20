@@ -1,7 +1,6 @@
 import {ErrorMessagesType, errorsMessagesCreator} from "../errorCommon/errorMessagesCreator";
 import {baseErrorList} from "../errorCommon/baseErrorListHelper";
 import {usersService} from "../../domain/users-services";
-import {loginPassErrorCreator} from "../auth/authHeplers";
 import {authService} from "../../domain/auth-services";
 import {TOKEN_STATUS} from "../../db/types";
 
@@ -11,6 +10,73 @@ export const isValidEmail = (email: string) => {
   return result;
 
 }
+
+export const userCreateErrorCreator = (errors: ErrorMessagesType | undefined,
+                                       login: string,
+                                       password: string,
+                                       email: string) => {
+
+  errors = userLoginPasswordErrorCreator(errors, login, password);
+  if (!isValidEmail(email)) {
+    errors = errorsMessagesCreator(baseErrorList(errors),
+      "Login must contain from 3 to 10 symbols",
+      "login"
+    );
+  }
+  return errors
+}
+
+export const userLoginPasswordErrorCreator = (errors: ErrorMessagesType | undefined,
+                                              login: string,
+                                              password: string) => {
+  if (login.length < 3 || login.length > 10) {
+    errors = errorsMessagesCreator(baseErrorList(errors),
+      "Login must contain from 3 to 10 symbols",
+      "login"
+    );
+  }
+  if (password.length < 6 || password.length > 20) {
+    errors = errorsMessagesCreator(baseErrorList(errors),
+      "Password must contain from 6 to 20 symbols",
+      "password"
+    );
+  }
+  return errors
+}
+
+export const userExistsErrorCreator = async (errors: ErrorMessagesType | undefined,
+                                             login: string,
+                                             email: string) => {
+
+  const userByLogin = await usersService.findByLogin(login)
+  const userByEmail = await usersService.findByEmail(email)
+  if (userByLogin) {
+    errors = errorsMessagesCreator(baseErrorList(errors),
+      "Login already exist",
+      "login"
+    );
+  }
+  if (userByEmail) {
+    errors = errorsMessagesCreator(baseErrorList(errors),
+      "Email already exist",
+      "email"
+    );
+  }
+  return errors
+}
+
+export const userNotExistsErrorCreator = async (errors: ErrorMessagesType | undefined, id: string) => {
+  const userById = await usersService.findById(id);
+
+  if (userById) {
+    errors = errorsMessagesCreator(baseErrorList(errors),
+      "User not exist",
+      "id"
+    );
+  }
+  return errors
+}
+
 export const emailErrorCreator = (errors: ErrorMessagesType | undefined, email: string) => {
   if (!isValidEmail(email)) {
     errors = errorsMessagesCreator(baseErrorList(errors),
@@ -22,40 +88,42 @@ export const emailErrorCreator = (errors: ErrorMessagesType | undefined, email: 
 
 }
 export const emailValidationCreator = async (errors: ErrorMessagesType | undefined, email: string) => {
-  const user = await usersService.findByEmail(email);
-  if (!user) {
-    errors = errorsMessagesCreator(baseErrorList(errors),
-      "User does not exist with this email",
-      "email"
-    );
-  } else {
-    const authUser = await authService.findByUserId(user.id);
-    if (!authUser) {
-      errors = errorsMessagesCreator(baseErrorList(errors),
-        "Register email wasn't send for user",
-        "email"
-      );
-    } else if (authUser.tokenStatus === TOKEN_STATUS.CONFIRMED){
-      errors = errorsMessagesCreator(baseErrorList(errors),
-        "Authentication already passed",
-        "email"
-      );
-    }
-  }
-  if (!isValidEmail(email)) {
-    errors = errorsMessagesCreator(baseErrorList(errors),
-      "Incorrect email",
-      "email"
-    );
-  }
+  // const user = await usersService.findByEmail(email);
+  // if (!user) {
+  //   errors = errorsMessagesCreator(baseErrorList(errors),
+  //     "User does not exist with this email",
+  //     "email"
+  //   );
+  // } else {
+  //   const authUser = await authService.findByUserId(user.id);
+  //   if (!authUser) {
+  //     errors = errorsMessagesCreator(baseErrorList(errors),
+  //       "Register email wasn't send for user",
+  //       "email"
+  //     );
+  //   } else if (authUser.tokenStatus === TOKEN_STATUS.CONFIRMED){
+  //     errors = errorsMessagesCreator(baseErrorList(errors),
+  //       "Authentication already passed",
+  //       "email"
+  //     );
+  //   }
+  // }
+  // if (!isValidEmail(email)) {
+  //   errors = errorsMessagesCreator(baseErrorList(errors),
+  //     "Incorrect email",
+  //     "email"
+  //   );
+  //}
   return errors;
 
 }
 export const loginPassEmailErrorCreator = (errors: ErrorMessagesType | undefined, loginLength: number, passwordLength: number, email: string) => {
-  errors = loginPassErrorCreator(errors, loginLength, passwordLength);
-  errors = emailErrorCreator(errors, email)
+  // errors = loginPassErrorCreator(errors, loginLength, passwordLength);
+  // errors = emailErrorCreator(errors, email)
   return errors;
 }
+
+
 
 
 

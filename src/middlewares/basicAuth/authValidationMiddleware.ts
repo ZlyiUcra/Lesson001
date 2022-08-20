@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {authBasicParsing} from "../../helpers/auth/validators";
+import {authBasicParsing} from "../../helpers/auth/authBasicParsing";
 
 export const authBasicValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
   if (req.headers.authorization && authBasicParsing(req.headers.authorization)) {

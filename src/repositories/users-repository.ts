@@ -1,70 +1,53 @@
-import {LoginType, UserDBType, UserInputType, UserType, UserWithHashedPasswordType} from "../db/types";
+import {LoginType, PaginatorParamsType, UserDBType, UserFullType, UserInputType} from "../db/types";
 import {usersCollection} from "../db/db";
 import {DeleteResult, ObjectId} from "mongodb";
 
 export const usersRepository = {
-  async findAll(usersInput: UserInputType): Promise<{ usersSearchResult: UserType[], usersCount: number }> {
-    const {pageNumber, pageSize} = usersInput;
-    const skip = pageSize * (pageNumber - 1);
-    const limit = pageSize;
+  async findAll({skip, limit}: PaginatorParamsType): Promise<{usersSearch: UserFullType[], usersCount: number }> {
 
     const usersCount = await usersCollection.count({});
 
-    const usersSearch: UserDBType[] = await usersCollection
-      .find({})
+    const usersSearch: UserFullType[] = await usersCollection
+      .find({}, {projection: {_id: 0}})
       .skip(skip)
       .limit(limit)
-      //.sort({createdAt: 1})
       .toArray()
 
-    const usersSearchResult: UserType[] = usersSearch.map((u: UserDBType): UserType => {
-      const {_id, passwordHash, createdAt, ...user} = u;
-      return user
-    })
-
-    return {usersSearchResult, usersCount};
+    return {usersSearch, usersCount};
   },
-  async findById(id: string): Promise<UserType | null> {
-    const userDB = await usersCollection.findOne({id});
-    if (userDB) {
-      const {_id, passwordHash, createdAt, ...user} = userDB;
-      return user;
-    }
-    return null;
-
+  async findById(id: string): Promise<UserFullType | null> {
+    return await usersCollection.findOne({id}, { projection: { _id: 0 }})
   },
-  async findByLogin(login: string): Promise<UserWithHashedPasswordType | null> {
-    return await usersCollection.findOne({login}, {projection: {_id: 0}});
+  async findByLogin(login: string): Promise<UserFullType | null> {
+    return await usersCollection.findOne({"credentials.login": login},
+      {
+        projection: {
+          _id: 0
+        }
+      })
   },
-  async findByLoginAndEmail(login: string, email: string): Promise<UserWithHashedPasswordType | null> {
-
-    return await usersCollection.findOne({
-      $and: [{login}, {email}]
-    }, {projection: {_id: 0}});
-
+  async findByEmail(email: string): Promise<UserFullType | null> {
+    return await usersCollection.findOne({"credentials.email": email},
+      {
+        projection: {
+          _id: 0
+        }
+      })
   },
-
-  async create(user: UserWithHashedPasswordType): Promise<UserType> {
+  async create(user: UserFullType): Promise<UserFullType> {
     const userToInsert: UserDBType = {...user, _id: new ObjectId()};
     await usersCollection.insertOne(userToInsert);
 
     return await usersCollection.findOne({id: user.id}, {
       projection: {
-        _id: 0,
-        passwordHash: 0,
-        createdAt: 0
+        _id: 0
       }
-    }) as UserType;
+    }) as UserFullType;
   },
-
   async delete(id: string): Promise<boolean> {
     const result: DeleteResult = await usersCollection.deleteOne({id});
     if (result.deletedCount === 1) return true;
     return false;
-  },
-
-  async findByEmail(email: string): Promise<UserType | null> {
-    return usersCollection.findOne({email}, {projection: {_id: 0, passwordHash: 0, createdAt: 0}});
   }
 }
 

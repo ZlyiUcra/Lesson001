@@ -1,14 +1,14 @@
 import {Request, Response, Router} from "express";
 import {authBasicValidationMiddleware} from "../middlewares/basicAuth/authValidationMiddleware";
 import {bloggersService} from "../domain/bloggers-services";
-import {BloggerPaginatorInputType, PostPaginatorInputType} from "../db/types";
+import {BloggerPaginatorInputType, PostCreateType, PostPaginatorInputType} from "../db/types";
 import {
-  bloggerForPostMiddleware,
-  bloggersCorrectIdMiddleware,
+  bloggerForPostMiddleware, bloggersCorrectIdMiddleware,
+  bloggersCorrectNameAndYoutubeURLUpdateMiddleware,
   bloggersNameAndYoutubeMiddleware
-} from "../middlewares/bloggersMiddleware";
+} from "../middlewares/bloggers/bloggersMiddleware";
 import {postsService} from "../domain/posts-services";
-import {postMiddleware} from "../middlewares/posts/postsMiddleware";
+import {postTitleShorDescriptionContentMiddleware} from "../middlewares/posts/postsMiddleware";
 
 
 export const bloggersRouter = Router({});
@@ -18,8 +18,8 @@ bloggersRouter.get("/",
 
     const searchBloggersTerm: BloggerPaginatorInputType = {
       searchNameTerm: req.query.SearchNameTerm ? req.query.SearchNameTerm as string : '',
-      pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 0),
-      pageSize: +(req.query.PageSize ? req.query.PageSize : 0)
+      pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 1),
+      pageSize: +(req.query.PageSize ? req.query.PageSize : 10)
     }
 
     const bloggers = await bloggersService.findAll(searchBloggersTerm);
@@ -30,7 +30,6 @@ bloggersRouter.post("/",
   authBasicValidationMiddleware,
   bloggersNameAndYoutubeMiddleware,
   async (req: Request, res: Response) => {
-
     const newBlogger = await bloggersService.create(req.body.name, req.body.youtubeUrl);
     res.status(201).send(newBlogger);
   });
@@ -48,10 +47,15 @@ bloggersRouter.get('/:id',
 
 bloggersRouter.put('/:id',
   authBasicValidationMiddleware,
+  bloggersCorrectNameAndYoutubeURLUpdateMiddleware,
   bloggersCorrectIdMiddleware,
   async (req: Request, res: Response) => {
 
-    const isUpdated = await bloggersService.update(req.params.id, req.body.name, req.body.youtubeUrl);
+    const isUpdated = await bloggersService.update({
+      id: req.params.id,
+      name: req.body.name,
+      youtubeUrl: req.body.youtubeUrl
+    });
     if (isUpdated) {
       res.status(204).send();
       return;
@@ -61,6 +65,7 @@ bloggersRouter.put('/:id',
 
 bloggersRouter.delete('/:id',
   authBasicValidationMiddleware,
+  bloggersCorrectIdMiddleware,
   async (req: Request, res: Response) => {
     const isDeleted = await bloggersService.delete(req.params.id);
     if (isDeleted) {
@@ -74,23 +79,29 @@ bloggersRouter.get('/:bloggerId/posts',
   bloggerForPostMiddleware,
   async (req: Request, res: Response) => {
     const searchPostsTerm: PostPaginatorInputType = {
-      pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 0),
-      pageSize: +(req.query.PageSize ? req.query.PageSize : 0),
-      bloggerId: req.params.bloggerId
+      pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 1),
+      pageSize: +(req.query.PageSize ? req.query.PageSize : 10),
+      bloggerId: req.params.bloggerId as string
     };
-    const posts = await postsService.findAll(searchPostsTerm);
+    const posts = await postsService.getAll(searchPostsTerm);
     res.send(posts);
   });
 
 bloggersRouter.post("/:bloggerId/posts",
   authBasicValidationMiddleware,
   bloggerForPostMiddleware,
-  postMiddleware,
+  postTitleShorDescriptionContentMiddleware,
   async (req: Request, res: Response) => {
 
-    const newPost = await postsService.create(req.body.title,
-      req.body.shortDescription,
-      req.body.content,
-      req.params.bloggerId);
-    res.status(201).send(newPost);
+    const postCreate: PostCreateType =
+      {
+        title: req.body.title,
+        shortDescription: req.body.shortDescription,
+        content: req.body.content,
+        bloggerId: req.params.bloggerId
+      }
+
+    const post = await postsService.create(postCreate);
+    if (post) return res.status(201).send(post);
+    res.status(404).send();
   });
