@@ -26,6 +26,14 @@ export const usersRepository = {
         }
       })
   },
+  async findByLoginEmail({login, password}: LoginType): Promise<UserFullType | null> {
+    return await usersCollection.findOne({"credentials.login": login, "credentials.password": password},
+      {
+        projection: {
+          _id: 0
+        }
+      })
+  },
   async findByEmail(email: string): Promise<UserFullType | null> {
     return await usersCollection.findOne({"credentials.email": email},
       {

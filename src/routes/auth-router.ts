@@ -2,7 +2,7 @@ import {Request, Response, Router} from "express";
 import {CredentialType, LoginType, RequestWithInternetData} from "../db/types";
 import {authService} from "../domain/auth-services";
 
-import {attemptsRequestMiddleware} from "../middlewares/ipMiddlware/attemptsRequestMiddleware";
+import {addIPMiddleware} from "../middlewares/ipMiddlware/addIPMiddleware";
 
 import {
   //codeConfirmationValidation,
@@ -10,14 +10,15 @@ import {
   loginAndPassAndEmailValidationMiddleware
 } from "../middlewares/auth/loginAndPassAndEmailValidationMiddleware";
 import {authLoginPassValidationMiddleware} from "../middlewares/auth/authMiddleware";
+import {authLoginMiddleware} from "../middlewares/auth/authLoginMiddleware";
 //import {userValidationMiddleware} from "../middlewares/users/usersMiddleware";
 
 
 export const authRouter = Router({});
 
 authRouter.post('/login',
-  attemptsRequestMiddleware,
-  authLoginPassValidationMiddleware,
+  addIPMiddleware,
+  authLoginMiddleware,
   async (req: Request, res: Response) => {
     const credentials: LoginType = {
       login: req.body.login,

@@ -1,5 +1,5 @@
 import {
-  CredentialType, PaginatorParamsType,
+  CredentialType, LoginType, PaginatorParamsType,
   SearchResultType,
   TOKEN_STATUS,
   TokenType,
@@ -71,6 +71,10 @@ export const usersService = {
   },
   async findByEmail(email: string): Promise<UserFullType | null> {
     return await usersRepository.findByEmail(email)
+  },
+  async findByLoginEmail(credentials: LoginType): Promise<UserFullType | null> {
+    const passwordHash = await authService.generateHash(credentials.password);
+    return usersRepository.findByLoginEmail({login: credentials.login, password: passwordHash});
   },
   async delete(id: string): Promise<boolean> {
     return await usersRepository.delete(id);
