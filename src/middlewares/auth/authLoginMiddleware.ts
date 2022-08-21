@@ -10,18 +10,21 @@ export const authLoginMiddleware = async (req: RequestWithInternetData, res: Res
   const {login, password} = req.body;
 
   const attempts: AttemptsType | null = await attemptsService.find(clientIP, req.originalUrl, req.method);
-  const user: UserFullType | null = await usersService.findByLoginEmail({login, password});
+  const user: UserFullType | null = await usersService.findByLoginPass({login, password});
 
   if (attempts) {
     const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
-    if (timeDifference < 10) {
-      if (attempts.limitTimeCount >= 5) {
-        return res.status(429).send();
-      }
+    if (timeDifference < 10 && attempts.limitTimeCount >= 5) {
+      return res.status(429).send();
     }
+
     if (!user) {
       return res.status(401).send();
     } else {
+      await attemptsService.update(clientIP, req.originalUrl, req.method);
+    }
+  } else {
+    if (user) {
       await attemptsService.update(clientIP, req.originalUrl, req.method);
     }
   }

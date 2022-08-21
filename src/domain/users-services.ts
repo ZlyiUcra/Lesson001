@@ -72,9 +72,15 @@ export const usersService = {
   async findByEmail(email: string): Promise<UserFullType | null> {
     return await usersRepository.findByEmail(email)
   },
-  async findByLoginEmail(credentials: LoginType): Promise<UserFullType | null> {
-    const passwordHash = await authService.generateHash(credentials.password);
-    return usersRepository.findByLoginEmail({login: credentials.login, password: passwordHash});
+  async findByLoginPass(credentials: LoginType): Promise<UserFullType | null> {
+    const userByLogin = await this.findByLogin(credentials.login);
+    if(userByLogin){
+      const isPassCorrect = await authService.isPasswordCorrect(credentials.password, userByLogin.credentials.password);
+      if(isPassCorrect){
+        return userByLogin
+      }
+    }
+    return null;
   },
   async delete(id: string): Promise<boolean> {
     return await usersRepository.delete(id);
