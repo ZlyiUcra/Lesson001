@@ -19,8 +19,8 @@ export const userCreateErrorCreator = (errors: ErrorMessagesType | undefined,
   errors = userLoginPasswordErrorCreator(errors, login, password);
   if (!isValidEmail(email)) {
     errors = errorsMessagesCreator(baseErrorList(errors),
-      "Login must contain from 3 to 10 symbols",
-      "login"
+      "Email must be correctly formated",
+      "email"
     );
   }
   return errors
@@ -117,9 +117,14 @@ export const emailValidationCreator = async (errors: ErrorMessagesType | undefin
   return errors;
 
 }
-export const loginPassEmailErrorCreator = (errors: ErrorMessagesType | undefined, loginLength: number, passwordLength: number, email: string) => {
-  // errors = loginPassErrorCreator(errors, loginLength, passwordLength);
-  // errors = emailErrorCreator(errors, email)
+export const authLoginPassEmailErrorCreator = (errors: ErrorMessagesType | undefined, login: string, password: string, email: string) => {
+  errors = userLoginPasswordErrorCreator(errors, login, password);
+  if (!isValidEmail(email)) {
+    errors = errorsMessagesCreator(baseErrorList(errors),
+      "Email must be correctly formatted",
+      "email"
+    );
+  }
   return errors;
 }
 

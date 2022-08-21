@@ -9,7 +9,12 @@ import {
   emailValidationMiddleware,
   loginAndPassAndEmailValidationMiddleware
 } from "../middlewares/auth/loginAndPassAndEmailValidationMiddleware";
-import {authLoginMiddleware, authUserExistMiddleware, authLoginPassValidationMiddleware} from "../middlewares/auth/authMiddleware";
+import {
+  authLoginMiddleware,
+  authUserExistMiddleware,
+  authRegistrationMiddleware,
+  authLoginPassValidationMiddleware
+} from "../middlewares/auth/authMiddleware";
 //import {userValidationMiddleware} from "../middlewares/users/usersMiddleware";
 
 
@@ -30,7 +35,8 @@ authRouter.post('/login',
 
 authRouter.post('/registration',
   addIPMiddleware,
-  // loginAndPassAndEmailValidationMiddleware,
+  authRegistrationMiddleware,
+  loginAndPassAndEmailValidationMiddleware,
   async (req: RequestWithInternetData, res: Response) => {
     const credentials: CredentialType = {
       login: req.body.login,

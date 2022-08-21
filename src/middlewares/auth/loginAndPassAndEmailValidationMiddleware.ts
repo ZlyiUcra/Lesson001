@@ -4,7 +4,7 @@ import {isErrorsPresent} from "../../helpers/errorCommon/isErrorPresente";
 import {usersService} from "../../domain/users-services";
 import {
   emailValidationCreator,
-  loginPassEmailErrorCreator,
+  authLoginPassEmailErrorCreator,
 } from "../../helpers/user/userHelper";
 import {authService} from "../../domain/auth-services";
 import {RequestWithInternetData} from "../../db/types";
@@ -17,20 +17,8 @@ export const loginAndPassAndEmailValidationMiddleware = async (req: Request, res
   const loginLength = login ? login.length : 0;
   const passLength = password ? password.length : 0;
 
-  //login, password and email validation
-  errors = loginPassEmailErrorCreator(errors, loginLength, passLength, email);
+  errors = authLoginPassEmailErrorCreator(errors, loginLength, passLength, email);
 
-  // login and email presence in DB validation
-  // const userByLogin = await usersService.findByLogin(login);
-  // const userByEmail = await usersService.findByEmail(email);
-  //
-  // if (userByLogin) {
-  //   errors = userAlreadyRegistered(errors, "login");
-  // }
-  //
-  // if (userByEmail) {
-  //   errors = userAlreadyRegistered(errors, "email");
-  // }
 
   if (isErrorsPresent(errors)) {
     return res.status(400).send(errors);

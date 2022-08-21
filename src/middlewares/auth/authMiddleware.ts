@@ -51,3 +51,4 @@ export const authUserExistMiddleware = async (req: RequestWithInternetData, res:
   }
   next()
 }
+export const authRegistrationMiddleware = authLoginMiddleware;
