@@ -2,10 +2,10 @@ import {AttemptsType} from "../db/types";
 import {attemptsRepository} from "../repositories/attempts-repository";
 
 export const attemptsService = {
-  // async update(ip: string): Promise<boolean> {
-  //   return  attemptsRepository.update(ip)
-  // },
-  // async find(ip: string): Promise<AttemptsType> {
-  //   return  attemptsRepository.find(ip)
-  // }
+  async update(ip: string, url: string, method: string, limitTimeCount?: number): Promise<boolean> {
+    return  attemptsRepository.update(ip, url, method, limitTimeCount);
+  },
+  async find(ip: string, url: string, method: string): Promise<AttemptsType> {
+    return  attemptsRepository.find(ip, url, method)
+  }
 }

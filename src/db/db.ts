@@ -14,7 +14,7 @@ export const client = new MongoClient(settings.MONGO_URI);
 
 export const db = client.db("instagram")
 
-// export const attemptsCollection = db.collection<AttemptsDBType>('attempts')
+export const attemptsCollection = db.collection<AttemptsDBType>('attempts')
 export const commentsCollection = db.collection<CommentDBType>('comments')
 export const usersCollection = db.collection<UserDBType>('users')
 export const bloggersCollection = db.collection<BloggerDBType>('bloggers')

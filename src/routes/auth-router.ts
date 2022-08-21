@@ -1,11 +1,9 @@
 import {Request, Response, Router} from "express";
-import {CredentialType, LoginType, RequestWithIP} from "../db/types";
+import {CredentialType, LoginType, RequestWithInternetData} from "../db/types";
 import {authService} from "../domain/auth-services";
 
-import {ipMiddleware} from "../middlewares/ipMiddlware/ipHandler";
-import {
-  attemptsMiddleware
-} from "../middlewares/auth/attemptsMiddleware";
+import {attemptsRequestMiddleware} from "../middlewares/ipMiddlware/attemptsRequestMiddleware";
+
 import {
   //codeConfirmationValidation,
   emailValidationMiddleware,
@@ -18,8 +16,7 @@ import {authLoginPassValidationMiddleware} from "../middlewares/auth/authMiddlew
 export const authRouter = Router({});
 
 authRouter.post('/login',
-  ipMiddleware,
-  //attemptsMiddleware,
+  attemptsRequestMiddleware,
   authLoginPassValidationMiddleware,
   async (req: Request, res: Response) => {
     const credentials: LoginType = {
@@ -47,7 +44,7 @@ authRouter.post('/login',
 //     }
 //     const result = await authService.registration(credentials, req.clientIP);
 //     if (result) {
-//       res.status(204).json("Input data is accepted. Email with confirmation code will be send to passed email address");
+//       res.status(204).json("Input data is accepted. Email with confirmation code will be sent to passed email address");
 //       return
 //     }
 //     res.status(401).send();

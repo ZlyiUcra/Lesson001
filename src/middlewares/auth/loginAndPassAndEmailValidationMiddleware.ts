@@ -7,7 +7,7 @@ import {
   loginPassEmailErrorCreator,
 } from "../../helpers/user/userHelper";
 import {authService} from "../../domain/auth-services";
-import {RequestWithIP} from "../../db/types";
+import {RequestWithInternetData} from "../../db/types";
 
 export const loginAndPassAndEmailValidationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   let errors: ErrorMessagesType | undefined = undefined;

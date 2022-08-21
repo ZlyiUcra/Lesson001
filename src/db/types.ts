@@ -120,8 +120,9 @@ export interface RequestWithUser extends Request {
   user?: UserShortType
 }
 
-export interface RequestWithIP extends Request {
+export interface RequestWithInternetData extends Request {
   clientIP?: string | null;
+  clientURL?: string | null;
 }
 
 export enum TOKEN_STATUS {
@@ -132,6 +133,8 @@ export enum TOKEN_STATUS {
 
 export type AttemptsDBType = WithId<{
   ip: string | null;
+  url: string | null;
+  method: string | null;
   limitTimeCount: number;
   lastRequestedAt: Date;
 }>
