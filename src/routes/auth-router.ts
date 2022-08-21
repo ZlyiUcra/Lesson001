@@ -9,8 +9,7 @@ import {
   emailValidationMiddleware,
   loginAndPassAndEmailValidationMiddleware
 } from "../middlewares/auth/loginAndPassAndEmailValidationMiddleware";
-import {authLoginPassValidationMiddleware} from "../middlewares/auth/authMiddleware";
-import {authLoginMiddleware} from "../middlewares/auth/authLoginMiddleware";
+import {authLoginMiddleware, authUserExistMiddleware, authLoginPassValidationMiddleware} from "../middlewares/auth/authMiddleware";
 //import {userValidationMiddleware} from "../middlewares/users/usersMiddleware";
 
 
@@ -19,37 +18,32 @@ export const authRouter = Router({});
 authRouter.post('/login',
   addIPMiddleware,
   authLoginMiddleware,
+  authUserExistMiddleware,
   async (req: Request, res: Response) => {
     const credentials: LoginType = {
       login: req.body.login,
       password: req.body.password
     }
     const token = await authService.login(credentials, req.ip);
+    res.status(200).send(token);
+  });
 
-    if (token !== null) {
-      res.status(200).send(token);
+authRouter.post('/registration',
+  addIPMiddleware,
+  // loginAndPassAndEmailValidationMiddleware,
+  async (req: RequestWithInternetData, res: Response) => {
+    const credentials: CredentialType = {
+      login: req.body.login,
+      email: req.body.email,
+      password: req.body.password
+    }
+    const result = await authService.registration(credentials);
+    if (result) {
+      res.status(204).send(result);
       return
     }
     res.status(401).send();
-  });
-//
-// authRouter.post('/registration',
-//   ipMiddleware,
-//   attemptsMiddleware,
-//   loginAndPassAndEmailValidationMiddleware,
-//   async (req: RequestWithIP, res: Response) => {
-//     const credentials: CredentialType = {
-//       login: req.body.login,
-//       email: req.body.email,
-//       password: req.body.password
-//     }
-//     const result = await authService.registration(credentials, req.clientIP);
-//     if (result) {
-//       res.status(204).json("Input data is accepted. Email with confirmation code will be sent to passed email address");
-//       return
-//     }
-//     res.status(401).send();
-//   })
+  })
 //
 //
 // authRouter.post('/registration-email-resending',

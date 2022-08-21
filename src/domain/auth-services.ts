@@ -1,11 +1,9 @@
 import bcrypt from 'bcrypt'
 import {jwtUtility} from '../application/jwt-utility';
-import {CredentialType, JWTType, LoginType, TOKEN_STATUS, TokenType} from "../db/types";
+import {CredentialType, JWTType, LoginType, TOKEN_STATUS} from "../db/types";
 import {usersService} from "./users-services";
-import {authRepository} from "../repositories/auth-repository";
-import {v4 as uuidv4} from "uuid";
 import {emailAdapter} from "../adapters/email-adapter";
-import differenceInSeconds from "date-fns/differenceInSeconds";
+import {usersRepository} from "../repositories/users-repository";
 
 export const authService = {
   async generateHash(password: string, saltOrRounds: number = 10): Promise<string> {
@@ -27,35 +25,28 @@ export const authService = {
     }
     return null
   },
-  //
-  // async registration(credentials: CredentialType, ip?: string | null): Promise<boolean> {
-  //   const user = await usersService.create(credentials);
-  //   if (user) {
-  //
-  //     const confirmationToken = uuidv4();
-  //
-  //     const authToken: TokenType = {
-  //       id: uuidv4(),
-  //       userId: user.id,
-  //       confirmationToken,
-  //       createdAt: new Date(),
-  //       tokenStatus: TOKEN_STATUS.SENT,
-  //       tokenJWT: ''
-  //     }
-  //     const message = `${authToken.confirmationToken}`;
-  //
-  //     try {
-  //       /* TODO:  Parsing of infoEmail must be implemented */
-  //       // Returned value
-  //       await emailAdapter.sendEmail(credentials.email, "Registration's confirmation", message);
-  //       const token = await authRepository.create(authToken);
-  //       return true
-  //     } catch (err) {
-  //       return false
-  //     }
-  //   }
-  //   return false
-  // },
+
+  async registration(credentials: CredentialType): Promise<boolean> {
+    let user = await usersService.findByLoginEmailPass(credentials);
+    if(!user) {
+      user = await usersService.create(credentials) //, TOKEN_STATUS.SENT
+    }
+
+    const message = `${user.token.confirmationToken}`;
+
+    try {
+      /* TODO:  Parsing of infoEmail must be implemented */
+      // Returned value
+      const sentInfo = await emailAdapter.sendEmail(user.credentials.email, "Registration's confirmation", message);
+      //const token = await authRepository.create(authToken);
+      return  await usersRepository.setTokenStatus(user.id, TOKEN_STATUS.SENT);
+
+    } catch (err) {
+      return false
+    }
+
+    return false
+  },
   //
   // async emailResending(email: string, ip: string): Promise<boolean> {
   //   const user = await usersService.findByEmail(email);

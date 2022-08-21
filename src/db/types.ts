@@ -126,6 +126,7 @@ export interface RequestWithInternetData extends Request {
 }
 
 export enum TOKEN_STATUS {
+  NONE= "None",
   SENT = "Sent",
   RESENT = "Resent",
   CONFIRMED = "Confirmed"

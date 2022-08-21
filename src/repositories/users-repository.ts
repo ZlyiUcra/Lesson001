@@ -1,9 +1,9 @@
-import {LoginType, PaginatorParamsType, UserDBType, UserFullType, UserInputType} from "../db/types";
+import {LoginType, PaginatorParamsType, TOKEN_STATUS, UserDBType, UserFullType, UserInputType} from "../db/types";
 import {usersCollection} from "../db/db";
 import {DeleteResult, ObjectId} from "mongodb";
 
 export const usersRepository = {
-  async findAll({skip, limit}: PaginatorParamsType): Promise<{usersSearch: UserFullType[], usersCount: number }> {
+  async findAll({skip, limit}: PaginatorParamsType): Promise<{ usersSearch: UserFullType[], usersCount: number }> {
 
     const usersCount = await usersCollection.count({});
 
@@ -16,24 +16,25 @@ export const usersRepository = {
     return {usersSearch, usersCount};
   },
   async findById(id: string): Promise<UserFullType | null> {
-    return await usersCollection.findOne({id}, { projection: { _id: 0 }})
+    return await usersCollection.findOne({id}, {projection: {_id: 0}})
   },
   async findByLogin(login: string): Promise<UserFullType | null> {
-    return await usersCollection.findOne({"credentials.login": login},
+    const user = await usersCollection.findOne({"credentials.login": login},
       {
         projection: {
           _id: 0
         }
-      })
+      });
+    return user
   },
-  async findByLoginPass({login, password}: LoginType): Promise<UserFullType | null> {
-
-    return await usersCollection.findOne({credentials: {login, password}},
+  async findByLoginEmail(login: string, email: string): Promise<UserFullType | null> {
+    return await usersCollection.findOne({"credentials.login": login, "credentials.email":email},
       {
         projection: {
           _id: 0
         }
-      })
+      }
+    )
   },
   async findByEmail(email: string): Promise<UserFullType | null> {
     return await usersCollection.findOne({"credentials.email": email},
@@ -56,6 +57,15 @@ export const usersRepository = {
   async delete(id: string): Promise<boolean> {
     const result: DeleteResult = await usersCollection.deleteOne({id});
     if (result.deletedCount === 1) return true;
+    return false;
+  },
+  async setTokenStatus(id: string, tokenStatus: TOKEN_STATUS) {
+    const isUpdated = await usersCollection.updateOne({id}, {
+      $set: {
+        "token.tokenStatus": tokenStatus
+      }
+    })
+    if (isUpdated.matchedCount) return true;
     return false;
   }
 }

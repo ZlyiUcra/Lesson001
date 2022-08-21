@@ -2,10 +2,10 @@ import {ErrorMessagesType, errorsMessagesCreator} from "../errorCommon/errorMess
 import {baseErrorList} from "../errorCommon/baseErrorListHelper";
 import {usersService} from "../../domain/users-services";
 import {authService} from "../../domain/auth-services";
-import {TOKEN_STATUS} from "../../db/types";
+import {AttemptsType, TOKEN_STATUS} from "../../db/types";
 import {userLoginPasswordErrorCreator} from "../user/userHelper";
-
-
+import differenceInSeconds from "date-fns/differenceInSeconds";
+import {settings} from "../../settings";
 
 
 // export const userExistsCreator = async (errors: ErrorMessagesType | undefined, login: string) => {
@@ -36,18 +36,18 @@ import {userLoginPasswordErrorCreator} from "../user/userHelper";
 // }
 
 //export const confirmationCodeErrorCreator = async (errors: ErrorMessagesType | undefined, code: string, ip: string) => {
-  // const userAuth = await authService.findByCodeAndIP(code);
-  // if (!userAuth) {
-  //   errors = errorsMessagesCreator(baseErrorList(errors),
-  //     "Incorrect code information",
-  //     "code"
-  //   );
-  // } else if(userAuth.tokenStatus === TOKEN_STATUS.CONFIRMED) {
-  //   errors = errorsMessagesCreator(baseErrorList(errors),
-  //     "Authentication already passed",
-  //     "code"
-  //   );
-  // }
+// const userAuth = await authService.findByCodeAndIP(code);
+// if (!userAuth) {
+//   errors = errorsMessagesCreator(baseErrorList(errors),
+//     "Incorrect code information",
+//     "code"
+//   );
+// } else if(userAuth.tokenStatus === TOKEN_STATUS.CONFIRMED) {
+//   errors = errorsMessagesCreator(baseErrorList(errors),
+//     "Authentication already passed",
+//     "code"
+//   );
+// }
 
 //   return errors;
 // }
@@ -55,6 +55,14 @@ import {userLoginPasswordErrorCreator} from "../user/userHelper";
 export const authLoginEmailErrorCreator = (errors: ErrorMessagesType | undefined,
                                            login: string,
                                            password: string,
-                                          ) => {
+) => {
   return userLoginPasswordErrorCreator(errors, login, password)
+}
+
+export const is429Status = (attempts: AttemptsType): boolean => {
+  const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
+  if (timeDifference < settings.TIME_LIMIT && attempts.limitTimeCount >= settings.ATTEMPTS_TOKEN_LIMIT) {
+    return true
+  }
+  return false
 }

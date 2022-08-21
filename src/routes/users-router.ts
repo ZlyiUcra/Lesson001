@@ -26,7 +26,8 @@ usersRouter.post("/",
   async (req: Request, res: Response) => {
     const credentials: CredentialType = {login: req.body.login, email: req.body.email, password: req.body.password}
     const newUser = await usersService.create(credentials);
-    res.status(201).send(newUser)
+    const {id, credentials: {login}} = newUser
+    res.status(201).send({id, login})
   });
 
 usersRouter.delete("/:id",

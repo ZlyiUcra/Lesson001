@@ -1,10 +1,13 @@
 import {
-  CredentialType, LoginType, PaginatorParamsType,
+  CredentialType,
+  LoginType,
+  PaginatorParamsType,
   SearchResultType,
   TOKEN_STATUS,
   TokenType,
   UserFullType,
-  UserInputType, UserShortType,
+  UserInputType,
+  UserShortType,
 } from "../db/types";
 import {usersRepository} from "../repositories/users-repository";
 import {v4 as uuidv4} from 'uuid';
@@ -42,7 +45,7 @@ export const usersService = {
     return await usersRepository.findById(id)
   },
 
-  async create(userCredentials: CredentialType): Promise<UserShortType> {
+  async create(userCredentials: CredentialType, status: TOKEN_STATUS = TOKEN_STATUS.NONE): Promise<UserFullType> {
     const passwordHash = await authService.generateHash(userCredentials.password);
 
     const credentials: CredentialType = {
@@ -53,7 +56,7 @@ export const usersService = {
 
     const token: TokenType = {
       confirmationToken: uuidv4(),
-      tokenStatus: TOKEN_STATUS.SENT,
+      tokenStatus: status,
       tokenJWT: ''
     }
     const user: UserFullType = {
@@ -62,9 +65,7 @@ export const usersService = {
       token,
       createdAt: new Date()
     }
-    const userFromDB = await usersRepository.create(user);
-
-    return {id: userFromDB.id, login: userFromDB.credentials.login}
+    return  await usersRepository.create(user);
   },
   async findByLogin(login: string): Promise<UserFullType | null> {
     return await usersRepository.findByLogin(login)
@@ -72,17 +73,32 @@ export const usersService = {
   async findByEmail(email: string): Promise<UserFullType | null> {
     return await usersRepository.findByEmail(email)
   },
-  async findByLoginPass(credentials: LoginType): Promise<UserFullType | null> {
-    const userByLogin = await this.findByLogin(credentials.login);
+
+  async findByLoginPass(shortCredentials: LoginType): Promise<UserFullType | null> {
+    const userByLogin = await this.findByLogin(shortCredentials.login);
     if(userByLogin){
-      const isPassCorrect = await authService.isPasswordCorrect(credentials.password, userByLogin.credentials.password);
+      const isPassCorrect = await authService.isPasswordCorrect(shortCredentials.password, userByLogin.credentials.password);
       if(isPassCorrect){
         return userByLogin
       }
     }
     return null;
   },
+  async findByLoginEmailPass(credentials: CredentialType): Promise<UserFullType | null> {
+    const {login, email, password} = credentials
+    const user = await usersRepository.findByLoginEmail(login, email);
+    if(user) {
+      const isPassCorrect = await authService.isPasswordCorrect(password, user.credentials.password);
+      if(isPassCorrect){
+        return user
+      }
+    }
+    return null;
+  },
   async delete(id: string): Promise<boolean> {
     return await usersRepository.delete(id);
+  },
+  async setTokenStatus(id: string, status: TOKEN_STATUS): Promise<boolean> {
+    return await usersRepository.setTokenStatus(id, status)
   }
 }
