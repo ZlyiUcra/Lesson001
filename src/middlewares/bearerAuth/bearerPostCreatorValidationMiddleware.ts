@@ -16,13 +16,14 @@ export const bearerPostCreatorValidationMiddleware = async (req: RequestWithUser
       if (id) {
         const user = await usersService.findById(id);
         const comment = await commentsService.findById(req.params.commentId);
-        if (!user  || !comment) {
+        if (!user || !comment) {
           return res.status(404).send();
         }
         if (user && comment) {
           req.user = {id: user.id, login: user.credentials.login};
           if (user.id === comment.userId) {
-            return next();
+            next();
+            return
           } else {
             return res.status(403).send();
           }
@@ -30,6 +31,6 @@ export const bearerPostCreatorValidationMiddleware = async (req: RequestWithUser
       }
     }
   }
-  res.status(401).send()
+  return res.status(401).send()
 
 }
