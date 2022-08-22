@@ -29,19 +29,18 @@ export const commentPostIdMiddleware = async (req: RequestWithUser, res: Respons
 }
 
 export const commentOwnPostMiddleware = async (req: RequestWithUser,
-                                                     res: Response,
-                                                     next: NextFunction) => {
+                                               res: Response,
+                                               next: NextFunction) => {
 
   const comment = await commentsService.findById(req.params.commentId)
   if (comment) {
     const userId = req.user?.id as string;
-    if(comment.userId !== userId){
+    if (comment.userId !== userId) {
       return res.status(403).send();
     }
   }
   next();
 };
-
 
 export const commentContentMiddleware = async (req: RequestWithUser,
                                                res: Response,
@@ -52,12 +51,11 @@ export const commentContentMiddleware = async (req: RequestWithUser,
   errors = await commentContentErrorCreator(errors, req.body.content);
 
   if (errors?.errorsMessages?.length) {
-    res.status(400).send(errors);
-    return;
-  } else {
-    next();
+    return res.status(400).send(errors);
   }
+  next();
 };
+
 export const commentExistsMiddleware = async (req: RequestWithUser,
                                               res: Response,
                                               next: NextFunction) => {
@@ -65,7 +63,7 @@ export const commentExistsMiddleware = async (req: RequestWithUser,
   let errors: ErrorMessagesType | undefined = undefined;
 
   const comment = await commentsService.findById(req.params.commentId)
-  if(!comment) {
+  if (!comment) {
     errors = errorsMessagesCreator(baseErrorList(errors),
       "Comment does not exist",
       "commentId"
@@ -73,8 +71,7 @@ export const commentExistsMiddleware = async (req: RequestWithUser,
   }
 
   if (errors?.errorsMessages?.length) {
-    res.status(400).send(errors);
-    return;
+    return res.status(400).send(errors);
   } else {
     next();
   }
