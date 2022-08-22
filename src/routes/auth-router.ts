@@ -25,7 +25,7 @@ authRouter.post('/login',
       password: req.body.password
     }
     const token = await authService.login(credentials, req.ip);
-    res.status(200).send(token);
+    return res.status(200).send(token);
   });
 
 authRouter.post('/registration',
@@ -58,7 +58,7 @@ authRouter.post('/registration-email-resending',
     if (isEmailResent) {
       return res.status(204).send();
     }
-    res.status(400).send();
+    return res.status(400).send();
   })
 
 authRouter.post('/registration-confirmation',
@@ -70,10 +70,10 @@ authRouter.post('/registration-confirmation',
     const {code} = req.body;
     const isConfirmed = await authService.emailConfirmedByCodeAndIP(code);
     if (isConfirmed) {
-      res.status(204).send();
-      return;
+      return res.status(204).send();
+
     }
-    res.status(400).send();
+    return res.status(400).send();
 
   });
 

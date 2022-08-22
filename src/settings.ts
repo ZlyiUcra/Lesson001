@@ -7,5 +7,8 @@ export const settings = {
   JWT_SECRET: process.env.JWT_SECRET || "123",
   PORT: process.env.PORT,
   ATTEMPTS_TOKEN_LIMIT: process.env.ATTEMPTS_TOKEN_LIMIT || 5,
-  TIME_LIMIT: process.env.TIME_LIMIT || 10
+  TIME_LIMIT: process.env.TIME_LIMIT || 10,
+  EMAIL_SERVICE: process.env.EMAIL_SERVICE,
+  EMAIL: process.env.EMAIL,
+  EMAIL_AUTH: process.env.EMAIL_AUTH
 }

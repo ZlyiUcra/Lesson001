@@ -54,7 +54,7 @@ export const authService = {
     const user = await usersService.findByEmail(email);
     if (user) {
       const confirmationToken = uuidv4();
-      const message = `${confirmationToken}`;
+      const message = `<a href="https://it-kamasutra-lesson-01.herokuapp.com/auth/registration-confirmation/?code=${confirmationToken}">${confirmationToken}</a>`;
 
       const token: TokenType = {
         ...user.token,

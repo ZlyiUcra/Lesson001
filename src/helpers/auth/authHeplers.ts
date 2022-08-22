@@ -32,15 +32,14 @@ export const authRegistrationEmailValidationCreator = async (errors: ErrorMessag
 
 export const is429Status = async (attempts: AttemptsType): Promise<boolean> => {
   const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
-  if (timeDifference < settings.TIME_LIMIT && attempts.limitTimeCount >= settings.ATTEMPTS_TOKEN_LIMIT) {
+  if (timeDifference < +settings.TIME_LIMIT && attempts.limitTimeCount >= +settings.ATTEMPTS_TOKEN_LIMIT) {
     return true
   }
-  if(timeDifference > 10 + +settings.TIME_LIMIT ){
+  if(timeDifference > 3 + +settings.TIME_LIMIT ){
     await attemptsService.update(attempts.ip as string, attempts.url as string, attempts.method as string, 0)
   }
   return false
 }
-
 
 export const authLoginPassEmailErrorCreator = (errors: ErrorMessagesType | undefined, login: string, password: string, email: string) => {
   errors = userLoginPasswordErrorCreator(errors, login, password);
@@ -68,7 +67,6 @@ export const authConfirmedValidationCreator = (errors: ErrorMessagesType | undef
   );
 
 }
-
 
 export const authLoginOrEmailAlreadyExistsErrorCreator = (errors: ErrorMessagesType | undefined, fieldsList: string[]) => {
   fieldsList.forEach(field => {
