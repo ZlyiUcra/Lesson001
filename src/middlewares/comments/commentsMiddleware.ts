@@ -23,6 +23,7 @@ export const commentForPostMiddleware = async (req: RequestWithUser,
 export const commentPostIdMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   const post = await postsService.findById(req.params.postId);
   console.log("req.params.postId", req.params.postId, "\n\npost", post);
+
   if (!post) {
     return res.status(404).send();
   }
