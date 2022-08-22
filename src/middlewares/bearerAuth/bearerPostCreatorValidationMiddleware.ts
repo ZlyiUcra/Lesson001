@@ -6,34 +6,30 @@ import {jwtUtility} from "../../application/jwt-utility";
 
 
 export const bearerPostCreatorValidationMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-  // const auth = req.headers.authorization;
-  // if (auth) {
-  //   const splitAuth = auth.split(" ")
-  //   if (splitAuth[0] === "Bearer" && splitAuth[1]) {
-  //     const jwtBase = splitAuth[1];
-  //     const userId = await jwtUtility.extractUserIdFromToken(jwtBase);
-  //
-  //     if (userId) {
-  //       const user = await usersService.findById(userId);
-  //       const comment = await commentsService.findById(req.params.commentId);
-  //       if (!user  || !comment) {
-  //         res.status(404).send();
-  //         return;
-  //       }
-  //       if (user && comment) {
-  //         req.user = user;
-  //         if (user.id === comment.userId) {
-  //           next();
-  //           return
-  //         } else {
-  //           res.status(403).send();
-  //           return;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  // res.status(401).send()
-  next()
+  const auth = req.headers.authorization;
+  if (auth) {
+    const splitAuth = auth.split(" ")
+    if (splitAuth[0] === "Bearer" && splitAuth[1]) {
+      const jwtBase = splitAuth[1];
+      const id = await jwtUtility.extractUserIdFromToken(jwtBase);
+
+      if (id) {
+        const user = await usersService.findById(id);
+        const comment = await commentsService.findById(req.params.commentId);
+        if (!user  || !comment) {
+          return res.status(404).send();
+        }
+        if (user && comment) {
+          req.user = {id: user.id, login: user.credentials.login};
+          if (user.id === comment.userId) {
+            return next();
+          } else {
+            return res.status(403).send();
+          }
+        }
+      }
+    }
+  }
+  res.status(401).send()
 
 }

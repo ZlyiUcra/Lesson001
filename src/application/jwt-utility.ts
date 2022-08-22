@@ -8,7 +8,7 @@ export const jwtUtility = {
    * @return Returns JWT-token
    */
   async createJWT(user: UserShortType, expiresIn: string = '1h') {
-    return jwt.sign({id: user.id}, settings.JWT_SECRET, {expiresIn})
+    return jwt.sign({id: user.id, login: user.login}, settings.JWT_SECRET, {expiresIn})
 
   },
   async extractUserIdFromToken(token: string): Promise<string | null> {

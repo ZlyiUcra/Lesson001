@@ -41,7 +41,6 @@ authRouter.post('/registration',
     const result = await authService.registration(credentials);
     if (result) {
       return res.status(204).send();
-
     }
     return res.status(401).send();
   })
@@ -53,7 +52,6 @@ authRouter.post('/registration-email-resending',
   authAttemptsMiddleware,
   async (req: RequestWithInternetData, res: Response) => {
     const {email} = req.body;
-
     const isEmailResent = await authService.emailResending(email);
     if (isEmailResent) {
       return res.status(204).send();
@@ -63,15 +61,14 @@ authRouter.post('/registration-email-resending',
 
 authRouter.post('/registration-confirmation',
   addIPMiddleware,
-  authAttemptsMiddleware,
   authCodeConfirmationValidationMiddleware,
   authConfirmedValidationMiddleware,
+  authAttemptsMiddleware,
   async (req: RequestWithInternetData, res: Response) => {
     const {code} = req.body;
     const isConfirmed = await authService.emailConfirmedByCodeAndIP(code);
     if (isConfirmed) {
       return res.status(204).send();
-
     }
     return res.status(400).send();
 
