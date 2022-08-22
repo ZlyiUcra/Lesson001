@@ -9,9 +9,8 @@ import {
   authLoginPassEmailValidationMiddleware,
   authAttemptsMiddleware,
   authRegistrationEmailValidationMiddleware,
-  authCodeConfirmationValidationMiddleware
+  authCodeConfirmationValidationMiddleware, authConfirmedValidationMiddleware
 } from "../middlewares/auth/authMiddleware";
-//import {userValidationMiddleware} from "../middlewares/users/usersMiddleware";
 
 
 export const authRouter = Router({});
@@ -65,6 +64,7 @@ authRouter.post('/registration-confirmation',
   addIPMiddleware,
   authAttemptsMiddleware,
   authCodeConfirmationValidationMiddleware,
+  authConfirmedValidationMiddleware,
   async (req: RequestWithInternetData, res: Response) => {
     const {code} = req.body;
     const isConfirmed = await authService.emailConfirmedByCodeAndIP(code);

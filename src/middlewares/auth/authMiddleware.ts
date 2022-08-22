@@ -1,15 +1,15 @@
-import {ErrorMessagesType, errorsMessagesCreator} from "../../helpers/errorCommon/errorMessagesCreator";
+import {ErrorMessagesType} from "../../helpers/errorCommon/errorMessagesCreator";
 
 import {NextFunction, Request, Response} from "express";
 import {
-  authCodeConfirmationValidationCreator,
-  authLoginEmailErrorCreator,
-  authLoginOrEmailAlreadyExistsErrorCreator, authLoginPassEmailErrorCreator,
+  authCodeConfirmationValidationCreator, authConfirmedValidationCreator,
+  authLoginOrEmailAlreadyExistsErrorCreator,
+  authLoginPassEmailErrorCreator,
   authRegistrationEmailValidationCreator,
   is429Status
 } from "../../helpers/auth/authHeplers";
 import {isErrorsPresent} from "../../helpers/errorCommon/isErrorPresente";
-import {AttemptsType, RequestWithInternetData, UserFullType} from "../../db/types";
+import {AttemptsType, RequestWithInternetData, TOKEN_STATUS, UserFullType} from "../../db/types";
 import {attemptsService} from "../../domain/attempts-service";
 import {usersService} from "../../domain/users-services";
 
@@ -73,6 +73,18 @@ export const authCodeConfirmationValidationMiddleware = async (req: Request, res
   const user = await usersService.findByCode(req.body.code);
   if(!user){
     errors = authCodeConfirmationValidationCreator(errors);
+  }
+  if(errors){
+    return res.status(400).send(errors)
+  }
+  next()
+}
+export const authConfirmedValidationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  let errors: ErrorMessagesType | undefined = undefined;
+  const user = await usersService.findByCode(req.body.code);
+
+  if(user && user.token.tokenStatus === TOKEN_STATUS.CONFIRMED){
+    errors = authConfirmedValidationCreator(errors);
   }
   if(errors){
     return res.status(400).send(errors)
