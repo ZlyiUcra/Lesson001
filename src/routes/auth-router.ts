@@ -24,7 +24,7 @@ authRouter.post('/login',
       login: req.body.login,
       password: req.body.password
     }
-    const token = await authService.login(credentials, req.ip);
+    const token = await authService.login(credentials);
     return res.status(200).send(token);
   });
 
@@ -49,8 +49,8 @@ authRouter.post('/registration',
 
 authRouter.post('/registration-email-resending',
   addIPMiddleware,
-  authAttemptsMiddleware,
   authRegistrationEmailValidationMiddleware,
+  authAttemptsMiddleware,
   async (req: RequestWithInternetData, res: Response) => {
     const {email} = req.body;
 

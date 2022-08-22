@@ -15,8 +15,8 @@ commentsRouter.get("/:id",
   commentPostIdMiddleware,
   async (req: Request, res: Response) => {
     const result = await commentsService.findById(req.params.id);
-    if (result) res.status(200).send(result);
-    res.status(404).send()
+    if (result) return res.status(200).send(result);
+    return res.status(404).send()
   });
 
 commentsRouter.put("/:commentId",
@@ -27,8 +27,8 @@ commentsRouter.put("/:commentId",
   async (req: RequestWithUser, res: Response) => {
     const comment: CommentContentType = {content: req.body.content}
     const result = await commentsService.update(comment, req.params.commentId);
-    if (result) res.status(204).send();
-    res.status(404).send()
+    if (result) return res.status(204).send();
+    return res.status(404).send()
   });
 
 commentsRouter.delete("/:commentId",
@@ -38,6 +38,6 @@ commentsRouter.delete("/:commentId",
   async (req: RequestWithUser, res: Response) => {
 
     const result = await commentsService.delete(req.params.commentId);
-    if (result) res.status(204).send();
-    res.status(404).send()
+    if (result) return res.status(204).send();
+    return res.status(404).send()
   });

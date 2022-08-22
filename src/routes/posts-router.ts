@@ -28,7 +28,7 @@ postsRouter.get('/',
       pageSize: +(req.query.PageSize ? req.query.PageSize : 10)
     }
     const posts = await postsService.getAll(searchPostsTerm);
-    res.send(posts);
+    return res.send(posts);
   });
 
 postsRouter.post('/',
@@ -56,7 +56,7 @@ postsRouter.get("/:postId/comments",
       postId: req.params.postId
     }
     const comments = await commentsService.getAll(searchPostComments);
-    res.send(comments)
+    return res.send(comments)
   });
 
 postsRouter.post("/:postId/comments",
@@ -70,7 +70,7 @@ postsRouter.post("/:postId/comments",
       const comment = await commentsService.create(commentContent, user, req.params.postId);
       return res.status(201).send(comment);
     }
-    res.status(401).send();
+    return res.status(401).send();
   })
 
 postsRouter.get('/:id',
@@ -80,7 +80,7 @@ postsRouter.get('/:id',
     if (post) {
       return res.status(200).send(post);
     }
-    res.status(404).send();
+    return res.status(404).send();
   });
 
 postsRouter.put('/:id',
@@ -100,7 +100,7 @@ postsRouter.put('/:id',
     if (isUpdated) {
       return res.status(204).send();
     }
-    res.status(404).send();
+    return res.status(404).send();
   });
 
 postsRouter.delete('/:id',
@@ -111,5 +111,5 @@ postsRouter.delete('/:id',
     if (isDeleted) {
       return res.status(204).send();
     }
-    res.status(404).send();
+    return res.status(404).send();
   });

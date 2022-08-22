@@ -15,7 +15,7 @@ export const authService = {
     const compareResult: boolean = await bcrypt.compare(password, hash)
     return compareResult
   },
-  async login(credentials: LoginType, ip: string): Promise<JWTType | null> {
+  async login(credentials: LoginType): Promise<JWTType | null> {
     const user = await usersService.findByLogin(credentials.login);
     if (user !== null) {
       const isCorrectUserPassword = await this.isPasswordCorrect(credentials.password, user.credentials.password);
