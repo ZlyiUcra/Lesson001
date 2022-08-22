@@ -35,7 +35,7 @@ export const authAttemptsMiddleware = async (req: RequestWithInternetData, res: 
     const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
     if (is429Status(attempts)) {
       return res.status(429).send();
-    } else if(timeDifference > settings.TIME_LIMIT ){
+    } else {
       await attemptsService.update(attempts.ip as string, attempts.url as string, attempts.method as string, 0)
     }
   }
