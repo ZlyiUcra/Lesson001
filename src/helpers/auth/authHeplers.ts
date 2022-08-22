@@ -5,6 +5,7 @@ import {AttemptsType, TOKEN_STATUS} from "../../db/types";
 import {isValidEmail, userLoginPasswordErrorCreator} from "../user/userHelper";
 import differenceInSeconds from "date-fns/differenceInSeconds";
 import {settings} from "../../settings";
+import {attemptsService} from "../../domain/attempts-service";
 
 
 export const authRegistrationEmailValidationCreator = async (errors: ErrorMessagesType | undefined, email: string) => {
@@ -29,10 +30,13 @@ export const authRegistrationEmailValidationCreator = async (errors: ErrorMessag
   return errors;
 }
 
-export const is429Status = (attempts: AttemptsType): boolean => {
+export const is429Status = async (attempts: AttemptsType): Promise<boolean> => {
   const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
   if (timeDifference < settings.TIME_LIMIT && attempts.limitTimeCount >= settings.ATTEMPTS_TOKEN_LIMIT) {
     return true
+  }
+  if(timeDifference > settings.TIME_LIMIT){
+    await attemptsService.update(attempts.ip as string, attempts.url as string, attempts.method as string, 0)
   }
   return false
 }

@@ -30,7 +30,7 @@ export const authAttemptsMiddleware = async (req: RequestWithInternetData, res: 
   const attempts: AttemptsType | null = await attemptsService.find(clientIP, req.originalUrl, req.method);
 
   if (attempts) {
-    if (is429Status(attempts)) {
+    if (await is429Status(attempts)) {
       return res.status(429).send();
     }
   }

@@ -4,8 +4,7 @@ import {AttemptsType} from "../db/types";
 export const attemptsRepository = {
 
   async update(ip: string, url: string, method: string, limitTimeCount?: number): Promise<boolean> {
-
-    const update = limitTimeCount ? {
+    const update = typeof limitTimeCount === "number" ? {
       $set: {lastRequestedAt: new Date(), limitTimeCount}
     } : {
       $inc: {limitTimeCount: 1},
