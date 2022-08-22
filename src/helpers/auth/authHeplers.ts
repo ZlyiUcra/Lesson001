@@ -35,7 +35,7 @@ export const is429Status = async (attempts: AttemptsType): Promise<boolean> => {
   if (timeDifference < +settings.TIME_LIMIT && attempts.limitTimeCount >= +settings.ATTEMPTS_TOKEN_LIMIT) {
     return true
   }
-  if(timeDifference > 3 + +settings.TIME_LIMIT ){
+  if(timeDifference > +settings.TIME_LIMIT ){
     await attemptsService.update(attempts.ip as string, attempts.url as string, attempts.method as string, 0)
   }
   return false

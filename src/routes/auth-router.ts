@@ -17,8 +17,8 @@ export const authRouter = Router({});
 
 authRouter.post('/login',
   addIPMiddleware,
-  authAttemptsMiddleware,
   authUserExistMiddleware,
+  authAttemptsMiddleware,
   async (req: Request, res: Response) => {
     const credentials: LoginType = {
       login: req.body.login,

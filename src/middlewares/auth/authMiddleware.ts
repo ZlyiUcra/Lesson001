@@ -63,18 +63,17 @@ export const authRegistrationEmailValidationMiddleware = async (req: Request, re
   errors = await authRegistrationEmailValidationCreator(errors, email);
   if (errors) {
     return res.status(400).send(errors);
-  } else {
-    next()
   }
+  next()
 }
 
 export const authCodeConfirmationValidationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   let errors: ErrorMessagesType | undefined = undefined;
   const user = await usersService.findByCode(req.body.code);
-  if(!user){
+  if (!user) {
     errors = authCodeConfirmationValidationCreator(errors);
   }
-  if(errors){
+  if (errors) {
     return res.status(400).send(errors)
   }
   next()
@@ -83,10 +82,10 @@ export const authConfirmedValidationMiddleware = async (req: Request, res: Respo
   let errors: ErrorMessagesType | undefined = undefined;
   const user = await usersService.findByCode(req.body.code);
 
-  if(user && user.token.tokenStatus === TOKEN_STATUS.CONFIRMED){
+  if (user && user.token.tokenStatus === TOKEN_STATUS.CONFIRMED) {
     errors = authConfirmedValidationCreator(errors);
   }
-  if(errors){
+  if (errors) {
     return res.status(400).send(errors)
   }
   next()
