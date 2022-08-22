@@ -99,6 +99,16 @@ export const usersService = {
     return await usersRepository.delete(id);
   },
   async setTokenStatus(id: string, status: TOKEN_STATUS): Promise<boolean> {
-    return await usersRepository.setTokenStatus(id, status)
+    return await usersRepository.updateTokenStatus(id, status)
+  },
+  async findByLoginOrEmail(login: any, email: any): Promise<string[]> {
+    const result = await usersRepository.findByLoginOrEmail(login, email);
+    return result
+  },
+  async updateToken(id: string, token: TokenType) {
+    return await usersRepository.updateToken(id, token)
+  },
+  async findByCode(code: string) {
+    return await usersRepository.findByCode(code);
   }
 }

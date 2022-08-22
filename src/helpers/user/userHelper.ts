@@ -19,7 +19,7 @@ export const userCreateErrorCreator = (errors: ErrorMessagesType | undefined,
   errors = userLoginPasswordErrorCreator(errors, login, password);
   if (!isValidEmail(email)) {
     errors = errorsMessagesCreator(baseErrorList(errors),
-      "Email must be correctly formated",
+      "Email must be correctly formatted",
       "email"
     );
   }
@@ -86,46 +86,6 @@ export const emailErrorCreator = (errors: ErrorMessagesType | undefined, email: 
   }
   return errors;
 
-}
-export const emailValidationCreator = async (errors: ErrorMessagesType | undefined, email: string) => {
-  // const user = await usersService.findByEmail(email);
-  // if (!user) {
-  //   errors = errorsMessagesCreator(baseErrorList(errors),
-  //     "User does not exist with this email",
-  //     "email"
-  //   );
-  // } else {
-  //   const authUser = await authService.findByUserId(user.id);
-  //   if (!authUser) {
-  //     errors = errorsMessagesCreator(baseErrorList(errors),
-  //       "Register email wasn't send for user",
-  //       "email"
-  //     );
-  //   } else if (authUser.tokenStatus === TOKEN_STATUS.CONFIRMED){
-  //     errors = errorsMessagesCreator(baseErrorList(errors),
-  //       "Authentication already passed",
-  //       "email"
-  //     );
-  //   }
-  // }
-  // if (!isValidEmail(email)) {
-  //   errors = errorsMessagesCreator(baseErrorList(errors),
-  //     "Incorrect email",
-  //     "email"
-  //   );
-  //}
-  return errors;
-
-}
-export const authLoginPassEmailErrorCreator = (errors: ErrorMessagesType | undefined, login: string, password: string, email: string) => {
-  errors = userLoginPasswordErrorCreator(errors, login, password);
-  if (!isValidEmail(email)) {
-    errors = errorsMessagesCreator(baseErrorList(errors),
-      "Email must be correctly formatted",
-      "email"
-    );
-  }
-  return errors;
 }
 
 

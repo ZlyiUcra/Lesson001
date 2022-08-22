@@ -1,4 +1,12 @@
-import {LoginType, PaginatorParamsType, TOKEN_STATUS, UserDBType, UserFullType, UserInputType} from "../db/types";
+import {
+  LoginType,
+  PaginatorParamsType,
+  TOKEN_STATUS,
+  TokenType,
+  UserDBType,
+  UserFullType,
+  UserInputType
+} from "../db/types";
 import {usersCollection} from "../db/db";
 import {DeleteResult, ObjectId} from "mongodb";
 
@@ -28,7 +36,7 @@ export const usersRepository = {
     return user
   },
   async findByLoginEmail(login: string, email: string): Promise<UserFullType | null> {
-    return await usersCollection.findOne({"credentials.login": login, "credentials.email":email},
+    return await usersCollection.findOne({"credentials.login": login, "credentials.email": email},
       {
         projection: {
           _id: 0
@@ -59,7 +67,7 @@ export const usersRepository = {
     if (result.deletedCount === 1) return true;
     return false;
   },
-  async setTokenStatus(id: string, tokenStatus: TOKEN_STATUS) {
+  async updateTokenStatus(id: string, tokenStatus: TOKEN_STATUS) {
     const isUpdated = await usersCollection.updateOne({id}, {
       $set: {
         "token.tokenStatus": tokenStatus
@@ -67,6 +75,28 @@ export const usersRepository = {
     })
     if (isUpdated.matchedCount) return true;
     return false;
+  },
+  async findByLoginOrEmail(login: any, email: any): Promise<string[]> {
+    const result = [];
+    const userLogin = await usersCollection.findOne({"credentials.login": login});
+    const userEmail = await usersCollection.findOne({"credentials.email": email});
+    if (userLogin) result.push("login")
+    if (userEmail) result.push("email")
+
+    return result
+  },
+  async updateToken(id: string, token: TokenType): Promise<boolean> {
+    const result = await usersCollection.updateOne({id}, {$set: {token}})
+    if (result.matchedCount) return true;
+    return false;
+  },
+  async findByCode(code: string) {
+    return await usersCollection.findOne({"token.confirmationToken": code},
+      {
+        projection: {
+          _id: 0
+        }
+      })
   }
 }
 
