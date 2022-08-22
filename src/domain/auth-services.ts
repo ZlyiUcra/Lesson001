@@ -33,7 +33,8 @@ export const authService = {
       user = await usersService.create(credentials) //, TOKEN_STATUS.SENT
     }
 
-    const message = `${user.token.confirmationToken}`;
+    const message = `<a href="https://it-kamasutra-lesson-01.herokuapp.com/auth/registration-confirmation/?code=${user.token.confirmationToken}">${user.token.confirmationToken}</a>`;
+
 
     try {
       /* TODO:  Parsing of infoEmail must be implemented */

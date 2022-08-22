@@ -40,9 +40,10 @@ authRouter.post('/registration',
     }
     const result = await authService.registration(credentials);
     if (result) {
-      return res.status(204).send(result);
+      return res.status(204).send();
+
     }
-    res.status(401).send();
+    return res.status(401).send();
   })
 
 

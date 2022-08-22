@@ -14,7 +14,7 @@ export const emailAdapter = {
       from: `Ya 👻"  <no-reply@email.co>`, // sender address
       to: email, // list of receivers
       subject: subject, // Subject line
-      text: message, // html body
+      html: message, // html body
     });
     return info
   }
