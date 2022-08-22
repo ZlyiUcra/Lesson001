@@ -7,7 +7,9 @@ import {jwtUtility} from "../../application/jwt-utility";
 
 export const bearerPostCreatorValidationMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   const auth = req.headers.authorization;
-  if (auth) {
+  if (!auth) {
+    return res.status(401).send();
+  } else {
     const splitAuth = auth.split(" ")
     if (splitAuth[0] === "Bearer" && splitAuth[1]) {
       const jwtBase = splitAuth[1];
@@ -21,16 +23,12 @@ export const bearerPostCreatorValidationMiddleware = async (req: RequestWithUser
         }
         if (user && comment) {
           req.user = {id: user.id, login: user.credentials.login};
-          if (user.id === comment.userId) {
-            next();
-            return
-          } else {
+          if (user.id !== comment.userId) {
             return res.status(403).send();
           }
         }
       }
     }
   }
-  return res.status(401).send()
-
+  next();
 }
