@@ -30,15 +30,9 @@ export const authRegistrationEmailValidationCreator = async (errors: ErrorMessag
   return errors;
 }
 
-export const is429Status = async (attempts: AttemptsType): Promise<boolean> => {
+export const is429Status = (attempts: AttemptsType): boolean => {
   const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
-  if (timeDifference < +settings.TIME_LIMIT && attempts.limitTimeCount >= +settings.ATTEMPTS_TOKEN_LIMIT) {
-    return true
-  }
-  if(timeDifference > 1 + +settings.TIME_LIMIT ){
-    await attemptsService.update(attempts.ip as string, attempts.url as string, attempts.method as string, 0)
-  }
-  return false
+  return (timeDifference < settings.TIME_LIMIT && attempts.limitTimeCount >= settings.ATTEMPTS_TOKEN_LIMIT);
 }
 
 export const authLoginPassEmailErrorCreator = (errors: ErrorMessagesType | undefined, login: string, password: string, email: string) => {

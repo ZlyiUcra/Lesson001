@@ -12,6 +12,8 @@ import {isErrorsPresent} from "../../helpers/errorCommon/isErrorPresente";
 import {AttemptsType, RequestWithInternetData, TOKEN_STATUS, UserFullType} from "../../db/types";
 import {attemptsService} from "../../domain/attempts-service";
 import {usersService} from "../../domain/users-services";
+import {settings} from "../../settings";
+import differenceInSeconds from "date-fns/differenceInSeconds";
 
 
 export const authUserExistMiddleware = async (req: RequestWithInternetData, res: Response,
@@ -30,8 +32,11 @@ export const authAttemptsMiddleware = async (req: RequestWithInternetData, res: 
   const attempts: AttemptsType | null = await attemptsService.find(clientIP, req.originalUrl, req.method);
 
   if (attempts) {
-    if (await is429Status(attempts)) {
+    const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
+    if (is429Status(attempts)) {
       return res.status(429).send();
+    } else if(timeDifference > settings.TIME_LIMIT ){
+      await attemptsService.update(attempts.ip as string, attempts.url as string, attempts.method as string, 0)
     }
   }
   await attemptsService.update(clientIP, req.originalUrl, req.method);
