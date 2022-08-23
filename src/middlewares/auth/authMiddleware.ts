@@ -32,7 +32,7 @@ export const authAttemptsMiddleware = async (req: RequestWithInternetData, res: 
   const attempts: AttemptsType | null = await attemptsService.find(clientIP, req.originalUrl, req.method);
 
   if (attempts) {
-    const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt as Date);
+    const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
     if (is429Status(attempts)) {
       return res.status(429).send();
     }
@@ -42,9 +42,10 @@ export const authAttemptsMiddleware = async (req: RequestWithInternetData, res: 
         ip: attempts.ip,
         url: attempts.url,
         method: attempts.method,
-        limitTimeCount: 0,
+        limitTimeCount: 1,
         lastRequestedAt: new Date()
       })
+       return next()
     }
   }
   await attemptsService.update({
