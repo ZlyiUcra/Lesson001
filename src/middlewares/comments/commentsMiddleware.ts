@@ -72,7 +72,7 @@ export const commentExistsMiddleware = async (req: RequestWithUser,
   }
 
   if (errors?.errorsMessages?.length) {
-    return res.status(400).send(errors);
+    return res.status(404).send(errors);
   } else {
     next();
   }

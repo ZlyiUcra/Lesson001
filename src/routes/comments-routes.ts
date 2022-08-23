@@ -5,14 +5,13 @@ import {bearerPostCreatorValidationMiddleware} from "../middlewares/bearerAuth/b
 import {
   commentContentMiddleware, commentExistsMiddleware,
   commentOwnPostMiddleware,
-  commentPostIdMiddleware
 } from "../middlewares/comments/commentsMiddleware";
 
 
 export const commentsRouter = Router({});
 
 commentsRouter.get("/:id",
-  commentPostIdMiddleware,
+  commentExistsMiddleware,
   async (req: Request, res: Response) => {
     const result = await commentsService.findById(req.params.id);
     if (result) return res.status(200).send(result);
