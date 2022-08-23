@@ -30,30 +30,27 @@ export const authAttemptsMiddleware = async (req: RequestWithInternetData, res: 
   const clientIP = req.clientIP || "";
 
   const attempts: AttemptsType | null = await attemptsService.find(clientIP, req.originalUrl, req.method);
+  let attemptToSend: AttemptsType = {
+    ip: clientIP,
+    url: req.originalUrl,
+    method: req.method,
+    lastRequestedAt: new Date()
+  }
 
   if (attempts) {
     const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
     if (is429Status(attempts)) {
       return res.status(429).send();
+    } else{
+      await attemptsService.incrementCounter(attemptToSend);
     }
 
-    if (timeDifference > +settings.TIME_LIMIT) {
-      await attemptsService.update({
-        ip: attempts.ip,
-        url: attempts.url,
-        method: attempts.method,
-        limitTimeCount: 1,
-        lastRequestedAt: new Date()
-      })
-       return next()
-    }
+    if (timeDifference > +settings.TIME_LIMIT)
+      await attemptsService.resetCounter(attemptToSend);
+
+  } else {
+    await attemptsService.resetCounter(attemptToSend);
   }
-  await attemptsService.update({
-    ip: attempts.ip,
-    url: attempts.url,
-    method: attempts.method,
-    lastRequestedAt: new Date()
-  });
   next()
 };
 

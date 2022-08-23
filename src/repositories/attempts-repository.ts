@@ -3,18 +3,27 @@ import {AttemptsType} from "../db/types";
 
 export const attemptsRepository = {
 
-  async update({ip, url, method, limitTimeCount,lastRequestedAt}: AttemptsType): Promise<boolean> {
-    const update = typeof limitTimeCount === "number" ? {
-      $set: {lastRequestedAt, limitTimeCount}
-    } : {
-      $inc: {limitTimeCount: 1},
-      $set: {lastRequestedAt}
+  async resetCounter({ip, url, method}: AttemptsType): Promise<boolean> {
+    const update ={
+      $set: {lastRequestedAt: new Date(), limitTimeCount: 1}
     };
 
     const result = await attemptsCollection.updateOne({ip, url, method},
       update,
       {upsert: true});
-    //const attemptsForIP = await this.find(ip);
+
+    if (result.upsertedCount) {
+      return true;
+    }
+    return false
+  },
+  async incrementCounter({ip, url, method}: AttemptsType): Promise<boolean> {
+    const update = {
+      $inc: {limitTimeCount: 1},
+    };
+    const result = await attemptsCollection.updateOne({ip, url, method},
+      update,
+      {upsert: true});
     if (result.upsertedCount) {
       return true;
     }
