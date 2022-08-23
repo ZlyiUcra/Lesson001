@@ -40,7 +40,7 @@ export const authAttemptsMiddleware = async (req: RequestWithInternetData, res: 
 
 
   if (attempts) {
-    const requests = attempts.lastRequestsAt.filter(t => differenceInSeconds(currentTime, t) < +settings.TIME_LIMIT * 1);
+    const requests = attempts.lastRequestsAt.filter(t => differenceInSeconds(currentTime, t) < +settings.TIME_LIMIT * 1.3);
     const lastRequest = attempts.lastRequestsAt.reduce((a, b) => (a > b ? a : b));
 
     if (requests.length >= +settings.ATTEMPTS_TOKEN_LIMIT) {
