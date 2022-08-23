@@ -68,7 +68,7 @@ export const userExistsErrorCreator = async (errors: ErrorMessagesType | undefin
 export const userNotExistsErrorCreator = async (errors: ErrorMessagesType | undefined, id: string) => {
   const userById = await usersService.findById(id);
 
-  if (userById) {
+  if (!userById) {
     errors = errorsMessagesCreator(baseErrorList(errors),
       "User not exist",
       "id"

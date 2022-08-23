@@ -39,8 +39,11 @@ export const authService = {
     try {
       /* TODO:  Parsing of infoEmail must be implemented */
       // Returned value
-      const sentInfo = await emailAdapter.sendEmail(user.credentials.email, "Registration's confirmation", message);
+      console.time('Email')
+      emailAdapter.sendEmail(user.credentials.email, "Registration's confirmation", message);
+      console.timeEnd('Email')
       //const token = await authRepository.create(authToken);
+
       return  await usersRepository.updateTokenStatus(user.id, TOKEN_STATUS.SENT);
 
     } catch (err) {
@@ -64,7 +67,7 @@ export const authService = {
       try {
         /* TODO:  Parsing of infoEmail must be implemented */
         if (user.token.tokenStatus !== TOKEN_STATUS.CONFIRMED) {
-          const sentInfo = await emailAdapter.sendEmail(email, "Email Resending", message);
+          await emailAdapter.sendEmail(email, "Email Resending", message);
           return await usersService.updateToken(user.id, token);
         } else {
           return false
