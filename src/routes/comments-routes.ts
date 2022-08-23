@@ -11,7 +11,6 @@ import {
 export const commentsRouter = Router({});
 
 commentsRouter.get("/:id",
-  commentExistsMiddleware,
   async (req: Request, res: Response) => {
     const result = await commentsService.findById(req.params.id);
     if (result) return res.status(200).send(result);
@@ -22,7 +21,6 @@ commentsRouter.put("/:commentId",
   bearerPostCreatorValidationMiddleware,
   commentOwnPostMiddleware,
   commentContentMiddleware,
-  commentExistsMiddleware,
   async (req: RequestWithUser, res: Response) => {
     const comment: CommentContentType = {content: req.body.content}
     const result = await commentsService.update(comment, req.params.commentId);
@@ -33,7 +31,7 @@ commentsRouter.put("/:commentId",
 commentsRouter.delete("/:commentId",
   bearerPostCreatorValidationMiddleware,
   commentOwnPostMiddleware,
-  commentExistsMiddleware,
+  //commentExistsMiddleware,
   async (req: RequestWithUser, res: Response) => {
 
     const result = await commentsService.delete(req.params.commentId);

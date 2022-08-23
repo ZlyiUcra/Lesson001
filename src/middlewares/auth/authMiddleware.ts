@@ -46,7 +46,7 @@ export const authAttemptsMiddleware = async (req: RequestWithInternetData, res: 
     if (requests.length >= +settings.ATTEMPTS_TOKEN_LIMIT) {
       return res.status(429).send();
     } else {
-      if (differenceInSeconds(currentTime, lastRequest) <= +settings.TIME_LIMIT * 2) {
+      if (differenceInSeconds(currentTime, lastRequest) <= +settings.TIME_LIMIT * 1.5) {
         attemptToSend = {...attemptToSend, lastRequestsAt: [...requests, currentTime]}
       }
     }
