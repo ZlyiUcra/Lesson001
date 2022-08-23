@@ -29,34 +29,29 @@ export const authAttemptsMiddleware = async (req: RequestWithInternetData, res: 
   const clientIP = req.clientIP || "";
 
   const attempts: AttemptsType | null = await attemptsService.find(clientIP, req.originalUrl, req.method);
+  const currentTime = new Date();
+
   let attemptToSend: AttemptsType = {
     ip: clientIP,
     url: req.originalUrl,
     method: req.method,
-    lastRequestsAt: []
+    lastRequestsAt: [currentTime]
   }
-  const currentTime = new Date();
 
-  if (!attempts) {
-    await attemptsService.updateRequests({...attemptToSend, lastRequestsAt: [currentTime]});
-  } else {
 
+  if (attempts) {
     const requests = attempts.lastRequestsAt.filter(t => differenceInSeconds(currentTime, t) < +settings.TIME_LIMIT);
-
     const lastRequest = attempts.lastRequestsAt.reduce((a, b) => (a > b ? a : b));
+
     if (requests.length >= +settings.ATTEMPTS_TOKEN_LIMIT) {
       return res.status(429).send();
     } else {
       if (differenceInSeconds(currentTime, lastRequest) <= +settings.TIME_LIMIT * 2) {
-        await attemptsService.updateRequests({...attemptToSend, lastRequestsAt: [...requests, currentTime]});
-      } else {
-        await attemptsService.updateRequests({
-          ...attemptToSend,
-          lastRequestsAt: [currentTime]
-        });
+        attemptToSend = {...attemptToSend, lastRequestsAt: [...requests, currentTime]}
       }
     }
   }
+  await attemptsService.updateRequests(attemptToSend);
   next()
 };
 
