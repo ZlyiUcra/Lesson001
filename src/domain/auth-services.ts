@@ -28,10 +28,10 @@ export const authService = {
   },
 
   async registration(credentials: CredentialType): Promise<boolean> {
-    let user = await usersService.findByLoginEmailPass(credentials);
-    if(!user) {
-      user = await usersService.create(credentials) //, TOKEN_STATUS.SENT
-    }
+    let user = await usersService.create(credentials);
+    // if(!user) {
+    //   user = await usersService.create(credentials) //, TOKEN_STATUS.SENT
+    // }
 
     const message = `<a href="https://it-kamasutra-lesson-01.herokuapp.com/auth/registration-confirmation/?code=${user.token.confirmationToken}">${user.token.confirmationToken}</a>`;
 
@@ -39,10 +39,7 @@ export const authService = {
     try {
       /* TODO:  Parsing of infoEmail must be implemented */
       // Returned value
-
-      emailAdapter.sendEmail(user.credentials.email, "Registration's confirmation", message);
-
-      //const token = await authRepository.create(authToken);
+      await emailAdapter.sendEmail(user.credentials.email, "Registration's confirmation", message);
 
       return  await usersRepository.updateTokenStatus(user.id, TOKEN_STATUS.SENT);
 
