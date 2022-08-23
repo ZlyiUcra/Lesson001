@@ -136,7 +136,7 @@ export type AttemptsDBType = WithId<{
   ip: string | null;
   url: string | null;
   method: string | null;
-  limitTimeCount: number;
+  limitTimeCount?: number;
   lastRequestedAt: Date;
 }>
 export type AttemptsType = Omit<AttemptsDBType, "_id">
