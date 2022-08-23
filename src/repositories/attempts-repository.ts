@@ -4,7 +4,7 @@ import {AttemptsType} from "../db/types";
 export const attemptsRepository = {
 
   async resetCounter({ip, url, method}: AttemptsType): Promise<boolean> {
-    const update ={
+    const update = {
       $set: {lastRequestedAt: new Date(), limitTimeCount: 1}
     };
 
@@ -12,7 +12,7 @@ export const attemptsRepository = {
       update,
       {upsert: true});
 
-    if (result.upsertedCount) {
+    if (result.matchedCount) {
       return true;
     }
     return false
@@ -24,7 +24,7 @@ export const attemptsRepository = {
     const result = await attemptsCollection.updateOne({ip, url, method},
       update,
       {upsert: true});
-    if (result.upsertedCount) {
+    if (result.matchedCount) {
       return true;
     }
     return false
