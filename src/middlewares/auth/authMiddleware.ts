@@ -37,15 +37,18 @@ export const authAttemptsMiddleware = async (req: RequestWithInternetData, res: 
     lastRequestedAt: new Date()
   }
 
-  if (attempts) {
+  if (!attempts) {
+    await attemptsService.resetCounter(attemptToSend);
+  } else {
     const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
+
     if (is429Status(attempts)) {
       return res.status(429).send();
     } else if (timeDifference > +settings.TIME_LIMIT) {
       await attemptsService.resetCounter(attemptToSend);
-    } else await attemptsService.incrementCounter(attemptToSend);
-  } else {
-    await attemptsService.resetCounter(attemptToSend);
+    } else {
+      await attemptsService.incrementCounter(attemptToSend);
+    }
   }
   next()
 };

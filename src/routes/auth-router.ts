@@ -48,8 +48,8 @@ authRouter.post('/registration',
 
 authRouter.post('/registration-email-resending',
   addIPMiddleware,
-  authRegistrationEmailValidationMiddleware,
   authAttemptsMiddleware,
+  authRegistrationEmailValidationMiddleware,
   async (req: RequestWithInternetData, res: Response) => {
     const {email} = req.body;
     const isEmailResent = await authService.emailResending(email);
@@ -61,12 +61,12 @@ authRouter.post('/registration-email-resending',
 
 authRouter.post('/registration-confirmation',
   addIPMiddleware,
+  authAttemptsMiddleware,
   authCodeConfirmationValidationMiddleware,
   authConfirmedValidationMiddleware,
-  authAttemptsMiddleware,
   async (req: RequestWithInternetData, res: Response) => {
     const {code} = req.body;
-    const isConfirmed = await authService.emailConfirmedByCodeAndIP(code);
+    const isConfirmed = await authService.emailConfirmedByCode(code);
     if (isConfirmed) {
       return res.status(204).send();
     }

@@ -76,7 +76,7 @@ export const authService = {
     return false
   },
 
-  async emailConfirmedByCodeAndIP(confirmationToken: string): Promise<boolean> {
+  async emailConfirmedByCode(confirmationToken: string): Promise<boolean> {
     const user = await usersService.findByCode(confirmationToken);
     if (user) {
       return  await usersRepository.updateTokenStatus(user.id, TOKEN_STATUS.CONFIRMED);
