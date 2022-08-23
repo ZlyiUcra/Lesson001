@@ -2,8 +2,8 @@ import nodemailer from "nodemailer";
 import {settings} from "../settings";
 
 export const emailAdapter = {
-  sendEmail: async (email: string, subject: string, message: string) => {
-    let transporter = await nodemailer.createTransport({
+  sendEmail:  (email: string, subject: string, message: string) => {
+    let transporter = nodemailer.createTransport({
       service: settings.EMAIL_SERVICE,
       auth: {
         user: settings.EMAIL,
@@ -11,7 +11,7 @@ export const emailAdapter = {
       }
     });
 
-    let info = await transporter.sendMail({
+    let info =  transporter.sendMail({
       from: `Ya 👻"  <no-reply@email.co>`, // sender address
       to: email, // list of receivers
       subject: subject, // Subject line
