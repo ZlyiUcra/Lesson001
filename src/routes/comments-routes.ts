@@ -31,7 +31,7 @@ commentsRouter.put("/:commentId",
 commentsRouter.delete("/:commentId",
   bearerPostCreatorValidationMiddleware,
   commentOwnPostMiddleware,
-  //commentExistsMiddleware,
+  commentExistsMiddleware,
   async (req: RequestWithUser, res: Response) => {
 
     const result = await commentsService.delete(req.params.commentId);

@@ -12,7 +12,7 @@ export const emailAdapter = {
     });
 
     let info = await transporter.sendMail({
-      from: `Ya 👻"  <no-reply@email.co>`, // sender address
+      from: `Ya 👻  <no-reply@email.co>`, // sender address
       to: email, // list of receivers
       subject: subject, // Subject line
       html: message, // html body
