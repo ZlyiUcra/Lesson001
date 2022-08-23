@@ -54,6 +54,7 @@ export const postIdMiddleware = async (req: Request,
     next();
   }
 }
+
 export const postIdDeleteMiddleware = async (req: Request,
                                              res: Response,
                                              next: NextFunction) => {
