@@ -32,7 +32,7 @@ export const authRegistrationEmailValidationCreator = async (errors: ErrorMessag
 
 export const is429Status = (attempts: AttemptsType): boolean => {
   const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
-  return (timeDifference < settings.TIME_LIMIT && attempts.limitTimeCount >= settings.ATTEMPTS_TOKEN_LIMIT);
+  return (timeDifference < settings.TIME_LIMIT && attempts.limitTimeCount as number >= settings.ATTEMPTS_TOKEN_LIMIT);
 }
 
 export const authLoginPassEmailErrorCreator = (errors: ErrorMessagesType | undefined, login: string, password: string, email: string) => {
