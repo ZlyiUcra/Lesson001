@@ -31,7 +31,7 @@ authRouter.post('/login',
 authRouter.post('/registration',
   addIPMiddleware,
   authAttemptsMiddleware,
-  //authLoginPassEmailValidationMiddleware,
+  authLoginPassEmailValidationMiddleware,
   async (req: RequestWithInternetData, res: Response) => {
     const credentials: CredentialType = {
       login: req.body.login,

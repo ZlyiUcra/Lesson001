@@ -39,9 +39,9 @@ export const authService = {
     try {
       /* TODO:  Parsing of infoEmail must be implemented */
       // Returned value
-      console.time('Email')
+
       emailAdapter.sendEmail(user.credentials.email, "Registration's confirmation", message);
-      console.timeEnd('Email')
+
       //const token = await authRepository.create(authToken);
 
       return  await usersRepository.updateTokenStatus(user.id, TOKEN_STATUS.SENT);
