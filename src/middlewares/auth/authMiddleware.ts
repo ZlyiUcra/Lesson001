@@ -6,7 +6,6 @@ import {
   authLoginOrEmailAlreadyExistsErrorCreator,
   authLoginPassEmailErrorCreator,
   authRegistrationEmailValidationCreator,
-  is429Status
 } from "../../helpers/auth/authHeplers";
 import {isErrorsPresent} from "../../helpers/errorCommon/isErrorPresente";
 import {AttemptsType, RequestWithInternetData, TOKEN_STATUS, UserFullType} from "../../db/types";
@@ -34,21 +33,28 @@ export const authAttemptsMiddleware = async (req: RequestWithInternetData, res: 
     ip: clientIP,
     url: req.originalUrl,
     method: req.method,
-    lastRequestedAt: new Date()
+    lastRequestsAt: []
   }
+  const currentTime = new Date();
 
   if (!attempts) {
-    await attemptsService.resetCounter(attemptToSend);
+    await attemptsService.updateRequests({...attemptToSend, lastRequestsAt: [currentTime]});
   } else {
-    const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
 
-    if (is429Status(attempts)) {
-      await attemptsService.incrementCounter(attemptToSend);
+    const requests = attempts.lastRequestsAt.filter(t => differenceInSeconds(currentTime, t) < +settings.TIME_LIMIT);
+
+    const lastRequest = attempts.lastRequestsAt.reduce((a, b) => (a > b ? a : b));
+    if (requests.length >= +settings.ATTEMPTS_TOKEN_LIMIT) {
       return res.status(429).send();
-    } else if (timeDifference > +settings.TIME_LIMIT) {
-      await attemptsService.resetCounter(attemptToSend);
     } else {
-      await attemptsService.incrementCounter(attemptToSend);
+      if (differenceInSeconds(currentTime, lastRequest) <= +settings.TIME_LIMIT * 2) {
+        await attemptsService.updateRequests({...attemptToSend, lastRequestsAt: [...requests, currentTime]});
+      } else {
+        await attemptsService.updateRequests({
+          ...attemptToSend,
+          lastRequestsAt: [currentTime]
+        });
+      }
     }
   }
   next()
