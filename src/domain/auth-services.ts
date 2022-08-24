@@ -39,14 +39,13 @@ export const authService = {
     try {
       /* TODO:  Parsing of infoEmail must be implemented */
       // Returned value
-      await emailAdapter.sendEmail(user.credentials.email, "Registration's confirmation", message);
+      emailAdapter.sendEmail(user.credentials.email, "Registration's confirmation", message);
 
       return  await usersRepository.updateTokenStatus(user.id, TOKEN_STATUS.SENT);
 
     } catch (err) {
       return false
     }
-
     return false
   },
 
@@ -64,7 +63,7 @@ export const authService = {
       try {
         /* TODO:  Parsing of infoEmail must be implemented */
         if (user.token.tokenStatus !== TOKEN_STATUS.CONFIRMED) {
-          await emailAdapter.sendEmail(email, "Email Resending", message);
+          emailAdapter.sendEmail(email, "Email Resending", message);
           return await usersService.updateToken(user.id, token);
         } else {
           return false
