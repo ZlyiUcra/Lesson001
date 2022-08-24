@@ -20,12 +20,12 @@ export const commentsRepository = {
     const resultComment: CommentDBType = {...comment, postId, _id: new ObjectId()}
     await commentsCollection.insertOne(resultComment);
     const result = await commentsCollection
-      .findOne({id: comment.id}, {projection: {_id: 0}}) as CommentType;
+      .findOne({id: comment.id}, {projection: {_id: 0, postId: 0}}) as CommentType;
     return result;
   },
 
   async findById(id: string): Promise<CommentType | null> {
-    return await commentsCollection.findOne({id}, {projection: {_id: 0}});
+    return await commentsCollection.findOne({id}, {projection: {_id: 0, postId: 0}});
   },
   async update(comment: CommentContentType, commentId: string) {
     const result = await commentsCollection.updateOne(
