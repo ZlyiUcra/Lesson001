@@ -63,7 +63,6 @@ export const commentExistsMiddleware = async (req: RequestWithUser,
   let errors: ErrorMessagesType | undefined = undefined;
 
   const comment = await commentsService.findById(req.params.commentId);
-  console.log("comment: ", comment)
   if (!comment) {
     errors = errorsMessagesCreator(baseErrorList(errors),
       "Comment does not exist",
