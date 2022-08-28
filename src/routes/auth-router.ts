@@ -11,15 +11,12 @@ import {
   authRegistrationEmailValidationMiddleware,
   authCodeConfirmationValidationMiddleware,
   authConfirmedValidationMiddleware,
-  authAccessTokenAliveMiddleware,
   authAddFullUserFromAccessTokenMiddleware,
   authRefreshTokenBlacklistMiddleware,
   authRefreshTokenValidMiddleware,
   authLogoutMiddleware
 } from "../middlewares/auth/authMiddleware";
 import {jwtUtility} from "../application/jwt-utility";
-import {usersService} from "../domain/users-services";
-import {blacklistService} from "../domain/blacklist-service";
 
 
 export const authRouter = Router({});
@@ -60,7 +57,7 @@ authRouter.post('/login',
     }
     //const refreshToken = req.cookies["refreshToken"];
 
-    const result = await authService.login(credentials, "5m");
+    const result = await authService.login(credentials, "10s");
     if(result){
       const {accessToken, user} = result;
 
@@ -68,9 +65,9 @@ authRouter.post('/login',
         id: user.id,
         login: user.credentials.login,
         email: user.credentials.email
-      }, "1m");
-      //res.cookie("refreshToken", refreshToken,{secure: true, httpOnly: true})
-      res.cookie("refreshToken", refreshToken);
+      }, "20s");
+      res.cookie("refreshToken", refreshToken,{secure: true, httpOnly: true})
+      //res.cookie("refreshToken", refreshToken);
       return res.status(200).send({accessToken});
     }
     return res.status(401).send()
