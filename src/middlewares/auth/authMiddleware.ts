@@ -148,7 +148,6 @@ export const authAccessTokenAliveMiddleware = async (req: RequestWithFullUser, r
 
 export const authRefreshTokenValidMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
   const user = await jwtUtility.extractCompleteUserJWTFromToken(req.cookies["refreshToken"]);
-
   if(!user)
     return res.status(401).send()
   next();

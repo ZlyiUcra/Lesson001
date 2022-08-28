@@ -28,23 +28,25 @@ authRouter.post('/refresh-token',
   // authAccessTokenAliveMiddleware,
   authRefreshTokenValidMiddleware,
   async (req: RequestWithFullUser, res: Response) => {
-    const user = req.user as UserFullType;
+    const user = req.user;
 
-    const accessToken = await jwtUtility.createJWT({
-      id: user.id,
-      login: user.credentials.login
-    }, "10s");
-    const refreshToken = await jwtUtility.createUserJWT({
-      id: user.id,
-      login: user.credentials.login,
-      email: user.credentials.email
-    }, "20s");
+    if (!user) {
+      return res.status(401).send();
+    } else {
+      const accessToken = await jwtUtility.createJWT({
+        id: user.id,
+        login: user.credentials.login
+      }, "10s");
+      const refreshToken = await jwtUtility.createUserJWT({
+        id: user.id,
+        login: user.credentials.login,
+        email: user.credentials.email
+      }, "20s");
+      //res.cookie("refreshToken", refreshToken);
+      res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true});
 
-    //res.cookie("refreshToken", refreshToken);
-    res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true});
-
-    return res.status(200).send({accessToken});
-
+      return res.status(200).send({accessToken});
+    }
   });
 
 authRouter.post('/login',
@@ -59,7 +61,7 @@ authRouter.post('/login',
     //const refreshToken = req.cookies["refreshToken"];
 
     const result = await authService.login(credentials, "10s");
-    if(result){
+    if (result) {
       const {accessToken, user} = result;
 
       const refreshToken = await jwtUtility.createUserJWT({
@@ -67,7 +69,7 @@ authRouter.post('/login',
         login: user.credentials.login,
         email: user.credentials.email
       }, "20s");
-      res.cookie("refreshToken", refreshToken,{secure: true, httpOnly: true})
+      res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true})
       //res.cookie("refreshToken", refreshToken);
       return res.status(200).send({accessToken});
     }
