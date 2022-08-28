@@ -13,8 +13,8 @@ import {attemptsService} from "../../domain/attempts-service";
 import {usersService} from "../../domain/users-services";
 import {settings} from "../../settings";
 import differenceInSeconds from "date-fns/differenceInSeconds";
-import {blacklistService} from "../../domain/blacklist-service";
 import {jwtUtility} from "../../application/jwt-utility";
+import { blacklistService } from "../../domain/blacklist-service";
 
 
 export const authUserExistMiddleware = async (req: RequestWithInternetData, res: Response,
