@@ -40,7 +40,7 @@ authRouter.post('/refresh-token',
       email: user.credentials.email
     }, "20s");
 
-    res.cookie("refreshToken", refreshToken);
+    res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true});
 
     return res.status(200).send({accessToken});
 
