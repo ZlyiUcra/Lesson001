@@ -14,7 +14,7 @@ import {
   authAddUserDataFromTokenMiddleware,
   authRefreshTokenBlacklistMiddleware,
   authRefreshTokenIsValidMiddleware,
-  authLogoutMiddleware, authAccessTokenAliveMiddleware
+  authLogoutMiddleware, authAccessTokenAliveMiddleware, authAddUserFromAccessTokenMiddleware
 } from "../middlewares/auth/authMiddleware";
 import {jwtUtility} from "../application/jwt-utility";
 
@@ -79,7 +79,7 @@ authRouter.post('/logout',
   authLogoutMiddleware,
   async (req: Request, res: Response) => {
     res.clearCookie("refreshToken");
-    return res.status(200).send();
+    return res.status(204).send();
   });
 
 authRouter.post('/registration',
@@ -129,7 +129,7 @@ authRouter.post('/registration-confirmation',
   });
 
 authRouter.get('/me',
-  authAddUserDataFromTokenMiddleware,
+  authAddUserFromAccessTokenMiddleware,
   authAccessTokenAliveMiddleware,
   async (req: RequestWithFullUser, res: Response) => {
     const user = req.user;

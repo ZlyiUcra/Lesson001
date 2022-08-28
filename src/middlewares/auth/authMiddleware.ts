@@ -139,6 +139,18 @@ export const authAddUserDataFromTokenMiddleware = async (req: RequestWithFullUse
 
   next();
 }
+export const authAddUserFromAccessTokenMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
+  const headerAuth = req.headers.authorization;
+  const accessToken = headerAuth?.split(" ")[1] || "";
+  let userJWT = await jwtUtility.extractUserJWTFromToken(accessToken);
+
+  const user = await usersService.findById(userJWT?.id as string);
+
+  req.user = user ? user : undefined;
+
+  next();
+}
+
 
 export const authAccessTokenAliveMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
   const user = req.user;
