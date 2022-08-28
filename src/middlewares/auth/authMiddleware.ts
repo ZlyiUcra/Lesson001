@@ -124,10 +124,15 @@ export const authRefreshTokenBlacklistMiddleware = async (req: Request, res: Res
   next();
 }
 
-export const authAddFullUserFromAccessTokenMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
+export const authAddUserDataFromTokenMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
   const headerAuth = req.headers.authorization;
   const accessToken = headerAuth?.split(" ")[1] || "";
-  const userJWT = await jwtUtility.extractUserJWTFromToken(accessToken);
+  let userJWT = await jwtUtility.extractUserJWTFromToken(accessToken);
+
+  if(!userJWT) {
+    const refreshToken = req.cookies["refreshToken"]
+    userJWT = await jwtUtility.extractUserJWTFromToken(refreshToken)
+  }
   const user = await usersService.findById(userJWT?.id as string);
 
   req.user = user ? user : undefined;
@@ -146,7 +151,7 @@ export const authAccessTokenAliveMiddleware = async (req: RequestWithFullUser, r
   next();
 }
 
-export const authRefreshTokenValidMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
+export const authRefreshTokenIsValidMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
   const user = await jwtUtility.extractCompleteUserJWTFromToken(req.cookies["refreshToken"]);
   if(!user)
     return res.status(401).send()

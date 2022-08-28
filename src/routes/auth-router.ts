@@ -11,9 +11,9 @@ import {
   authRegistrationEmailValidationMiddleware,
   authCodeConfirmationValidationMiddleware,
   authConfirmedValidationMiddleware,
-  authAddFullUserFromAccessTokenMiddleware,
+  authAddUserDataFromTokenMiddleware,
   authRefreshTokenBlacklistMiddleware,
-  authRefreshTokenValidMiddleware,
+  authRefreshTokenIsValidMiddleware,
   authLogoutMiddleware, authAccessTokenAliveMiddleware
 } from "../middlewares/auth/authMiddleware";
 import {jwtUtility} from "../application/jwt-utility";
@@ -24,9 +24,9 @@ export const authRouter = Router({});
 authRouter.post('/refresh-token',
   // addIPMiddleware,
   authRefreshTokenBlacklistMiddleware,
-  authAddFullUserFromAccessTokenMiddleware,
+  authRefreshTokenIsValidMiddleware,
+  authAddUserDataFromTokenMiddleware,
   // authAccessTokenAliveMiddleware,
-  authRefreshTokenValidMiddleware,
   async (req: RequestWithFullUser, res: Response) => {
     const user = req.user;
 
@@ -58,9 +58,8 @@ authRouter.post('/login',
       login: req.body.login,
       password: req.body.password
     }
-    //const refreshToken = req.cookies["refreshToken"];
 
-    const result = await authService.login(credentials, "10s");
+    const result = await authService.login(credentials);
     if (result) {
       const {accessToken, user} = result;
 
@@ -130,7 +129,7 @@ authRouter.post('/registration-confirmation',
   });
 
 authRouter.get('/me',
-  authAddFullUserFromAccessTokenMiddleware,
+  authAddUserDataFromTokenMiddleware,
   authAccessTokenAliveMiddleware,
   async (req: RequestWithFullUser, res: Response) => {
     const user = req.user;
