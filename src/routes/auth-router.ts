@@ -59,7 +59,7 @@ authRouter.post('/login',
       password: req.body.password
     }
 
-    const result = await authService.login(credentials);
+    const result = await authService.login(credentials, "10s");
     if (result) {
       const {accessToken, user} = result;
 
