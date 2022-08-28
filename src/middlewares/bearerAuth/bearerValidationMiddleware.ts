@@ -1,10 +1,10 @@
 import {NextFunction, Request, Response} from "express";
 import {usersService} from "../../domain/users-services";
-import {RequestWithUser} from "../../db/types";
+import {RequestWithShortUser} from "../../db/types";
 import {jwtUtility} from "../../application/jwt-utility";
 
 
-export const bearerValidationMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+export const bearerValidationMiddleware = async (req: RequestWithShortUser, res: Response, next: NextFunction) => {
   const auth = req.headers.authorization;
   if (auth) {
     const splitAuth = auth.split(" ")

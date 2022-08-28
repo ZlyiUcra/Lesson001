@@ -1,4 +1,4 @@
-import {RequestWithUser} from "../../db/types";
+import {RequestWithShortUser} from "../../db/types";
 import {NextFunction, Response} from "express";
 import {ErrorMessagesType, errorsMessagesCreator} from "../../helpers/errorCommon/errorMessagesCreator";
 import {commentContentErrorCreator} from "../../helpers/comments/commentsHelper";
@@ -6,7 +6,7 @@ import {postsService} from "../../domain/posts-services";
 import {commentsService} from "../../domain/comments-services";
 import {baseErrorList} from "../../helpers/errorCommon/baseErrorListHelper";
 
-export const commentForPostMiddleware = async (req: RequestWithUser,
+export const commentForPostMiddleware = async (req: RequestWithShortUser,
                                                res: Response,
                                                next: NextFunction) => {
 
@@ -20,7 +20,7 @@ export const commentForPostMiddleware = async (req: RequestWithUser,
   next();
 };
 
-export const commentPostIdMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+export const commentPostIdMiddleware = async (req: RequestWithShortUser, res: Response, next: NextFunction) => {
   const post = await postsService.findById(req.params.postId);
   if (!post) {
     return res.status(404).send();
@@ -28,7 +28,7 @@ export const commentPostIdMiddleware = async (req: RequestWithUser, res: Respons
   next();
 }
 
-export const commentOwnPostMiddleware = async (req: RequestWithUser,
+export const commentOwnPostMiddleware = async (req: RequestWithShortUser,
                                                res: Response,
                                                next: NextFunction) => {
 
@@ -42,7 +42,7 @@ export const commentOwnPostMiddleware = async (req: RequestWithUser,
   next();
 };
 
-export const commentContentMiddleware = async (req: RequestWithUser,
+export const commentContentMiddleware = async (req: RequestWithShortUser,
                                                res: Response,
                                                next: NextFunction) => {
 
@@ -56,7 +56,7 @@ export const commentContentMiddleware = async (req: RequestWithUser,
   next();
 };
 
-export const commentExistsMiddleware = async (req: RequestWithUser,
+export const commentExistsMiddleware = async (req: RequestWithShortUser,
                                               res: Response,
                                               next: NextFunction) => {
 

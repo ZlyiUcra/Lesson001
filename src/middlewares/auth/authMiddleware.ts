@@ -8,11 +8,13 @@ import {
   authRegistrationEmailValidationCreator,
 } from "../../helpers/auth/authHeplers";
 import {isErrorsPresent} from "../../helpers/errorCommon/isErrorPresente";
-import {AttemptsType, RequestWithInternetData, TOKEN_STATUS, UserFullType} from "../../db/types";
+import {AttemptsType, RequestWithFullUser, RequestWithInternetData, TOKEN_STATUS, UserFullType} from "../../db/types";
 import {attemptsService} from "../../domain/attempts-service";
 import {usersService} from "../../domain/users-services";
 import {settings} from "../../settings";
 import differenceInSeconds from "date-fns/differenceInSeconds";
+import {blacklistService} from "../../domain/blacklist-service";
+import {jwtUtility} from "../../application/jwt-utility";
 
 
 export const authUserExistMiddleware = async (req: RequestWithInternetData, res: Response,
@@ -24,6 +26,7 @@ export const authUserExistMiddleware = async (req: RequestWithInternetData, res:
   }
   next()
 }
+
 export const authAttemptsMiddleware = async (req: RequestWithInternetData, res: Response,
                                              next: NextFunction) => {
   const clientIP = req.clientIP || "";
@@ -95,6 +98,7 @@ export const authCodeConfirmationValidationMiddleware = async (req: Request, res
   }
   next()
 }
+
 export const authConfirmedValidationMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   let errors: ErrorMessagesType | undefined = undefined;
   const user = await usersService.findByCode(req.body.code);
@@ -106,4 +110,58 @@ export const authConfirmedValidationMiddleware = async (req: Request, res: Respo
     return res.status(400).send(errors)
   }
   next()
+}
+
+export const authRefreshTokenBlacklistMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  const refreshToken = req.cookies["refreshToken"];
+
+  const isTokenInBlacklist = await blacklistService.findByRefreshToken(refreshToken);
+  if(isTokenInBlacklist)
+    return res.status(401).send()
+  else
+    await blacklistService.insertToken(refreshToken)
+
+  next();
+}
+
+export const authAddFullUserFromAccessTokenMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
+  const headerAuth = req.headers.authorization;
+  const accessToken = headerAuth?.split(" ")[1] || "";
+  const userJWT = await jwtUtility.extractUserJWTFromToken(accessToken);
+  const user = await usersService.findById(userJWT?.id as string);
+
+  req.user = user ? user : undefined;
+
+  next();
+}
+
+export const authAccessTokenAliveMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
+  const user = req.user;
+
+  if(!user)
+    return res.status(401).send()
+  else
+    req.user = user;
+
+  next();
+}
+
+export const authRefreshTokenValidMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
+  const user = await jwtUtility.extractCompleteUserJWTFromToken(req.cookies["refreshToken"]);
+
+  if(!user)
+    return res.status(401).send()
+  next();
+}
+
+export const authLogoutMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  const refreshToken = req.cookies["refreshToken"];
+
+  const isTokenInBlacklist = await blacklistService.findByRefreshToken(refreshToken);
+  const user = await jwtUtility.extractCompleteUserJWTFromToken(refreshToken);
+  if(isTokenInBlacklist || !user)
+    return res.status(401).send();
+
+  await blacklistService.insertToken(refreshToken)
+  next();
 }

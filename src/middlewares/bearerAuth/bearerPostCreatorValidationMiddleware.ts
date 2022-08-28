@@ -1,11 +1,11 @@
 import {NextFunction, Request, Response} from "express";
 import {usersService} from "../../domain/users-services";
-import {RequestWithUser} from "../../db/types";
+import {RequestWithShortUser} from "../../db/types";
 import {commentsService} from "../../domain/comments-services";
 import {jwtUtility} from "../../application/jwt-utility";
 
 
-export const bearerPostCreatorValidationMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+export const bearerPostCreatorValidationMiddleware = async (req: RequestWithShortUser, res: Response, next: NextFunction) => {
   const auth = req.headers.authorization;
   if (!auth) {
     return res.status(401).send();

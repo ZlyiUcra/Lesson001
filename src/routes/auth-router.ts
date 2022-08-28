@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import {CredentialType, LoginType, RequestWithInternetData} from "../db/types";
+import {CredentialType, LoginType, RequestWithFullUser, RequestWithInternetData, UserFullType} from "../db/types";
 import {authService} from "../domain/auth-services";
 
 import {addIPMiddleware} from "../middlewares/ipMiddlware/addIPMiddleware";
@@ -9,11 +9,45 @@ import {
   authLoginPassEmailValidationMiddleware,
   authAttemptsMiddleware,
   authRegistrationEmailValidationMiddleware,
-  authCodeConfirmationValidationMiddleware, authConfirmedValidationMiddleware
+  authCodeConfirmationValidationMiddleware,
+  authConfirmedValidationMiddleware,
+  authAccessTokenAliveMiddleware,
+  authAddFullUserFromAccessTokenMiddleware,
+  authRefreshTokenBlacklistMiddleware,
+  authRefreshTokenValidMiddleware,
+  authLogoutMiddleware
 } from "../middlewares/auth/authMiddleware";
+import {jwtUtility} from "../application/jwt-utility";
+import {usersService} from "../domain/users-services";
+import {blacklistService} from "../domain/blacklist-service";
 
 
 export const authRouter = Router({});
+
+authRouter.post('/refresh-token',
+  // addIPMiddleware,
+  authRefreshTokenBlacklistMiddleware,
+  authAddFullUserFromAccessTokenMiddleware,
+  // authAccessTokenAliveMiddleware,
+  authRefreshTokenValidMiddleware,
+  async (req: RequestWithFullUser, res: Response) => {
+    const user = req.user as UserFullType;
+
+    const accessToken = await jwtUtility.createJWT({
+      id: user.id,
+      login: user.credentials.login
+    }, "10s");
+    const refreshToken = await jwtUtility.createUserJWT({
+      id: user.id,
+      login: user.credentials.login,
+      email: user.credentials.email
+    }, "20s");
+
+    res.cookie("refreshToken", refreshToken);
+
+    return res.status(200).send({accessToken});
+
+  });
 
 authRouter.post('/login',
   addIPMiddleware,
@@ -24,8 +58,29 @@ authRouter.post('/login',
       login: req.body.login,
       password: req.body.password
     }
-    const token = await authService.login(credentials);
-    return res.status(200).send(token);
+    //const refreshToken = req.cookies["refreshToken"];
+
+    const result = await authService.login(credentials, "5m");
+    if(result){
+      const {accessToken, user} = result;
+
+      const refreshToken = await jwtUtility.createUserJWT({
+        id: user.id,
+        login: user.credentials.login,
+        email: user.credentials.email
+      }, "1m");
+      //res.cookie("refreshToken", refreshToken,{secure: true, httpOnly: true})
+      res.cookie("refreshToken", refreshToken);
+      return res.status(200).send({accessToken});
+    }
+    return res.status(401).send()
+  });
+
+authRouter.post('/logout',
+  authLogoutMiddleware,
+  async (req: Request, res: Response) => {
+    res.clearCookie("refreshToken");
+    return res.status(200).send();
   });
 
 authRouter.post('/registration',
@@ -74,3 +129,20 @@ authRouter.post('/registration-confirmation',
 
   });
 
+authRouter.get('/me',
+  authAddFullUserFromAccessTokenMiddleware,
+  async (req: RequestWithFullUser, res: Response) => {
+    const user = req.user;
+
+    if (!user)
+      return res.status(401).send();
+
+    const result = {
+      userId: user.id,
+      login: user.credentials.login,
+      email: user.credentials.email
+    }
+
+    res.status(200).send(result);
+
+  });

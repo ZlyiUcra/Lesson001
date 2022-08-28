@@ -7,6 +7,7 @@ import {
   userCreateValidationMiddleware,
   userAlreadyNotExistMiddleware
 } from "../middlewares/users/usersMiddleware";
+import {jwtUtility} from "../application/jwt-utility";
 
 export const usersRouter = Router({});
 
@@ -26,6 +27,12 @@ usersRouter.post("/",
   async (req: Request, res: Response) => {
     const credentials: CredentialType = {login: req.body.login, email: req.body.email, password: req.body.password}
     const newUser = await usersService.create(credentials);
+    const refreshToken = await jwtUtility.createUserJWT({
+      id: newUser.id,
+      login: newUser.credentials.login,
+      email: newUser.credentials.email
+    }, "3m");
+    res.cookie("refreshToken", refreshToken)
     const {id, credentials: {login}} = newUser
     res.status(201).send({id, login})
   });
@@ -34,9 +41,9 @@ usersRouter.delete("/:id",
   authBasicValidationMiddleware,
   userAlreadyNotExistMiddleware,
   async (req: Request, res: Response) => {
-  const isDeleted = await usersService.delete(req.params.id);
-  if (isDeleted) {
-    res.status(204).send()
-  }
-  res.status(404).send()
-})
+    const isDeleted = await usersService.delete(req.params.id);
+    if (isDeleted) {
+      res.status(204).send()
+    }
+    res.status(404).send()
+  })

@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import {jwtUtility} from '../application/jwt-utility';
-import {CredentialType, JWTType, LoginType, TOKEN_STATUS, TokenType} from "../db/types";
+import {CredentialType, JWTType, LoginType, TOKEN_STATUS, TokenType, UserFullType} from "../db/types";
 import {usersService} from "./users-services";
 import {emailAdapter} from "../adapters/email-adapter";
 import {usersRepository} from "../repositories/users-repository";
@@ -15,13 +15,14 @@ export const authService = {
     const compareResult: boolean = await bcrypt.compare(password, hash)
     return compareResult
   },
-  async login(credentials: LoginType): Promise<JWTType | null> {
+  async login(credentials: LoginType, expiresIn="1h"): Promise<JWTType & {user: UserFullType} | null> {
     const user = await usersService.findByLogin(credentials.login);
     if (user !== null) {
       const isCorrectUserPassword = await this.isPasswordCorrect(credentials.password, user.credentials.password);
       if (isCorrectUserPassword) {
-        const token = await jwtUtility.createJWT({id: user.id, login: user.credentials.login});
-        return {token}
+        const accessToken = await jwtUtility.createUserJWT({id: user.id, login: user.credentials.login, email: user.credentials.email}, expiresIn);
+        const result = {accessToken, user}
+        return result
       }
     }
     return null

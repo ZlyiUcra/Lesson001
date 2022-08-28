@@ -4,7 +4,7 @@ import {
   CommentContentType,
   PostCommentsInputType, PostCreateType,
   PostPaginatorInputType, PostUpdateType,
-  RequestWithUser
+  RequestWithShortUser
 } from "../db/types";
 import {postsService} from "../domain/posts-services";
 import {
@@ -63,7 +63,7 @@ postsRouter.post("/:postId/comments",
   bearerValidationMiddleware,
   commentForPostMiddleware,
   commentPostIdMiddleware,
-  async (req: RequestWithUser, res: Response) => {
+  async (req: RequestWithShortUser, res: Response) => {
     const commentContent: CommentContentType = {content: req.body.content};
     const user = req.user;
     if (user) {

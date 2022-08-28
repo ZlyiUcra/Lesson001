@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {commentsService} from "../domain/comments-services";
-import {CommentContentType, RequestWithUser} from "../db/types";
+import {CommentContentType, RequestWithShortUser} from "../db/types";
 import {bearerPostCreatorValidationMiddleware} from "../middlewares/bearerAuth/bearerPostCreatorValidationMiddleware"
 import {
   commentContentMiddleware, commentExistsMiddleware,
@@ -21,7 +21,7 @@ commentsRouter.put("/:commentId",
   bearerPostCreatorValidationMiddleware,
   commentOwnPostMiddleware,
   commentContentMiddleware,
-  async (req: RequestWithUser, res: Response) => {
+  async (req: RequestWithShortUser, res: Response) => {
     const comment: CommentContentType = {content: req.body.content}
     const result = await commentsService.update(comment, req.params.commentId);
     if (result) return res.status(204).send();
@@ -32,7 +32,7 @@ commentsRouter.delete("/:commentId",
   bearerPostCreatorValidationMiddleware,
   commentOwnPostMiddleware,
   commentExistsMiddleware,
-  async (req: RequestWithUser, res: Response) => {
+  async (req: RequestWithShortUser, res: Response) => {
 
     const result = await commentsService.delete(req.params.commentId);
     if (result) return res.status(204).send();

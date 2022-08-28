@@ -9,8 +9,10 @@ import {settings} from "./settings";
 import {usersRouter} from './routes/users-router';
 import {commentsRouter} from "./routes/comments-routes";
 import {testingRouter} from './routes/testing-router';
+import cookieParser from 'cookie-parser';
 
 const app = express();
+app.use(cookieParser());
 
 app.use(cors());
 

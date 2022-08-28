@@ -74,6 +74,7 @@ export type UserShortType = {
   id: string;
   login: string;
 }
+export type UserJWTType = UserShortType & {email: string};
 export type UserFullType = Omit<UserDBType, "_id">
 
 export type LoginType = {
@@ -87,7 +88,7 @@ export type UserInputType = {
 }
 
 export type JWTType = {
-  token: string
+  accessToken: string
 }
 
 export type PostCommentsInputType = {
@@ -116,8 +117,11 @@ export type CommentDBType = WithId<{
 
 export type CommentType = Omit<CommentDBType, "_id" | "postId">
 
-export interface RequestWithUser extends Request {
+export interface RequestWithShortUser extends Request {
   user?: UserShortType
+}
+export interface RequestWithFullUser extends Request {
+  user?: UserFullType
 }
 
 export interface RequestWithInternetData extends Request {
@@ -144,3 +148,10 @@ export type PaginatorParamsType = {
   skip: number,
   limit: number
 }
+
+export type BlacklistDBType = WithId<{
+  id: string;
+  refreshToken: string;
+}>
+
+export type BlacklistType = Omit<BlacklistDBType, "_id">
