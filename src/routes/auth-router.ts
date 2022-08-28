@@ -14,7 +14,7 @@ import {
   authAddFullUserFromAccessTokenMiddleware,
   authRefreshTokenBlacklistMiddleware,
   authRefreshTokenValidMiddleware,
-  authLogoutMiddleware
+  authLogoutMiddleware, authAccessTokenAliveMiddleware
 } from "../middlewares/auth/authMiddleware";
 import {jwtUtility} from "../application/jwt-utility";
 
@@ -58,7 +58,7 @@ authRouter.post('/login',
     }
     //const refreshToken = req.cookies["refreshToken"];
 
-    const result = await authService.login(credentials, /*"10s"*/);
+    const result = await authService.login(credentials, "10s");
     if(result){
       const {accessToken, user} = result;
 
@@ -66,7 +66,7 @@ authRouter.post('/login',
         id: user.id,
         login: user.credentials.login,
         email: user.credentials.email
-      }, "100s");
+      }, "20s");
       res.cookie("refreshToken", refreshToken,{secure: true, httpOnly: true})
       //res.cookie("refreshToken", refreshToken);
       return res.status(200).send({accessToken});
@@ -129,6 +129,7 @@ authRouter.post('/registration-confirmation',
 
 authRouter.get('/me',
   authAddFullUserFromAccessTokenMiddleware,
+  authAccessTokenAliveMiddleware,
   async (req: RequestWithFullUser, res: Response) => {
     const user = req.user;
 
