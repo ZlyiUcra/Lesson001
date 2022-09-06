@@ -1,5 +1,6 @@
-import {attemptsCollection} from "../db/db";
 import {AttemptsType} from "../db/types";
+import {attemptModel} from "../db/mongoose/models";
+import {projection} from "../helpers/constants";
 
 export const attemptsRepository = {
 
@@ -8,7 +9,7 @@ export const attemptsRepository = {
       $set: {lastRequestsAt}
     };
 
-    const result = await attemptsCollection.updateOne({ip, url, method},
+    const result = await attemptModel.updateOne({ip, url, method},
       update,
       {upsert: true});
 
@@ -17,20 +18,7 @@ export const attemptsRepository = {
     }
     return false
   },
-  // async incrementCounter({ip, url, method}: AttemptsType): Promise<boolean> {
-  //   const update = {
-  //     $inc: {limitTimeCount: 1},
-  //   };
-  //   const result = await attemptsCollection.updateOne({ip, url, method},
-  //     update,
-  //     {upsert: true});
-  //   if (result.matchedCount) {
-  //     return true;
-  //   }
-  //   return false
-  // },
-
   async find(ip: string, url: string, method: string): Promise<AttemptsType> {
-    return await attemptsCollection.findOne({ip, url, method}, {projection: {_id: 0}}) as AttemptsType
+    return await attemptModel.findOne({ip, url, method}, projection) as AttemptsType
   }
 }

@@ -36,14 +36,14 @@ authRouter.post('/refresh-token',
       const accessToken = await jwtUtility.createJWT({
         id: user.id,
         login: user.credentials.login
-      }, "10s");
+      }, "10h");
       const refreshToken = await jwtUtility.createUserJWT({
         id: user.id,
         login: user.credentials.login,
         email: user.credentials.email
-      }, "20s");
-      //res.cookie("refreshToken", refreshToken);
-      res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true});
+      }, "20h");
+      res.cookie("refreshToken", refreshToken);
+      //res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true});
 
       return res.status(200).send({accessToken});
     }
@@ -59,7 +59,7 @@ authRouter.post('/login',
       password: req.body.password
     }
 
-    const result = await authService.login(credentials, "10s");
+    const result = await authService.login(credentials, "10h");
     if (result) {
       const {accessToken, user} = result;
 
@@ -67,9 +67,9 @@ authRouter.post('/login',
         id: user.id,
         login: user.credentials.login,
         email: user.credentials.email
-      }, "20s");
-      res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true})
-      //res.cookie("refreshToken", refreshToken);
+      }, "20h");
+      //res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true})
+      res.cookie("refreshToken", refreshToken);
       return res.status(200).send({accessToken});
     }
     return res.status(401).send()

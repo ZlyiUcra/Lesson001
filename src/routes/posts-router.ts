@@ -3,13 +3,16 @@ import {authBasicValidationMiddleware} from "../middlewares/basicAuth/authValida
 import {
   CommentContentType,
   PostCommentsInputType, PostCreateType,
-  PostPaginatorInputType, PostUpdateType,
+  PostPaginatorInputType, PostUpdateType, RequestWithFullUser,
   RequestWithShortUser
 } from "../db/types";
 import {postsService} from "../domain/posts-services";
 import {
   postIdDeleteMiddleware,
   postIdMiddleware,
+  postsLikesAuthMiddleware,
+  postsLikesCorrectLikesStatusMiddleware,
+  postsLikesCorrectsPostIdMiddleware,
   postTitleShorDescriptionContentBloggerIdMiddleware
 } from "../middlewares/posts/postsMiddleware";
 import {commentsService} from "../domain/comments-services";
@@ -18,6 +21,8 @@ import {
   commentForPostMiddleware,
   commentPostIdMiddleware
 } from "../middlewares/comments/commentsMiddleware";
+import {jwtUtility} from "../application/jwt-utility";
+import {authAddUserFromAccessTokenMiddleware} from "../middlewares/auth/authMiddleware";
 
 export const postsRouter = Router({});
 
@@ -112,4 +117,19 @@ postsRouter.delete('/:id',
       return res.status(204).send();
     }
     return res.status(404).send();
+  });
+
+postsRouter.put('/:postId/like-status',
+  authAddUserFromAccessTokenMiddleware,
+  postsLikesAuthMiddleware,
+  postsLikesCorrectLikesStatusMiddleware,
+  postsLikesCorrectsPostIdMiddleware,
+  async (req: RequestWithFullUser, res: Response) => {
+    const postId = req.params.postId;
+    const likeStatus = req.body.likeStatus;
+    const user = req.user
+    const isLikedStatus = await postsService.likeStatus(postId, likeStatus, user);
+
+    if(!isLikedStatus) return res.status(401).send();
+    res.status(204).send()
   });

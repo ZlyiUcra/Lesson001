@@ -74,7 +74,7 @@ export type UserShortType = {
   id: string;
   login: string;
 }
-export type UserJWTType = UserShortType & {email: string};
+export type UserJWTType = UserShortType & { email: string };
 export type UserFullType = Omit<UserDBType, "_id">
 
 export type LoginType = {
@@ -120,6 +120,7 @@ export type CommentType = Omit<CommentDBType, "_id" | "postId">
 export interface RequestWithShortUser extends Request {
   user?: UserShortType
 }
+
 export interface RequestWithFullUser extends Request {
   user?: UserFullType
 }
@@ -130,7 +131,7 @@ export interface RequestWithInternetData extends Request {
 }
 
 export enum TOKEN_STATUS {
-  NONE= "None",
+  NONE = "None",
   SENT = "Sent",
   RESENT = "Resent",
   CONFIRMED = "Confirmed"
@@ -155,3 +156,33 @@ export type BlacklistDBType = WithId<{
 }>
 
 export type BlacklistType = Omit<BlacklistDBType, "_id">
+
+export enum LIKE_STATUS {
+  NONE = "None",
+  LIKE = "Like",
+  DISLIKE = "Dislike"
+}
+export type LikesInfoType = {
+  likesCount: number,
+  dislikesCount: number,
+  myStatus: LIKE_STATUS
+}
+export type LikeUserDetailsInfoType = {
+  addedAt: string,
+  userId: string,
+  login: string
+}
+export type ExtendedLikesInfoType = LikesInfoType & {
+  newestLikes: Array<LikeUserDetailsInfoType>
+}
+
+export type PostsLikesDBType = WithId<{
+  id: string,
+  postId: string,
+  userId: string,
+  login: string,
+  likeStatus: LIKE_STATUS,
+  addedAt: Date
+}>
+
+export type PostsLikesType = Omit<PostsLikesDBType, "_id">

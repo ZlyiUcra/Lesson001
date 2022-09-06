@@ -1,14 +1,15 @@
 import {
-  BloggerType,
+  BloggerType, LIKE_STATUS,
   PostCreateType,
-  PostPaginatorInputType,
+  PostPaginatorInputType, PostsLikesType,
   PostType,
   PostUpdateType,
-  SearchResultType
+  SearchResultType, UserFullType
 } from "../db/types";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {postsRepository} from "../repositories/posts-repository";
 import {v4 as uuidv4} from "uuid";
+import {postLikesService} from "./postLikes-service";
 
 export const postsService = {
   async getAll(paginatorInput: PostPaginatorInputType):
@@ -58,5 +59,21 @@ export const postsService = {
   },
   async delete(id: string): Promise<boolean> {
     return await postsRepository.delete(id)
+  },
+  async likeStatus(postId: string, likeStatus: LIKE_STATUS, user: UserFullType | undefined): Promise<boolean> {
+    if(!user) return false;
+
+
+    const postLike: PostsLikesType = {
+      id: uuidv4(),
+      postId,
+      likeStatus,
+      userId: user.id,
+      login: user.credentials.login,
+      addedAt:  new Date()
+    }
+
+    return  await postLikesService.upsert(postLike);
+
   }
 }

@@ -7,68 +7,50 @@ import {
   UserFullType,
   UserInputType
 } from "../db/types";
-import {usersCollection} from "../db/db";
 import {DeleteResult, ObjectId} from "mongodb";
+import {projection} from "../helpers/constants";
+import {userModel} from "../db/mongoose/models";
+
 
 export const usersRepository = {
   async findAll({skip, limit}: PaginatorParamsType): Promise<{ usersSearch: UserFullType[], usersCount: number }> {
 
-    const usersCount = await usersCollection.count({});
+    const usersCount = await userModel.count({});
 
-    const usersSearch: UserFullType[] = await usersCollection
-      .find({}, {projection: {_id: 0}})
+    const usersSearch: UserFullType[] = await userModel
+      .find({}, projection)
       .skip(skip)
       .limit(limit)
-      .toArray()
+      .lean()
 
     return {usersSearch, usersCount};
   },
   async findById(id: string): Promise<UserFullType | null> {
-    return await usersCollection.findOne({id}, {projection: {_id: 0}})
+    return userModel.findOne({id}, projection)
   },
   async findByLogin(login: string): Promise<UserFullType | null> {
-    const user = await usersCollection.findOne({"credentials.login": login},
-      {
-        projection: {
-          _id: 0
-        }
-      });
+    const user = await userModel.findOne({"credentials.login": login}, projection).lean();
     return user
   },
   async findByLoginEmail(login: string, email: string): Promise<UserFullType | null> {
-    return await usersCollection.findOne({"credentials.login": login, "credentials.email": email},
-      {
-        projection: {
-          _id: 0
-        }
-      }
-    )
+    return userModel.findOne({"credentials.login": login, "credentials.email": email}, projection).lean()
   },
   async findByEmail(email: string): Promise<UserFullType | null> {
-    return await usersCollection.findOne({"credentials.email": email},
-      {
-        projection: {
-          _id: 0
-        }
-      })
+    return userModel.findOne({"credentials.email": email}, projection).lean()
   },
   async create(user: UserFullType): Promise<UserFullType> {
     const userToInsert: UserDBType = {...user, _id: new ObjectId()};
-    await usersCollection.insertOne(userToInsert);
+    await userModel.insertMany([userToInsert]);
 
-    return await usersCollection.findOne({id: user.id}, {
-      projection: {
-        _id: 0
-      }
-    }) as UserFullType;
+    return await userModel.findOne({id: user.id}, projection).lean() as UserFullType;
   },
   async delete(id: string): Promise<boolean> {
-    const result: DeleteResult = await usersCollection.deleteOne({id});
+    const result: DeleteResult = await userModel.deleteOne({id});
     if (result.deletedCount === 1) return true;
     return false;
   },
   async updateTokenStatus(id: string, tokenStatus: TOKEN_STATUS) {
-    const isUpdated = await usersCollection.updateOne({id}, {
+    const isUpdated = await userModel.updateOne({id}, {
       $set: {
         "token.tokenStatus": tokenStatus
       }
@@ -78,25 +60,20 @@ export const usersRepository = {
   },
   async findByLoginOrEmail(login: any, email: any): Promise<string[]> {
     const result = [];
-    const userLogin = await usersCollection.findOne({"credentials.login": login});
-    const userEmail = await usersCollection.findOne({"credentials.email": email});
+    const userLogin = await userModel.findOne({"credentials.login": login});
+    const userEmail = await userModel.findOne({"credentials.email": email});
     if (userLogin) result.push("login")
     if (userEmail) result.push("email")
 
     return result
   },
   async updateToken(id: string, token: TokenType): Promise<boolean> {
-    const result = await usersCollection.updateOne({id}, {$set: {token}})
+    const result = await userModel.updateOne({id}, {$set: {token}})
     if (result.matchedCount) return true;
     return false;
   },
   async findByCode(code: string) {
-    return await usersCollection.findOne({"token.confirmationToken": code},
-      {
-        projection: {
-          _id: 0
-        }
-      })
+    return userModel.findOne({"token.confirmationToken": code}, projection)
   }
 }
 

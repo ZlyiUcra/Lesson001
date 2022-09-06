@@ -11,7 +11,8 @@ import {jwtUtility} from "../application/jwt-utility";
 
 export const usersRouter = Router({});
 
-usersRouter.get('/', async (req: Request, res: Response) => {
+usersRouter.get('/',
+  async (req: Request, res: Response) => {
   const searchUsers: UserInputType = {
     pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 1),
     pageSize: +(req.query.PageSize ? req.query.PageSize : 10)
@@ -31,10 +32,10 @@ usersRouter.post("/",
       id: newUser.id,
       login: newUser.credentials.login,
       email: newUser.credentials.email
-    }, "20s");
-    //res.cookie("refreshToken", refreshToken)
-    res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true})
-    const {id, credentials: {login}} = newUser
+    }, "20h");
+    res.cookie("refreshToken", refreshToken)
+    //res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true})
+    const {id, credentials: {login}} = newUser;
     res.status(201).send({id, login})
   });
 

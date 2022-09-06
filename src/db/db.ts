@@ -1,37 +1,18 @@
-import {MongoClient} from "mongodb";
-
-import {
-  AttemptsDBType, BlacklistType,
-  BloggerDBType,
-  CommentDBType,
-  PostDBType,
-  UserDBType
-} from "./types";
+import {connect, disconnect} from "mongoose";
 
 import {settings} from "../settings";
 
-export const client = new MongoClient(settings.MONGO_URI);
-
-export const db = client.db("instagram")
-
-export const blacklistCollection = db.collection<BlacklistType>("blacklist")
-export const attemptsCollection = db.collection<AttemptsDBType>('attempts')
-export const commentsCollection = db.collection<CommentDBType>('comments')
-export const usersCollection = db.collection<UserDBType>('users')
-export const bloggersCollection = db.collection<BloggerDBType>('bloggers')
-export const postsCollection = db.collection<PostDBType>('posts')
-
+const dbLink = `${settings.MONGO_URI}/${settings.MONGO_BD_NAME}`;
 
 export async function runDb() {
   try {
     // Connect the client to the server
-    await client.connect();
-    await client.db("bloggers").command({ping: 1});
+    await connect(dbLink);
     console.log("Connected successfully to mongo server");
 
   } catch {
     console.log("Can't connect to db");
     // Ensures that the client will close when you finish/error
-    await client.close();
+    await disconnect();
   }
 }

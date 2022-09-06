@@ -139,6 +139,7 @@ export const authAddUserDataFromTokenMiddleware = async (req: RequestWithFullUse
 
   next();
 }
+
 export const authAddUserFromAccessTokenMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
   const headerAuth = req.headers.authorization;
   const accessToken = headerAuth?.split(" ")[1] || "";
@@ -181,3 +182,4 @@ export const authLogoutMiddleware = async (req: Request, res: Response, next: Ne
   await blacklistService.insertToken(refreshToken)
   next();
 }
+

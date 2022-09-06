@@ -1,6 +1,7 @@
 import {PostDBType, PostPaginatorInputType, PostPaginatorType, PostType} from "../db/types";
-import {postsCollection} from "../db/db";
 import {DeleteResult, ObjectId, UpdateResult} from "mongodb";
+import {postModel} from "../db/mongoose/models";
+import {projection} from "../helpers/constants";
 
 
 export const postsRepository = {
@@ -11,12 +12,12 @@ export const postsRepository = {
 
     const searchTerm = bloggerId ? {bloggerId} : {}
 
-    const postsCount = await postsCollection.count(searchTerm);
+    const postsCount = await postModel.count(searchTerm);
 
-    const postsSearch: PostType[] = await postsCollection
-      .find(searchTerm, {projection: {_id: 0}})
+    const postsSearch: PostType[] = await postModel
+      .find(searchTerm, projection)
       .skip(skip).limit(limit)
-      .toArray();
+      .lean();
 
     return {postsSearch, postsCount};
   },
@@ -27,24 +28,24 @@ export const postsRepository = {
       _id: new ObjectId()
     };
 
-    await postsCollection.insertOne(resultPost);
+    await postModel.insertMany([resultPost]);
 
-    return await postsCollection.findOne({id: post.id}, {projection: {_id: 0}}) as PostType;
+    return await postModel.findOne({id: post.id}, projection) as PostType;
   },
   async findById(id: string): Promise<PostType | null> {
-    return await postsCollection.findOne({id}, {projection:  {_id: 0}});
+    return postModel.findOne({id}, projection);
   },
   async update(post: PostType): Promise<boolean> {
     const {id, ...restPost} = post;
     let result: UpdateResult =
-      await postsCollection.updateOne({id}, {$set: {...restPost}})
+      await postModel.updateOne({id}, {$set: {...restPost}})
     if (result.modifiedCount || (result.matchedCount && !result.modifiedCount)) {
       return true;
     }
     return false;
   },
   async delete(id: string): Promise<boolean> {
-    let result: DeleteResult = await postsCollection.deleteOne({id});
+    let result: DeleteResult = await postModel.deleteOne({id});
     if (result.deletedCount) return true;
     return false;
   }

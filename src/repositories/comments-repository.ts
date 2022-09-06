@@ -1,6 +1,7 @@
 import {CommentType, CommentDBType, CommentContentType, CommentsPaginatorType} from "../db/types";
-import {commentsCollection} from "../db/db";
 import {DeleteResult, ObjectId} from "mongodb";
+import {commentModel} from "../db/mongoose/models";
+import {projection, projectionExcludePostId} from "../helpers/constants";
 
 export const commentsRepository = {
   async getAll(searchPostComments: CommentsPaginatorType):
@@ -8,27 +9,27 @@ export const commentsRepository = {
 
     const {postId, limit, skip} = searchPostComments;
 
-    const commentsCount = await commentsCollection.count({postId});
-    const commentsSearch: CommentDBType[] = await commentsCollection
-      .find({postId}, {projection: {_id: 0, postId: 0}})
+    const commentsCount = await commentModel.count({postId});
+    const commentsSearch: CommentDBType[] = await commentModel
+      .find({postId}, projection)
       .skip(skip).limit(limit)
-      .toArray();
+      .lean();
 
     return {commentsSearch, commentsCount};
   },
   async create(comment: CommentType, postId: string): Promise<CommentType> {
     const resultComment: CommentDBType = {...comment, postId, _id: new ObjectId()}
-    await commentsCollection.insertOne(resultComment);
-    const result = await commentsCollection
-      .findOne({id: comment.id}, {projection: {_id: 0, postId: 0}}) as CommentType;
+    await commentModel.insertMany([resultComment]);
+    const result = await commentModel
+      .findOne({id: comment.id}, projection) as CommentType;
     return result;
   },
 
   async findById(id: string): Promise<CommentType | null> {
-    return await commentsCollection.findOne({id}, {projection: {_id: 0, postId: 0}});
+    return commentModel.findOne({id}, projectionExcludePostId);
   },
   async update(comment: CommentContentType, commentId: string) {
-    const result = await commentsCollection.updateOne(
+    const result = await commentModel.updateOne(
       {id: commentId},
       {
         $set:
@@ -40,9 +41,8 @@ export const commentsRepository = {
     return false;
   },
   async delete(id: string) {
-    const result: DeleteResult = await commentsCollection.deleteOne({id});
+    const result: DeleteResult = await commentModel.deleteOne({id});
     if (result.deletedCount === 1) return true;
     return false;
-  },
-
+  }
 }
