@@ -1,11 +1,16 @@
 import {Request, Response, Router} from "express";
 import {commentsService} from "../domain/comments-services";
-import {CommentContentType, RequestWithShortUser} from "../db/types";
+import {CommentContentType, RequestWithFullUser, RequestWithShortUser} from "../db/types";
 import {bearerPostCreatorValidationMiddleware} from "../middlewares/bearerAuth/bearerPostCreatorValidationMiddleware"
 import {
   commentContentMiddleware, commentExistsMiddleware,
   commentOwnPostMiddleware,
 } from "../middlewares/comments/commentsMiddleware";
+import {authAddUserFromAccessTokenMiddleware} from "../middlewares/auth/authMiddleware";
+import {
+  commentLikesAuthMiddleware,
+  commentLikesCorrectLikesStatusMiddleware, commentLikesCorrectsCommentIdMiddleware
+} from "../middlewares/commentLikes/commentLikesMiddleware";
 
 
 export const commentsRouter = Router({});
@@ -38,3 +43,20 @@ commentsRouter.delete("/:commentId",
     if (result) return res.status(204).send();
     return res.status(404).send()
   });
+
+commentsRouter.put('/:commentId/like-status',
+  authAddUserFromAccessTokenMiddleware,
+  commentLikesAuthMiddleware,
+  commentLikesCorrectLikesStatusMiddleware,
+  commentLikesCorrectsCommentIdMiddleware,
+  async (req: RequestWithFullUser, res: Response) => {
+    const commentId = req.params.commentId;
+    const likeStatus = req.body.likeStatus;
+    const user = req.user;
+
+    const isLikedStatus = await commentsService.likeStatus(commentId, likeStatus, user);
+
+    if (!isLikedStatus) return res.status(401).send();
+    res.status(204).send();
+  }
+)

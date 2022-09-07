@@ -1,9 +1,16 @@
 import {
-  CommentType, CommentContentType, PostCommentsInputType, SearchResultType, UserShortType, CommentsPaginatorType
+  CommentType,
+  CommentContentType,
+  PostCommentsInputType,
+  SearchResultType,
+  UserShortType,
+  CommentsPaginatorType,
+  LIKE_STATUS, UserFullType, CommentLikeType
 } from "../db/types";
 
 import {v4 as uuidv4} from "uuid";
 import {commentsRepository} from "../repositories/comments-repository";
+import {commentLikesService} from "./commentLikes-service";
 
 
 export const commentsService = {
@@ -52,5 +59,11 @@ export const commentsService = {
 
   async delete(id: string): Promise<boolean> {
     return await commentsRepository.delete(id)
+  },
+  async likeStatus(commentId: string, likeStatus: LIKE_STATUS, user: UserFullType | undefined): Promise<boolean> {
+    if (!user) return false;
+
+    return await commentLikesService.upsert(commentId, likeStatus, user);
+
   }
 }

@@ -26,7 +26,7 @@ export const commentsRepository = {
   },
 
   async findById(id: string): Promise<CommentType | null> {
-    return commentModel.findOne({id}, projectionExcludePostId);
+    return commentModel.findOne({id}, projectionExcludePostId).lean();
   },
   async update(comment: CommentContentType, commentId: string) {
     const result = await commentModel.updateOne(

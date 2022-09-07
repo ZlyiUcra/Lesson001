@@ -10,9 +10,6 @@ import {postsService} from "../domain/posts-services";
 import {
   postIdDeleteMiddleware,
   postIdMiddleware,
-  postsLikesAuthMiddleware,
-  postsLikesCorrectLikesStatusMiddleware,
-  postsLikesCorrectsPostIdMiddleware,
   postTitleShorDescriptionContentBloggerIdMiddleware
 } from "../middlewares/posts/postsMiddleware";
 import {commentsService} from "../domain/comments-services";
@@ -21,8 +18,11 @@ import {
   commentForPostMiddleware,
   commentPostIdMiddleware
 } from "../middlewares/comments/commentsMiddleware";
-import {jwtUtility} from "../application/jwt-utility";
 import {authAddUserFromAccessTokenMiddleware} from "../middlewares/auth/authMiddleware";
+import {
+  postLikesAuthMiddleware,
+  postLikesCorrectLikesStatusMiddleware, postLikesCorrectsPostIdMiddleware
+} from "../middlewares/postLikes/postLikesMiddleware";
 
 export const postsRouter = Router({});
 
@@ -121,9 +121,9 @@ postsRouter.delete('/:id',
 
 postsRouter.put('/:postId/like-status',
   authAddUserFromAccessTokenMiddleware,
-  postsLikesAuthMiddleware,
-  postsLikesCorrectLikesStatusMiddleware,
-  postsLikesCorrectsPostIdMiddleware,
+  postLikesAuthMiddleware,
+  postLikesCorrectLikesStatusMiddleware,
+  postLikesCorrectsPostIdMiddleware,
   async (req: RequestWithFullUser, res: Response) => {
     const postId = req.params.postId;
     const likeStatus = req.body.likeStatus;

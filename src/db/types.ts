@@ -176,7 +176,7 @@ export type ExtendedLikesInfoType = LikesInfoType & {
   newestLikes: Array<LikeUserDetailsInfoType>
 }
 
-export type PostsLikesDBType = WithId<{
+export type PostLikeDBType = WithId<{
   id: string,
   postId: string,
   userId: string,
@@ -185,4 +185,14 @@ export type PostsLikesDBType = WithId<{
   addedAt: Date
 }>
 
-export type PostsLikesType = Omit<PostsLikesDBType, "_id">
+export type PostLikeType = Omit<PostLikeDBType, "_id">
+
+export type CommentLikeDBType = WithId<{
+  id: string,
+  commentId: string,
+  userId: string,
+  likeStatus: LIKE_STATUS,
+  addedAt: Date
+}>
+
+export type CommentLikeType = Omit<CommentLikeDBType, "_id">

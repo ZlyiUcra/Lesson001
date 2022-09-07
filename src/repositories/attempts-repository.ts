@@ -19,6 +19,6 @@ export const attemptsRepository = {
     return false
   },
   async find(ip: string, url: string, method: string): Promise<AttemptsType> {
-    return await attemptModel.findOne({ip, url, method}, projection) as AttemptsType
+    return await attemptModel.findOne({ip, url, method}, projection).lean() as AttemptsType
   }
 }

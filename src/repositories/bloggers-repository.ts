@@ -27,7 +27,7 @@ export const bloggersRepository = {
     return result;
   },
   async findById(id: string): Promise<BloggerType | null> {
-    return bloggerModel.findOne({id}, projection);
+    return bloggerModel.findOne({id}, projection).lean();
   },
   async update({id, name, youtubeUrl}: BloggerType): Promise<boolean> {
     let result: UpdateResult =

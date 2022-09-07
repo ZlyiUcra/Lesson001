@@ -3,8 +3,8 @@ import {
   AttemptsDBType,
   BlacklistType,
   BloggerDBType,
-  CommentDBType, CredentialType, LIKE_STATUS,
-  PostDBType, PostsLikesType,
+  CommentDBType, CommentLikeType, CredentialType, LIKE_STATUS,
+  PostDBType, PostLikeType,
   TOKEN_STATUS, TokenType,
   UserDBType
 } from "../types";
@@ -79,11 +79,19 @@ export const blacklistSchema = new Schema<BlacklistType>({
   refreshToken: String
 });
 
-export const postLikesSchema = new Schema<PostsLikesType>({
+export const postLikeSchema = new Schema<PostLikeType>({
   id: String,
   postId: String,
   userId: String,
   login: String,
+  likeStatus: {type: String, enum: LIKE_STATUS, default: LIKE_STATUS.NONE},
+  addedAt: Date
+})
+
+export const commentLikeSchema = new Schema<CommentLikeType>({
+  id: String,
+  commentId: String,
+  userId: String,
   likeStatus: {type: String, enum: LIKE_STATUS, default: LIKE_STATUS.NONE},
   addedAt: Date
 })

@@ -26,7 +26,7 @@ export const usersRepository = {
     return {usersSearch, usersCount};
   },
   async findById(id: string): Promise<UserFullType | null> {
-    return userModel.findOne({id}, projection)
+    return userModel.findOne({id}, projection).lean()
   },
   async findByLogin(login: string): Promise<UserFullType | null> {
     const user = await userModel.findOne({"credentials.login": login}, projection).lean();

@@ -32,7 +32,7 @@ usersRouter.post("/",
       id: newUser.id,
       login: newUser.credentials.login,
       email: newUser.credentials.email
-    }, "20h");
+    }, "20d");
     res.cookie("refreshToken", refreshToken)
     //res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true})
     const {id, credentials: {login}} = newUser;

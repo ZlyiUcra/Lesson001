@@ -36,12 +36,12 @@ authRouter.post('/refresh-token',
       const accessToken = await jwtUtility.createJWT({
         id: user.id,
         login: user.credentials.login
-      }, "10h");
+      }, "10d");
       const refreshToken = await jwtUtility.createUserJWT({
         id: user.id,
         login: user.credentials.login,
         email: user.credentials.email
-      }, "20h");
+      }, "20d");
       res.cookie("refreshToken", refreshToken);
       //res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true});
 
@@ -59,7 +59,7 @@ authRouter.post('/login',
       password: req.body.password
     }
 
-    const result = await authService.login(credentials, "10h");
+    const result = await authService.login(credentials, "10d");
     if (result) {
       const {accessToken, user} = result;
 
@@ -67,7 +67,7 @@ authRouter.post('/login',
         id: user.id,
         login: user.credentials.login,
         email: user.credentials.email
-      }, "20h");
+      }, "20d");
       //res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true})
       res.cookie("refreshToken", refreshToken);
       return res.status(200).send({accessToken});

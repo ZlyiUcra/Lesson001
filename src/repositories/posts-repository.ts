@@ -33,7 +33,7 @@ export const postsRepository = {
     return await postModel.findOne({id: post.id}, projection) as PostType;
   },
   async findById(id: string): Promise<PostType | null> {
-    return postModel.findOne({id}, projection);
+    return postModel.findOne({id}, projection).lean();
   },
   async update(post: PostType): Promise<boolean> {
     const {id, ...restPost} = post;

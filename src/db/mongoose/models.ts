@@ -3,9 +3,9 @@ import {model} from "mongoose";
 import {
   attemptSchema,
   blacklistSchema,
-  bloggerSchema,
+  bloggerSchema, commentLikeSchema,
   commentSchema,
-  postLikesSchema,
+  postLikeSchema,
   postSchema,
   userSchema
 } from "./schemas";
@@ -22,4 +22,6 @@ export const attemptModel = model('attempts', attemptSchema);
 
 export const blacklistModel = model('blacklist', blacklistSchema);
 
-export const postLikesModel = model('postLikes', postLikesSchema)
+export const postLikeModel = model('postLikes', postLikeSchema);
+
+export const commentLikeModel = model('commentLikes', commentLikeSchema)
