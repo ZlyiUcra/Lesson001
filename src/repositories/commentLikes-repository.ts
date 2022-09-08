@@ -20,5 +20,4 @@ export const commentLikesRepository = {
     const postsLike = await commentLikeModel.find({commentId: {$in: commentIds}}, projection).lean();
     return postsLike;
   }
-
 }
