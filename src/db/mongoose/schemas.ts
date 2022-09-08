@@ -63,7 +63,7 @@ export const commentSchema = new Schema<CommentDBType>({
   id: String,
   userId: String,
   content: String,
-  postId: String,
+  //postId: String,
   userLogin: String,
   addedAt: Date
 });
