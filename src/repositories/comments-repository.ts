@@ -21,7 +21,7 @@ export const commentsRepository = {
     const resultComment: CommentDBType = {...comment, postId, _id: new ObjectId()}
     await commentModel.insertMany([resultComment]);
     const result = await commentModel
-      .findOne({id: comment.id}, projection) as CommentType;
+      .findOne({id: comment.id}, projection).lean() as CommentType;
     return result;
   },
 
