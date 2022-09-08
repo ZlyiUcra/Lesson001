@@ -30,7 +30,7 @@ export const postsService = {
       shortDescription,
       content, bloggerId,
       bloggerName: blogger ? blogger.name : `bloggerName_${id}`,
-      addedAt: new Date()
+      addedAt: (new Date()).toString()
     };
     const post =  await postsRepository.create(newPost)
     const postLikes = await postLikesService.findByIds([post.id]);

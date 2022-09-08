@@ -46,7 +46,7 @@ export type PostDBType = WithId<{
   content: string,
   bloggerId: string,
   bloggerName?: string,
-  addedAt: Date
+  addedAt: string
 }>
 
 export type PostType = Omit<PostDBType, "_id">
