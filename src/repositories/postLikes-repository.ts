@@ -13,8 +13,8 @@ export const postLikesRepository = {
     }
     return false
   },
-  async findByPostIdAndUserId(postId: string, userId: string):  Promise<PostLikeType | null> {
-    const postLike = await postLikeModel.findOne({postId, userId}, projection).lean();
+  async findByPostIdAndUserId(postId: string, userId: string | null):  Promise<PostLikeType | null> {
+    const postLike = await postLikeModel.findOne({postId, userId: userId}, projection).lean();
     return postLike
   },
   async findByIds(postIds: Array<string>): Promise<Array<PostLikeType>> {

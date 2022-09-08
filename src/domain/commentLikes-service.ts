@@ -20,16 +20,17 @@ export const commentLikesService = {
       commentLike.userId = user.id;
       commentLike.likeStatus = likeStatus;
       savedCommentLike = await this.findByCommentIdAndUserId(commentId, user.id);
-
-      if (savedCommentLike) {
-        savedCommentLike.likeStatus = correctLikeStatus(savedCommentLike.likeStatus, likeStatus)
-        commentLike = {...savedCommentLike}
-      }
+    } else {
+      savedCommentLike = await this.findByCommentIdAndUserId(commentId, null);
+    }
+    if (savedCommentLike) {
+      savedCommentLike.likeStatus = correctLikeStatus(savedCommentLike.likeStatus, likeStatus)
+      commentLike = {...savedCommentLike}
     }
 
     return commentLikesRepository.upsert(commentLike);
   },
-  async findByCommentIdAndUserId(commentId: string, userId: string): Promise<CommentLikeType | null> {
+  async findByCommentIdAndUserId(commentId: string, userId: string | null): Promise<CommentLikeType | null> {
     return commentLikesRepository.findByCommentIdAndUserId(commentId, userId);
   },
   async findByIds(commentIds:Array<string>): Promise<Array<CommentLikeType>> {

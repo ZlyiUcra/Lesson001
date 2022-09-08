@@ -24,15 +24,17 @@ export const postLikesService = {
       postLike.likeStatus = likeStatus;
       savedPostLike = await this.findByPostIdAndUserId(postId, user.id);
 
-      if (savedPostLike) {
-        savedPostLike.likeStatus = correctLikeStatus(savedPostLike.likeStatus, likeStatus)
-        postLike = {...savedPostLike}
-      }
+    } else {
+      savedPostLike = await this.findByPostIdAndUserId(postId, null);
+    }
+    if (savedPostLike) {
+      savedPostLike.likeStatus = correctLikeStatus(savedPostLike.likeStatus, likeStatus)
+      postLike = {...savedPostLike}
     }
 
     return postLikesRepository.upsert(postLike);
   },
-  async findByPostIdAndUserId(postId: string, userId: string): Promise<PostLikeType | null> {
+  async findByPostIdAndUserId(postId: string, userId: string | null): Promise<PostLikeType | null> {
     return postLikesRepository.findByPostIdAndUserId(postId, userId);
   },
   async findByIds(postIds: Array<string>): Promise<Array<PostLikeType>> {
