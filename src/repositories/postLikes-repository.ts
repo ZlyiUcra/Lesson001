@@ -7,7 +7,8 @@ export const postLikesRepository = {
 
   async upsert(postLike: PostLikeType): Promise<boolean> {
     const result: UpdateResult = await postLikeModel.updateOne({id: postLike.id}, {$set: postLike}, {upsert: true});
-    if(result.matchedCount === 1){
+   console.log("result, postLike", result);
+    if(result.upsertedCount === 1){
       return true
     }
     return false
