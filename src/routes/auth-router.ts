@@ -42,8 +42,8 @@ authRouter.post('/refresh-token',
         login: user.credentials.login,
         email: user.credentials.email
       }, "20d");
-      res.cookie("refreshToken", refreshToken);
-      //res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true});
+      //res.cookie("refreshToken", refreshToken);
+      res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true});
 
       return res.status(200).send({accessToken});
     }
@@ -68,8 +68,8 @@ authRouter.post('/login',
         login: user.credentials.login,
         email: user.credentials.email
       }, "20d");
-      //res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true})
-      res.cookie("refreshToken", refreshToken);
+      res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true})
+      //res.cookie("refreshToken", refreshToken);
       return res.status(200).send({accessToken});
     }
     return res.status(401).send()

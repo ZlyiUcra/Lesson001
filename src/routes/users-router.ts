@@ -33,8 +33,8 @@ usersRouter.post("/",
       login: newUser.credentials.login,
       email: newUser.credentials.email
     }, "20d");
-    res.cookie("refreshToken", refreshToken)
-    //res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true})
+    //res.cookie("refreshToken", refreshToken)
+    res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true})
     const {id, credentials: {login}} = newUser;
     res.status(201).send({id, login})
   });
