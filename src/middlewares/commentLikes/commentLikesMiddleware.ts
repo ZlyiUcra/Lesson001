@@ -12,8 +12,8 @@ import {likesAuthMiddleware} from "../../helpers/likes/likesHelper";
 
 export const commentLikesAuthMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
 
-  const  {headerAuth, accessToken, userJWT, user} = await likesAuthMiddleware(req.headers.authorization)
-  if(!headerAuth || !userJWT) return res.status(401).send()
+  const  {headerAuth, accessToken, userJWT, user,isBearer} = await likesAuthMiddleware(req.headers.authorization)
+  if(!headerAuth || !isBearer) return res.status(401).send()
   // if(!user){
   //   return res.status(401).send()
   // }

@@ -105,8 +105,9 @@ export const getCommentExtendedElement = (comment: CommentType, commentLikes: Ar
 export const likesAuthMiddleware = async (headerAuthorization: string | undefined) => {
   const headerAuth = headerAuthorization;
   const accessToken = headerAuth?.split(" ")[1] || "";
+  const isBearer = headerAuth?.split(" ")[0] === "Bearer";
   let userJWT = await jwtUtility.extractUserJWTFromToken(accessToken);
 
   const user = await usersService.findById(userJWT?.id as string);
-  return {headerAuth, accessToken, userJWT, user}
+  return {headerAuth, accessToken, userJWT, user, isBearer}
 }
