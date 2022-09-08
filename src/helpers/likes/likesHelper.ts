@@ -9,6 +9,8 @@ import {
   PostType
 } from "../../db/types";
 import differenceInSeconds from "date-fns/differenceInSeconds";
+import {jwtUtility} from "../../application/jwt-utility";
+import {usersService} from "../../domain/users-services";
 
 export const correctLikeStatus = (oldLikeStatus: LIKE_STATUS, newLikeStatus: LIKE_STATUS): LIKE_STATUS => {
   if (oldLikeStatus === LIKE_STATUS.LIKE && newLikeStatus === LIKE_STATUS.DISLIKE ||
@@ -97,4 +99,14 @@ export const getCommentExtendedElement = (comment: CommentType, commentLikes: Ar
     ...comment,
     likesInfo
   }
+}
+
+
+export const likesAuthMiddleware = async (headerAuthorization: string | undefined) => {
+  const headerAuth = headerAuthorization;
+  const accessToken = headerAuth?.split(" ")[1] || "";
+  let userJWT = await jwtUtility.extractUserJWTFromToken(accessToken);
+
+  const user = await usersService.findById(userJWT?.id as string);
+  return {headerAuth, accessToken, userJWT, user}
 }

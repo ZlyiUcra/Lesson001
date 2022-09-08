@@ -135,7 +135,7 @@ postsRouter.delete('/:id',
 
 postsRouter.put('/:postId/like-status',
   authAddUserFromAccessTokenMiddleware,
-  //postLikesAuthMiddleware,
+  postLikesAuthMiddleware,
   postLikesCorrectLikesStatusMiddleware,
   postLikesCorrectsPostIdMiddleware,
   async (req: RequestWithFullUser, res: Response) => {

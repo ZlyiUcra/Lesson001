@@ -51,7 +51,7 @@ commentsRouter.delete("/:commentId",
 
 commentsRouter.put('/:commentId/like-status',
   authAddUserFromAccessTokenMiddleware,
-  //commentLikesAuthMiddleware,
+  commentLikesAuthMiddleware,
   commentLikesCorrectLikesStatusMiddleware,
   commentLikesCorrectsCommentIdMiddleware,
   async (req: RequestWithFullUser, res: Response) => {
