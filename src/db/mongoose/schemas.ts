@@ -83,8 +83,8 @@ export const blacklistSchema = new Schema<BlacklistType>({
 export const postLikeSchema = new Schema<PostLikeType>({
   id: String,
   postId: String,
-  userId: String,
-  login: String,
+  userId: {type: String, default: null},
+  login: {type: String, default: null},
   likeStatus: {type: String, enum: LIKE_STATUS, default: LIKE_STATUS.NONE},
   addedAt: Date
 })
@@ -92,7 +92,7 @@ export const postLikeSchema = new Schema<PostLikeType>({
 export const commentLikeSchema = new Schema<CommentLikeType>({
   id: String,
   commentId: String,
-  userId: String,
+  userId: {type: String, default: null},
   likeStatus: {type: String, enum: LIKE_STATUS, default: LIKE_STATUS.NONE},
   addedAt: Date
 })

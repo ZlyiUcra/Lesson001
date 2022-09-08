@@ -142,6 +142,7 @@ postsRouter.put('/:postId/like-status',
     const postId = req.params.postId;
     const likeStatus = req.body.likeStatus;
     const user = req.user
+
     const isLikedStatus = await postsService.likeStatus(postId, likeStatus, user);
 
     if(!isLikedStatus) return res.status(401).send();

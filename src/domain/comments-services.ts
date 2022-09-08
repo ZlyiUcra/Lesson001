@@ -75,9 +75,8 @@ export const commentsService = {
     return await commentsRepository.delete(id)
   },
   async likeStatus(commentId: string, likeStatus: LIKE_STATUS, user: UserFullType | undefined): Promise<boolean> {
-    if (!user) return false;
 
-    return await commentLikesService.upsert(commentId, likeStatus, user);
+    return await commentLikesService.upsert(commentId, likeStatus, user || null);
 
   }
 }

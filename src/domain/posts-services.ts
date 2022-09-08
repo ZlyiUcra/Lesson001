@@ -81,9 +81,8 @@ export const postsService = {
     return await postsRepository.delete(id)
   },
   async likeStatus(postId: string, likeStatus: LIKE_STATUS, user: UserFullType | undefined): Promise<boolean> {
-    if (!user) return false
 
-    return await postLikesService.upsert(postId, likeStatus, user);
+    return await postLikesService.upsert(postId, likeStatus, user || null);
 
   }
 }

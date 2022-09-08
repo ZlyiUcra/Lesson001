@@ -4,22 +4,32 @@ import {v4 as uuidv4} from "uuid";
 import {correctLikeStatus} from "../helpers/likes/likesHelper";
 
 export const postLikesService = {
-  async upsert(postId: string, likeStatus: LIKE_STATUS, user: UserFullType): Promise<boolean> {
+  async upsert(postId: string, likeStatus: LIKE_STATUS, user: UserFullType | null): Promise<boolean> {
+    let userId: string | null = null;
+    let login: string | null = null;
+    let savedPostLike: PostLikeType | null = null;
+
     let postLike: PostLikeType = {
       id: uuidv4(),
       postId,
-      likeStatus,
-      userId: user.id,
-      login: user.credentials.login,
+      likeStatus: LIKE_STATUS.NONE,
+      userId,
+      login,
       addedAt: new Date()
     }
 
-    const savedPostLike = await this.findByPostIdAndUserId(postId, user.id);
+    if (user) {
+      postLike.userId = user.id;
+      postLike.login = user.credentials.login;
+      postLike.likeStatus = likeStatus;
+      savedPostLike = await this.findByPostIdAndUserId(postId, user.id);
 
-    if (savedPostLike) {
-      savedPostLike.likeStatus = correctLikeStatus(savedPostLike.likeStatus, likeStatus)
-      postLike = {...savedPostLike}
+      if (savedPostLike) {
+        savedPostLike.likeStatus = correctLikeStatus(savedPostLike.likeStatus, likeStatus)
+        postLike = {...savedPostLike}
+      }
     }
+
     return postLikesRepository.upsert(postLike);
   },
   async findByPostIdAndUserId(postId: string, userId: string): Promise<PostLikeType | null> {

@@ -1,23 +1,32 @@
-import {CommentLikeType, LIKE_STATUS, UserFullType} from "../db/types";
+import {CommentLikeType, LIKE_STATUS, PostLikeType, UserFullType} from "../db/types";
 import {commentLikesRepository} from "../repositories/commentLikes-repository";
 import {v4 as uuidv4} from "uuid";
 import {correctLikeStatus} from "../helpers/likes/likesHelper";
 
 export const commentLikesService = {
-  async upsert(commentId: string, likeStatus: LIKE_STATUS, user: UserFullType): Promise<boolean> {
+  async upsert(commentId: string, likeStatus: LIKE_STATUS, user: UserFullType | null): Promise<boolean> {
+
+    let userId: string | null = null;
+    let savedCommentLike: CommentLikeType | null = null;
 
     let commentLike: CommentLikeType = {
       id: uuidv4(),
       commentId,
-      userId: user.id,
-      likeStatus,
+      userId,
+      likeStatus : LIKE_STATUS.NONE,
       addedAt: new Date()
     }
-    const savedCommentLike = await this.findByCommentIdAndUserId(commentId, user.id);
-    if (savedCommentLike) {
-      savedCommentLike.likeStatus = correctLikeStatus(savedCommentLike.likeStatus, likeStatus)
-      commentLike = {...savedCommentLike}
+    if(user) {
+      commentLike.userId = user.id;
+      commentLike.likeStatus = likeStatus;
+      savedCommentLike = await this.findByCommentIdAndUserId(commentId, user.id);
+
+      if (savedCommentLike) {
+        savedCommentLike.likeStatus = correctLikeStatus(savedCommentLike.likeStatus, likeStatus)
+        commentLike = {...savedCommentLike}
+      }
     }
+
     return commentLikesRepository.upsert(commentLike);
   },
   async findByCommentIdAndUserId(commentId: string, userId: string): Promise<CommentLikeType | null> {

@@ -175,8 +175,8 @@ export type LikesInfoType = {
 }
 export type LikeUserDetailsInfoType = {
   addedAt: string,
-  userId: string,
-  login: string
+  userId: string | null,
+  login: string | null
 }
 export type ExtendedPostLikesInfoType = LikesInfoType & {
   newestLikes: Array<LikeUserDetailsInfoType>
@@ -185,8 +185,8 @@ export type ExtendedPostLikesInfoType = LikesInfoType & {
 export type PostLikeDBType = WithId<{
   id: string,
   postId: string,
-  userId: string,
-  login: string,
+  userId: string | null,
+  login: string | null,
   likeStatus: LIKE_STATUS,
   addedAt: Date
 }>
@@ -196,7 +196,7 @@ export type PostLikeType = Omit<PostLikeDBType, "_id">
 export type CommentLikeDBType = WithId<{
   id: string,
   commentId: string,
-  userId: string,
+  userId: string | null,
   likeStatus: LIKE_STATUS,
   addedAt: Date
 }>
