@@ -24,5 +24,8 @@ export const postLikesService = {
   },
   async findByPostIdAndUserId(postId: string, userId: string): Promise<PostLikeType | null> {
     return postLikesRepository.findByPostIdAndUserId(postId, userId);
+  },
+  async findByIds(postIds: Array<string>): Promise<Array<PostLikeType>> {
+    return postLikesRepository.findByIds(postIds);
   }
 }

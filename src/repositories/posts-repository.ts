@@ -1,4 +1,11 @@
-import {PostDBType, PostPaginatorInputType, PostPaginatorType, PostType} from "../db/types";
+import {
+  PostDBType,
+  PostInsertType,
+  PostPaginatorInputType,
+  PostPaginatorType,
+  PostType,
+  PostUpdateType
+} from "../db/types";
 import {DeleteResult, ObjectId, UpdateResult} from "mongodb";
 import {postModel} from "../db/mongoose/models";
 import {projection} from "../helpers/constants";
@@ -35,7 +42,7 @@ export const postsRepository = {
   async findById(id: string): Promise<PostType | null> {
     return postModel.findOne({id}, projection).lean();
   },
-  async update(post: PostType): Promise<boolean> {
+  async update(post: PostUpdateType | PostInsertType): Promise<boolean> {
     const {id, ...restPost} = post;
     let result: UpdateResult =
       await postModel.updateOne({id}, {$set: {...restPost}})

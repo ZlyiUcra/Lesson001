@@ -1,6 +1,9 @@
 import {
+  ExtendedPostLikesInfoType,
   LIKE_STATUS,
+  LikeUserDetailsInfoType,
   PostCreateType,
+  PostExtendedType, PostInsertType,
   PostLikeType,
   PostPaginatorInputType,
   PostType,
@@ -13,9 +16,29 @@ import {postsRepository} from "../repositories/posts-repository";
 import {v4 as uuidv4} from "uuid";
 import {postLikesService} from "./postLikes-service";
 
+import { getPostExtendedElement } from "../helpers/likes/likesHelper";
+
+
 export const postsService = {
-  async getAll(paginatorInput: PostPaginatorInputType):
-    Promise<SearchResultType<PostType>> {
+  async create({title, shortDescription, content, bloggerId}: PostCreateType, userId: string = ""): Promise<PostType> {
+    const id = uuidv4();
+    const blogger = await bloggersRepository.findById(bloggerId);
+
+    const newPost: PostType = {
+      id,
+      title,
+      shortDescription,
+      content, bloggerId,
+      bloggerName: blogger ? blogger.name : `bloggerName_${id}`,
+      addedAt: new Date()
+    };
+    const post =  await postsRepository.create(newPost)
+    const postLikes = await postLikesService.findByIds([post.id]);
+    const postExtended = getPostExtendedElement(newPost, postLikes, userId);
+    return postExtended;
+  },
+  async getAll(paginatorInput: PostPaginatorInputType, userId: string = ""):
+    Promise<SearchResultType<PostExtendedType>> {
 
     const {pageNumber, pageSize, bloggerId} = paginatorInput;
 
@@ -27,37 +50,31 @@ export const postsService = {
     const {postsSearch, postsCount} =
       await postsRepository.getAll(postPaginator);
 
-    const result: SearchResultType<PostType> = {
+    const postIds: Array<string> = postsSearch.map((p: PostType) => p.id);
+    const postLikes: Array<PostLikeType> = await postLikesService.findByIds(postIds);
+
+    const postSearchExtended: Array<PostExtendedType> = postsSearch.map((post: PostType) => getPostExtendedElement(post, postLikes, userId))
+
+    const result: SearchResultType<PostExtendedType> = {
       pagesCount: Math.ceil(postsCount / pageSize),
       page: pageNumber,
       pageSize: pageSize,
       totalCount: postsCount,
-      items: postsSearch
+      items: postSearchExtended
     }
     return result;
   },
-  async create({title, shortDescription, content, bloggerId}: PostCreateType): Promise<PostType> {
-    const id = uuidv4();
-    const blogger = await bloggersRepository.findById(bloggerId);
-
-    const newPost: PostType = {
-      id,
-      title,
-      shortDescription,
-      content, bloggerId,
-      bloggerName: blogger ? blogger.name : `bloggerName_${id}`
-    };
-    return await postsRepository.create(newPost)
+  async findById(id: string, userId: string = ""): Promise<PostExtendedType | null> {
+    const post = await postsRepository.findById(id);
+    if (!post) return null;
+    const postLikes = await postLikesService.findByIds([post.id]);
+    const postExtended = getPostExtendedElement(post, postLikes, userId);
+    return postExtended;
   },
-  async findById(id: string): Promise<PostType | null> {
-    return await postsRepository.findById(id);
-  },
-  async update({
-                 id, title, shortDescription, content, bloggerId
-               }: PostUpdateType): Promise<boolean> {
+  async update({id, title, shortDescription, content, bloggerId}: PostUpdateType): Promise<boolean> {
     const blogger = await bloggersRepository.findById(bloggerId);
     const bloggerName = blogger ? blogger.name : ""
-    const post: PostType = {id, title, shortDescription, content, bloggerId, bloggerName};
+    const post: PostInsertType = {id, title, shortDescription, content, bloggerId, bloggerName};
     return await postsRepository.update(post)
   },
   async delete(id: string): Promise<boolean> {

@@ -18,7 +18,10 @@ import {
   commentForPostMiddleware,
   commentPostIdMiddleware
 } from "../middlewares/comments/commentsMiddleware";
-import {authAddUserFromAccessTokenMiddleware} from "../middlewares/auth/authMiddleware";
+import {
+  authAddUserDataFromTokenMiddleware,
+  authAddUserFromAccessTokenMiddleware
+} from "../middlewares/auth/authMiddleware";
 import {
   postLikesAuthMiddleware,
   postLikesCorrectLikesStatusMiddleware, postLikesCorrectsPostIdMiddleware
@@ -27,19 +30,23 @@ import {
 export const postsRouter = Router({});
 
 postsRouter.get('/',
-  async (req: Request, res: Response) => {
+  authAddUserDataFromTokenMiddleware,
+  async (req: RequestWithFullUser, res: Response) => {
+    const user = req.user;
+
     const searchPostsTerm: PostPaginatorInputType = {
       pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 1),
       pageSize: +(req.query.PageSize ? req.query.PageSize : 10)
     }
-    const posts = await postsService.getAll(searchPostsTerm);
+    const posts = await postsService.getAll(searchPostsTerm, user?.id);
     return res.send(posts);
   });
 
 postsRouter.post('/',
   authBasicValidationMiddleware,
   postTitleShorDescriptionContentBloggerIdMiddleware,
-  async (req: Request, res: Response) => {
+  authAddUserDataFromTokenMiddleware,
+  async (req: RequestWithFullUser, res: Response) => {
     const postCreate: PostCreateType =
       {
         title: req.body.title,
@@ -47,20 +54,24 @@ postsRouter.post('/',
         content: req.body.content,
         bloggerId: req.body.bloggerId
       }
-    const post = await postsService.create(postCreate);
+    const user = req.user;
+    const post = await postsService.create(postCreate,user?.id);
 
     return res.status(201).send(post);
   });
 
 postsRouter.get("/:postId/comments",
   commentPostIdMiddleware,
-  async (req: Request, res: Response) => {
+  authAddUserDataFromTokenMiddleware,
+  async (req: RequestWithFullUser, res: Response) => {
+    const user = req.user;
+
     const searchPostComments: PostCommentsInputType = {
       pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 1),
       pageSize: +(req.query.PageSize ? req.query.PageSize : 10),
       postId: req.params.postId
     }
-    const comments = await commentsService.getAll(searchPostComments);
+    const comments = await commentsService.getAll(searchPostComments, user?.id);
     return res.send(comments)
   });
 
@@ -80,8 +91,11 @@ postsRouter.post("/:postId/comments",
 
 postsRouter.get('/:id',
   postIdMiddleware,
-  async (req: Request, res: Response) => {
-    const post = await postsService.findById(req.params.id);
+  authAddUserDataFromTokenMiddleware,
+  async (req: RequestWithFullUser, res: Response) => {
+    const user = req.user;
+
+    const post = await postsService.findById(req.params.id, user?.id);
     if (post) {
       return res.status(200).send(post);
     }

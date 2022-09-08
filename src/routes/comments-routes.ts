@@ -6,7 +6,10 @@ import {
   commentContentMiddleware, commentExistsMiddleware,
   commentOwnPostMiddleware,
 } from "../middlewares/comments/commentsMiddleware";
-import {authAddUserFromAccessTokenMiddleware} from "../middlewares/auth/authMiddleware";
+import {
+  authAddUserDataFromTokenMiddleware,
+  authAddUserFromAccessTokenMiddleware
+} from "../middlewares/auth/authMiddleware";
 import {
   commentLikesAuthMiddleware,
   commentLikesCorrectLikesStatusMiddleware, commentLikesCorrectsCommentIdMiddleware
@@ -16,8 +19,10 @@ import {
 export const commentsRouter = Router({});
 
 commentsRouter.get("/:id",
-  async (req: Request, res: Response) => {
-    const result = await commentsService.findById(req.params.id);
+  authAddUserDataFromTokenMiddleware,
+  async (req: RequestWithFullUser, res: Response) => {
+    const user = req.user;
+    const result = await commentsService.findById(req.params.id, user?.id);
     if (result) return res.status(200).send(result);
     return res.status(404).send()
   });

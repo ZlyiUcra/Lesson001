@@ -45,13 +45,17 @@ export type PostDBType = WithId<{
   shortDescription: string,
   content: string,
   bloggerId: string,
-  bloggerName?: string
+  bloggerName?: string,
+  addedAt: Date
 }>
 
 export type PostType = Omit<PostDBType, "_id">
+export type PostExtendedType = PostType & { extendedLikesInfo: ExtendedPostLikesInfoType }
 
-export type PostCreateType = Omit<PostType, "id" | "bloggerName">
-export type PostUpdateType = Omit<PostType, "bloggerName">
+
+export type PostCreateType = Omit<PostType, "id" | "bloggerName" | "addedAt">
+export type PostUpdateType = Omit<PostType, "bloggerName" | "addedAt">
+export type PostInsertType = Omit<PostType,  "addedAt">
 
 export type UserDBType = WithId<{
   id: string;
@@ -116,6 +120,7 @@ export type CommentDBType = WithId<{
 }>
 
 export type CommentType = Omit<CommentDBType, "_id" | "postId">
+export type CommentExtendedType = CommentType & { likesInfo: LikesInfoType };
 
 export interface RequestWithShortUser extends Request {
   user?: UserShortType
@@ -162,6 +167,7 @@ export enum LIKE_STATUS {
   LIKE = "Like",
   DISLIKE = "Dislike"
 }
+
 export type LikesInfoType = {
   likesCount: number,
   dislikesCount: number,
@@ -172,7 +178,7 @@ export type LikeUserDetailsInfoType = {
   userId: string,
   login: string
 }
-export type ExtendedLikesInfoType = LikesInfoType & {
+export type ExtendedPostLikesInfoType = LikesInfoType & {
   newestLikes: Array<LikeUserDetailsInfoType>
 }
 

@@ -22,5 +22,8 @@ export const commentLikesService = {
   },
   async findByCommentIdAndUserId(commentId: string, userId: string): Promise<CommentLikeType | null> {
     return commentLikesRepository.findByCommentIdAndUserId(commentId, userId);
+  },
+  async findByIds(commentIds:Array<string>): Promise<Array<CommentLikeType>> {
+    return commentLikesRepository.findByIds(commentIds);
   }
 }
