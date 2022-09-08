@@ -12,7 +12,7 @@ import {likesAuthValidator} from "../../helpers/likes/likesHelper";
 export const commentLikesAuthMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
 
   const {headerAuth, accessToken, userJWT, user, isBearer} = await likesAuthValidator(req.headers.authorization)
-  if (!isBearer || !userJWT) return res.status(401).send()
+  if (!isBearer || accessToken.length < 50) return res.status(401).send()
   // if(!user){
   //   return res.status(401).send()
   // }
