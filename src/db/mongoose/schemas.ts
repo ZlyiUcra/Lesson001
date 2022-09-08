@@ -55,7 +55,8 @@ export const postSchema = new Schema<PostDBType>({
   shortDescription: String,
   content: String,
   bloggerId: String,
-  bloggerName: {type: String, default: undefined}
+  bloggerName: {type: String, default: undefined},
+  addedAt: String
 });
 
 export const commentSchema = new Schema<CommentDBType>({
