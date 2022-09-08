@@ -61,7 +61,7 @@ commentsRouter.put('/:commentId/like-status',
 
     const isLikedStatus = await commentsService.likeStatus(commentId, likeStatus, user);
 
-    if (!isLikedStatus) return res.status(401).send();
+    // if (!isLikedStatus) return res.status(401).send();
     res.status(204).send();
   }
 )
