@@ -17,6 +17,9 @@ export const correctLikeStatus = (oldLikeStatus: LIKE_STATUS, newLikeStatus: LIK
     (oldLikeStatus === LIKE_STATUS.DISLIKE && newLikeStatus === LIKE_STATUS.LIKE)) {
     return LIKE_STATUS.NONE
   }
+  if (newLikeStatus === LIKE_STATUS.NONE) {
+    return oldLikeStatus;
+  }
   return newLikeStatus
 
 }
