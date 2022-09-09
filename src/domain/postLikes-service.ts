@@ -28,7 +28,7 @@ export const postLikesService = {
       savedPostLike = await this.findByPostIdAndUserId(postId, null);
     }
     if (savedPostLike) {
-      savedPostLike.likeStatus = correctLikeStatus(savedPostLike.likeStatus, likeStatus)
+      savedPostLike.likeStatus = correctLikeStatus(savedPostLike.likeStatus, likeStatus,user)
       postLike = {...savedPostLike}
     }
 

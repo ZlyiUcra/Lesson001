@@ -6,15 +6,15 @@ import {
   LikeUserDetailsInfoType,
   PostExtendedType,
   PostLikeType,
-  PostType
+  PostType, UserFullType
 } from "../../db/types";
 import differenceInSeconds from "date-fns/differenceInSeconds";
 import {jwtUtility} from "../../application/jwt-utility";
 import {usersService} from "../../domain/users-services";
 
-export const correctLikeStatus = (oldLikeStatus: LIKE_STATUS, newLikeStatus: LIKE_STATUS): LIKE_STATUS => {
-  if (oldLikeStatus === LIKE_STATUS.LIKE && newLikeStatus === LIKE_STATUS.DISLIKE ||
-    oldLikeStatus === LIKE_STATUS.DISLIKE && newLikeStatus === LIKE_STATUS.LIKE) {
+export const correctLikeStatus = (oldLikeStatus: LIKE_STATUS, newLikeStatus: LIKE_STATUS, user: UserFullType | null): LIKE_STATUS => {
+  if (!user || (oldLikeStatus === LIKE_STATUS.LIKE && newLikeStatus === LIKE_STATUS.DISLIKE) ||
+    (oldLikeStatus === LIKE_STATUS.DISLIKE && newLikeStatus === LIKE_STATUS.LIKE)) {
     return LIKE_STATUS.NONE
   }
   return newLikeStatus

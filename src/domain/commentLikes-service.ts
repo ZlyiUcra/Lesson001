@@ -24,7 +24,7 @@ export const commentLikesService = {
       savedCommentLike = await this.findByCommentIdAndUserId(commentId, null);
     }
     if (savedCommentLike) {
-      savedCommentLike.likeStatus = correctLikeStatus(savedCommentLike.likeStatus, likeStatus)
+      savedCommentLike.likeStatus = correctLikeStatus(savedCommentLike.likeStatus, likeStatus, user)
       commentLike = {...savedCommentLike}
     }
 
