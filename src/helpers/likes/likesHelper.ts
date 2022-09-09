@@ -8,7 +8,7 @@ import {
   PostLikeType,
   PostType, UserFullType
 } from "../../db/types";
-import differenceInSeconds from "date-fns/differenceInSeconds";
+import differenceInMilliseconds from "date-fns/differenceInMilliseconds";
 import {jwtUtility} from "../../application/jwt-utility";
 import {usersService} from "../../domain/users-services";
 
@@ -25,7 +25,7 @@ export const newest3LikesElements = (postLikes: Array<PostLikeType>, postId: str
   const newestLikes: Array<LikeUserDetailsInfoType> =
 
     postLikes.filter((pl: PostLikeType) => pl.likeStatus !== LIKE_STATUS.NONE && pl.postId === postId && pl.userId)
-      .sort((a, b) => Math.sign(differenceInSeconds(b.addedAt, a.addedAt)))
+      .sort((a, b) => differenceInMilliseconds(a.addedAt, b.addedAt))
       .slice(0, 3)
       .map((pl: PostLikeType) => {
         return {
