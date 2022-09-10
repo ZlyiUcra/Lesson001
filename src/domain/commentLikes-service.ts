@@ -30,7 +30,7 @@ export const commentLikesService = {
 
     return commentLikesRepository.upsert(commentLike);
   },
-  async findByCommentIdAndUserId(commentId: string, userId: string | null): Promise<CommentLikeType | null> {
+  async findByCommentIdAndUserId(commentId: string, userId: string | null ): Promise<CommentLikeType | null> {
     return commentLikesRepository.findByCommentIdAndUserId(commentId, userId);
   },
   async findByIds(commentIds:Array<string>): Promise<Array<CommentLikeType>> {
