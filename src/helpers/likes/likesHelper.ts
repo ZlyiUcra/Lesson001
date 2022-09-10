@@ -13,13 +13,14 @@ import {jwtUtility} from "../../application/jwt-utility";
 import {usersService} from "../../domain/users-services";
 
 export const correctLikeStatus = (oldLikeStatus: LIKE_STATUS, newLikeStatus: LIKE_STATUS, user: UserFullType | null): LIKE_STATUS => {
-  if (!user || (oldLikeStatus === LIKE_STATUS.LIKE && newLikeStatus === LIKE_STATUS.LIKE) ||
-    (oldLikeStatus === LIKE_STATUS.DISLIKE && newLikeStatus === LIKE_STATUS.DISLIKE)) {
-    return LIKE_STATUS.NONE
-  }
+  // if (!user || (oldLikeStatus === LIKE_STATUS.LIKE && newLikeStatus === LIKE_STATUS.LIKE) ||
+  //   (oldLikeStatus === LIKE_STATUS.DISLIKE && newLikeStatus === LIKE_STATUS.DISLIKE)) {
+  //   return LIKE_STATUS.NONE
+  // }
   // if (newLikeStatus === LIKE_STATUS.NONE) {
   //   return oldLikeStatus;
   // }
+  if (!user) return LIKE_STATUS.NONE
   return newLikeStatus
 
 }
