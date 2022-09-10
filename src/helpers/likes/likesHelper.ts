@@ -20,7 +20,11 @@ export const correctLikeStatus = (oldLikeStatus: LIKE_STATUS, newLikeStatus: LIK
   // if (newLikeStatus === LIKE_STATUS.NONE) {
   //   return oldLikeStatus;
   // }
-  if (!user) return LIKE_STATUS.NONE
+  if (!user) {
+    return LIKE_STATUS.NONE
+  } else if (newLikeStatus === LIKE_STATUS.NONE) {
+    return oldLikeStatus;
+  }
   return newLikeStatus
 
 }
@@ -29,7 +33,7 @@ export const newest3LikesElements = (postLikes: Array<PostLikeType>, postId: str
   const newestLikes: Array<LikeUserDetailsInfoType> =
 
     postLikes.filter((pl: PostLikeType) => pl.likeStatus === LIKE_STATUS.LIKE && pl.postId === postId && pl.userId)
-      .sort((a, b) =>  differenceInMilliseconds(b.addedAt, a.addedAt))
+      .sort((a, b) => differenceInMilliseconds(b.addedAt, a.addedAt))
       .slice(0, 3)
       .map((pl: PostLikeType) => {
         return {
