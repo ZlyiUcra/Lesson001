@@ -15,7 +15,7 @@ export const postLikesService = {
     if (savedPostLike) {
       postLike = {
         ...savedPostLike,
-        likeStatus: correctLikeStatus(savedPostLike.likeStatus, likeStatus, user)
+        likeStatus: localLikeStatus
       }
     } else {
       postLike = {
