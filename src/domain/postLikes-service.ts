@@ -12,7 +12,7 @@ export const postLikesService = {
     let postLike: PostLikeType = {
       id: uuidv4(),
       postId,
-      likeStatus: LIKE_STATUS.NONE,
+      likeStatus: likeStatus,
       userId,
       login,
       addedAt: new Date()
@@ -21,7 +21,6 @@ export const postLikesService = {
     if (user) {
       postLike.userId = user.id;
       postLike.login = user.credentials.login;
-      postLike.likeStatus = likeStatus;
       savedPostLike = await this.findByPostIdAndUserId(postId, user.id);
 
     } else {
