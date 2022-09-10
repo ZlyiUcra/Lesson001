@@ -22,9 +22,10 @@ export const correctLikeStatus = (oldLikeStatus: LIKE_STATUS, newLikeStatus: LIK
   // }
   if (!user) {
     return LIKE_STATUS.NONE
-  } else if (newLikeStatus === LIKE_STATUS.NONE) {
-    return oldLikeStatus;
   }
+  //else if (newLikeStatus === LIKE_STATUS.NONE) {
+  //   return oldLikeStatus;
+  // }
   return newLikeStatus
 
 }
