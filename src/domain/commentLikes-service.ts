@@ -13,12 +13,11 @@ export const commentLikesService = {
       id: uuidv4(),
       commentId,
       userId,
-      likeStatus : LIKE_STATUS.NONE,
+      likeStatus : likeStatus,
       addedAt: new Date()
     }
     if(user) {
       commentLike.userId = user.id;
-      commentLike.likeStatus = likeStatus;
       savedCommentLike = await this.findByCommentIdAndUserId(commentId, user.id);
     } else {
       savedCommentLike = await this.findByCommentIdAndUserId(commentId, null);
