@@ -29,7 +29,7 @@ export const newest3LikesElements = (postLikes: Array<PostLikeType>, postId: str
   const newestLikes: Array<LikeUserDetailsInfoType> =
 
     postLikes.filter((pl: PostLikeType) => pl.likeStatus === LIKE_STATUS.LIKE && pl.postId === postId && pl.userId)
-      .sort((a, b) => differenceInMilliseconds(b.addedAt, a.addedAt))
+      .sort((a, b) =>  new Date(b.addedAt).getMilliseconds() - new Date(a.addedAt).getMilliseconds())//differenceInMilliseconds(b.addedAt, a.addedAt))
       .slice(0, 3)
       .map((pl: PostLikeType) => {
         return {
