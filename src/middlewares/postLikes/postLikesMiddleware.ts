@@ -12,7 +12,7 @@ export const postLikesAuthMiddleware = async (req: RequestWithFullUser, res: Res
 
   const {headerAuth, accessToken, userJWT, user, isBearer} = await likesAuthValidator(req.headers.authorization);
 
-  if (!isBearer || accessToken.length < 50) return res.status(401).send()
+  if (!isBearer) return res.status(401).send()
   // if(!user){
   //   return res.status(401).send()
   // }

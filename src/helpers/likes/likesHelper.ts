@@ -109,7 +109,7 @@ export const getCommentExtendedElement = (comment: CommentType, commentLikes: Ar
 export const likesAuthValidator = async (headerAuthorization: string | undefined) => {
   const headerAuth = headerAuthorization;
   const accessToken = headerAuth?.split(" ")[1] || "";
-  const isBearer = headerAuth?.split(" ")[0].trim() === "Bearer";
+  const isBearer = headerAuth?.split(" ")[0].trim() === "Bearer" && accessToken.split(".").length === 3;
   let userJWT = await jwtUtility.extractUserJWTFromToken(accessToken);
 
   const user = await usersService.findById(userJWT?.id as string);
