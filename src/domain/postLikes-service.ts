@@ -21,6 +21,7 @@ export const postLikesService = {
     if (user) {
       postLike.userId = user.id;
       postLike.login = user.credentials.login;
+      postLike.likeStatus = likeStatus;
       savedPostLike = await this.findByPostIdAndUserId(postId, user.id);
 
     } else {
