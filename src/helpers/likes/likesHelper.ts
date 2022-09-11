@@ -118,11 +118,11 @@ export const likesAuthValidator = async (headerAuthorization: string | undefined
   let userJWT = await jwtUtility.extractUserJWTFromToken(accessToken);
 
   const user = await usersService.findById(userJWT?.id as string);
-  console.log("likesAuthValidator: ",
-    "\n1.", headerAuth,
-    "\n2.", accessToken,
-    "\n3.", userJWT,
-    "\n4.", user,
-    "\n5.", isBearer)
+  // console.log("likesAuthValidator: ",
+  //   "\n1.", headerAuth,
+  //   "\n2.", accessToken,
+  //   "\n3.", userJWT,
+  //   "\n4.", user,
+  //   "\n5.", isBearer)
   return {headerAuth, accessToken, userJWT, user, isBearer}
 }
