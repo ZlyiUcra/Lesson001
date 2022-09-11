@@ -18,10 +18,10 @@ export const commentsRepository = {
     return {commentsSearch, commentsCount};
   },
   async create(comment: CommentType, postId: string): Promise<CommentType> {
-    const resultComment: CommentDBType = {...comment, /*postid,*/ _id: new ObjectId()}
+    const resultComment: CommentDBType = {...comment, postId, _id: new ObjectId()}
     await commentModel.insertMany([resultComment]);
     const result = await commentModel
-      .findOne({id: comment.id}, projection).lean() as CommentType;
+      .findOne({id: comment.id}, projectionExcludePostId).lean() as CommentType;
     return result;
   },
 

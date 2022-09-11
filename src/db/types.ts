@@ -114,7 +114,7 @@ export type CommentDBType = WithId<{
   id: string;
   userId: string;
   content: string;
-  //postId: string;
+  postId: string;
   userLogin: string;
   addedAt: Date;
 }>
