@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {authBasicValidationMiddleware} from "../middlewares/basicAuth/authValidationMiddleware";
 import {bloggersService} from "../domain/bloggers-services";
-import {BloggerPaginatorInputType, PostCreateType, PostPaginatorInputType} from "../db/types";
+import {BloggerPaginatorInputType, PostCreateType, PostPaginatorInputType, RequestWithFullUser} from "../db/types";
 import {
   bloggerForPostMiddleware, bloggersCorrectIdMiddleware,
   bloggersCorrectNameAndYoutubeURLUpdateMiddleware,
@@ -9,6 +9,7 @@ import {
 } from "../middlewares/bloggers/bloggersMiddleware";
 import {postsService} from "../domain/posts-services";
 import {postTitleShorDescriptionContentMiddleware} from "../middlewares/posts/postsMiddleware";
+import {authAddUserDataFromTokenMiddleware} from "../middlewares/auth/authMiddleware";
 
 
 export const bloggersRouter = Router({});
@@ -77,13 +78,17 @@ bloggersRouter.delete('/:id',
 
 bloggersRouter.get('/:bloggerId/posts',
   bloggerForPostMiddleware,
-  async (req: Request, res: Response) => {
+  authAddUserDataFromTokenMiddleware,
+  async (req: RequestWithFullUser, res: Response) => {
+
+    const user = req.user;
+
     const searchPostsTerm: PostPaginatorInputType = {
       pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 1),
       pageSize: +(req.query.PageSize ? req.query.PageSize : 10),
       bloggerId: req.params.bloggerId as string
     };
-    const posts = await postsService.getAll(searchPostsTerm);
+    const posts = await postsService.getAll(searchPostsTerm, user?.id);
     res.send(posts);
   });
 
