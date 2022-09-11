@@ -10,8 +10,8 @@ export const commentsRepository = {
     const {postId, limit, skip} = searchPostComments;
 
     const commentsCount = await commentModel.count({postId});
-    const commentsSearch: CommentDBType[] = await commentModel
-      .find({postId}, projection)
+    const commentsSearch: CommentType[] = await commentModel
+      .find({postId}, projectionExcludePostId)
       .skip(skip).limit(limit)
       .lean();
 
