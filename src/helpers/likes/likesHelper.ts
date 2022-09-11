@@ -49,7 +49,7 @@ export const newest3LikesElements = (postLikes: Array<PostLikeType>, postId: str
 export const getPostMyStatus = (postLikes: Array<PostLikeType>, postId: string, userId: string): LIKE_STATUS => {
   //if (!userId) return LIKE_STATUS.NONE
 
-  const myStatusPostLike = postLikes.find((pl: PostLikeType) => pl.postId === postId && pl.userId === userId)
+  const myStatusPostLike = postLikes.find((pl: PostLikeType) => pl.postId === postId && pl.userId === userId);
   const myStatus = myStatusPostLike ? myStatusPostLike.likeStatus : LIKE_STATUS.NONE;
   return myStatus;
 }

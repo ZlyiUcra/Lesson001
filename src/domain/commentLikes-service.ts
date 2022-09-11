@@ -6,12 +6,11 @@ import {correctLikeStatus} from "../helpers/likes/likesHelper";
 export const commentLikesService = {
   async upsert(commentId: string, likeStatus: LIKE_STATUS, user: UserFullType | null): Promise<boolean> {
 
-    let userId: string | null = null;
+    const userId: string | null = user ? user.id : null;
     const localLikeStatus: LIKE_STATUS = user ? likeStatus : LIKE_STATUS.NONE;
     let commentLike: CommentLikeType | null = null;
 
     let savedCommentLike = await this.findByCommentIdAndUserId(commentId, user?.id || null);
-
     if (savedCommentLike) {
       commentLike = {
         ...savedCommentLike,

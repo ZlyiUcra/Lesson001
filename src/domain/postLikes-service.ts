@@ -11,7 +11,6 @@ export const postLikesService = {
     let postLike: PostLikeType | null = null;
 
     let savedPostLike = await this.findByPostIdAndUserId(postId, user?.id || null);
-
     if (savedPostLike) {
       postLike = {
         ...savedPostLike,

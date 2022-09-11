@@ -134,7 +134,6 @@ export const authAddUserDataFromTokenMiddleware = async (req: RequestWithFullUse
     userJWT = await jwtUtility.extractUserJWTFromToken(refreshToken)
   }
   const user = await usersService.findById(userJWT?.id as string);
-
   req.user = user ? user : undefined;
 
   next();
