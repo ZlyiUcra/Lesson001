@@ -18,6 +18,7 @@ export const commentsService = {
 
   async getAll(searchPostComments: PostCommentsInputType, userId: string = ""): Promise<SearchResultType<CommentExtendedType>> {
     const {pageNumber, pageSize, postId} = searchPostComments;
+    console.log("searchPostComments", searchPostComments )
 
     const skip = pageSize * (pageNumber - 1);
     const limit = pageSize;
