@@ -14,5 +14,6 @@ export async function runDb() {
     console.log("Can't connect to db");
     // Ensures that the client will close when you finish/error
     await disconnect();
+    
   }
 }
