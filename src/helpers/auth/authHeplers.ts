@@ -1,11 +1,9 @@
 import {ErrorMessagesType, errorsMessagesCreator} from "../errorCommon/errorMessagesCreator";
 import {baseErrorList} from "../errorCommon/baseErrorListHelper";
 import {usersService} from "../../domain/users-services";
-import {AttemptsType, TOKEN_STATUS} from "../../db/types";
+import {TOKEN_STATUS} from "../../db/types";
 import {isValidEmail, userLoginPasswordErrorCreator} from "../user/userHelper";
-import differenceInSeconds from "date-fns/differenceInSeconds";
-import {settings} from "../../settings";
-import {attemptsService} from "../../domain/attempts-service";
+
 
 
 export const authRegistrationEmailValidationCreator = async (errors: ErrorMessagesType | undefined, email: string) => {
@@ -29,12 +27,6 @@ export const authRegistrationEmailValidationCreator = async (errors: ErrorMessag
   }
   return errors;
 }
-
-// export const is429Status = (attempts: AttemptsType): boolean => {
-//   const timeDifference = differenceInSeconds(new Date(), attempts.lastRequestedAt);
-//   return (timeDifference < settings.TIME_LIMIT && attempts.limitTimeCount as number >= settings.ATTEMPTS_TOKEN_LIMIT);
-// }
-
 export const authLoginPassEmailErrorCreator = (errors: ErrorMessagesType | undefined, login: string, password: string, email: string) => {
   errors = userLoginPasswordErrorCreator(errors, login, password);
   if (!isValidEmail(email)) {
@@ -61,7 +53,6 @@ export const authConfirmedValidationCreator = (errors: ErrorMessagesType | undef
   );
 
 }
-
 export const authLoginOrEmailAlreadyExistsErrorCreator = (errors: ErrorMessagesType | undefined, fieldsList: string[]) => {
   fieldsList.forEach(field => {
     errors = errorsMessagesCreator(baseErrorList(errors),
