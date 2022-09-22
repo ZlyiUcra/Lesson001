@@ -3,7 +3,7 @@ import {DeleteResult, ObjectId, UpdateResult} from "mongodb";
 import {bloggerModel} from "../db/mongoose/models";
 import {projection} from "../helpers/constants";
 
-export const bloggersRepository = {
+export class BloggersRepository {
   async getAll(paginatorInput: BloggerPaginatorType):
     Promise<{ bloggersSearch: BloggerType[], bloggersCount: number }> {
 
@@ -19,16 +19,19 @@ export const bloggersRepository = {
 
 
     return {bloggersSearch, bloggersCount};
-  },
+  }
+
   async create(newBlogger: BloggerType): Promise<BloggerType> {
     const resultBlogger: BloggerDBType = {...newBlogger, _id: new ObjectId()}
     await bloggerModel.insertMany([resultBlogger]);
     const result = await bloggerModel.findOne({id: newBlogger.id}, projection) as BloggerType;
     return result;
-  },
+  }
+
   async findById(id: string): Promise<BloggerType | null> {
     return bloggerModel.findOne({id}, projection).lean();
-  },
+  }
+
   async update({id, name, youtubeUrl}: BloggerType): Promise<boolean> {
     let result: UpdateResult =
       await bloggerModel.updateOne({id}, {$set: {name, youtubeUrl}});
@@ -36,7 +39,8 @@ export const bloggersRepository = {
       return true;
     }
     return false;
-  },
+  }
+
   async delete(id: string): Promise<boolean> {
     let result: DeleteResult = await bloggerModel.deleteOne({id});
     if (result.deletedCount) return true
@@ -44,3 +48,5 @@ export const bloggersRepository = {
     return false;
   }
 }
+
+export const bloggersRepository = new BloggersRepository()

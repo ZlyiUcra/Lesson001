@@ -12,11 +12,8 @@ import {postTitleShorDescriptionContentMiddleware} from "../middlewares/posts/po
 import {authAddUserDataFromTokenMiddleware} from "../middlewares/auth/authMiddleware";
 
 
-export const bloggersRouter = Router({});
-
-bloggersRouter.get("/",
-  async (req: Request, res: Response) => {
-
+class BloggersRouter {
+  async getBloggers(req: Request, res: Response) {
     const searchBloggersTerm: BloggerPaginatorInputType = {
       searchNameTerm: req.query.SearchNameTerm ? req.query.SearchNameTerm as string : '',
       pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 1),
@@ -25,18 +22,14 @@ bloggersRouter.get("/",
 
     const bloggers = await bloggersService.findAll(searchBloggersTerm);
     res.send(bloggers);
-  });
+  }
 
-bloggersRouter.post("/",
-  authBasicValidationMiddleware,
-  bloggersNameAndYoutubeMiddleware,
-  async (req: Request, res: Response) => {
+  async createBlogger(req: Request, res: Response) {
     const newBlogger = await bloggersService.create(req.body.name, req.body.youtubeUrl);
     res.status(201).send(newBlogger);
-  });
+  }
 
-bloggersRouter.get('/:id',
-  async (req: Request, res: Response) => {
+  async getBlogger(req: Request, res: Response) {
     let blogger = await bloggersService.findById(req.params.id);
 
     if (blogger) {
@@ -44,13 +37,9 @@ bloggersRouter.get('/:id',
       return;
     }
     res.status(404).send();
-  });
+  }
 
-bloggersRouter.put('/:id',
-  authBasicValidationMiddleware,
-  bloggersCorrectNameAndYoutubeURLUpdateMiddleware,
-  bloggersCorrectIdMiddleware,
-  async (req: Request, res: Response) => {
+  async updateBlogger(req: Request, res: Response) {
 
     const isUpdated = await bloggersService.update({
       id: req.params.id,
@@ -62,24 +51,18 @@ bloggersRouter.put('/:id',
       return;
     }
     res.status(404).send();
-  });
+  }
 
-bloggersRouter.delete('/:id',
-  authBasicValidationMiddleware,
-  bloggersCorrectIdMiddleware,
-  async (req: Request, res: Response) => {
+  async deleteBlogger(req: Request, res: Response) {
     const isDeleted = await bloggersService.delete(req.params.id);
     if (isDeleted) {
       res.status(204).send();
       return;
     }
     res.status(404).send();
-  });
+  }
 
-bloggersRouter.get('/:bloggerId/posts',
-  bloggerForPostMiddleware,
-  authAddUserDataFromTokenMiddleware,
-  async (req: RequestWithFullUser, res: Response) => {
+  async getBloggerPosts(req: RequestWithFullUser, res: Response) {
 
     const user = req.user;
 
@@ -90,13 +73,9 @@ bloggersRouter.get('/:bloggerId/posts',
     };
     const posts = await postsService.getAll(searchPostsTerm, user?.id);
     res.send(posts);
-  });
+  }
 
-bloggersRouter.post("/:bloggerId/posts",
-  authBasicValidationMiddleware,
-  bloggerForPostMiddleware,
-  postTitleShorDescriptionContentMiddleware,
-  async (req: Request, res: Response) => {
+  async createBloggerPost(req: Request, res: Response) {
 
     const postCreate: PostCreateType =
       {
@@ -109,4 +88,41 @@ bloggersRouter.post("/:bloggerId/posts",
     const post = await postsService.create(postCreate);
     if (post) return res.status(201).send(post);
     res.status(404).send();
-  });
+  }
+}
+
+const bloggersController = new BloggersRouter()
+export const bloggersRouter = Router({});
+
+bloggersRouter.get("/",
+  bloggersController.getBloggers);
+
+bloggersRouter.post("/",
+  authBasicValidationMiddleware,
+  bloggersNameAndYoutubeMiddleware,
+  bloggersController.createBlogger);
+
+bloggersRouter.get('/:id',
+  bloggersController.getBlogger);
+
+bloggersRouter.put('/:id',
+  authBasicValidationMiddleware,
+  bloggersCorrectNameAndYoutubeURLUpdateMiddleware,
+  bloggersCorrectIdMiddleware,
+  bloggersController.updateBlogger);
+
+bloggersRouter.delete('/:id',
+  authBasicValidationMiddleware,
+  bloggersCorrectIdMiddleware,
+  bloggersController.deleteBlogger);
+
+bloggersRouter.get('/:bloggerId/posts',
+  bloggerForPostMiddleware,
+  authAddUserDataFromTokenMiddleware,
+  bloggersController.getBloggerPosts);
+
+bloggersRouter.post("/:bloggerId/posts",
+  authBasicValidationMiddleware,
+  bloggerForPostMiddleware,
+  postTitleShorDescriptionContentMiddleware,
+  bloggersController.createBloggerPost);

@@ -1,45 +1,64 @@
 import {ObjectId, WithId} from 'mongodb'
 import {Request} from "express";
 
-export type BloggerPaginatorInputType = {
-  searchNameTerm?: string;
-  pageNumber: number;
-  pageSize: number;
-}
-export type BloggerPaginatorType = {
-  searchNameTerm?: string;
-  skip: number;
-  limit: number;
+export class BloggerPaginatorInputType {
+  constructor(
+    public searchNameTerm: string | undefined,
+    public pageNumber: number,
+    public pageSize: number) {
+  }
 }
 
-export type BloggerDBType = WithId<{
-  id: string,
-  name?: string,
-  youtubeUrl?: string
-}>
-export type BloggerType = Omit<BloggerDBType, "_id">
-
-export type SearchResultType<T> = {
-  pagesCount: number,
-  page: number,
-  pageSize: number,
-  totalCount: number,
-  items: Array<T>
+export class BloggerPaginatorType {
+  constructor(
+    public searchNameTerm: string | undefined,
+    public skip: number,
+    public limit: number) {
+  }
 }
 
-export type PostPaginatorInputType = {
-  pageNumber: number;
-  pageSize: number;
-  bloggerId?: string;
+export class BloggerType {
+  constructor(public id: string,
+              public name?: string,
+              public youtubeUrl?: string) {
+  }
 }
 
-export type PostPaginatorType = {
-  bloggerId?: string;
-  skip: number;
-  limit: number;
+export class BloggerDBType extends BloggerType {
+  _id: ObjectId
+
+  constructor(_id: ObjectId, id: string, name?: string, youtubeUrl?: string) {
+    super(id, name, youtubeUrl);
+    this._id = _id;
+  }
 }
 
+export class SearchResultType<T> {
+  constructor(public pagesCount: number,
+              public page: number,
+              public pageSize: number,
+              public totalCount: number,
+              public items: Array<T>) {
+  }
 
+}
+
+export class PostPaginatorInputType {
+  constructor(
+    public pageNumber: number,
+    public pageSize: number,
+    public bloggerId?: string) {
+  }
+}
+
+export class PostPaginatorType {
+  constructor(
+    public bloggerId: string | undefined,
+    public skip: number,
+    public limit: number,
+  ) {
+  }
+}
 
 export class PostCreateType {
   constructor(
@@ -134,6 +153,7 @@ export class PostExtendedType extends PostType {
   }
 
 }
+
 // export type PostDBType = WithId<{
 //   id: string,
 //   title: string,
@@ -177,62 +197,129 @@ export class UserDBType extends UserFullType {
 }
 
 export class CredentialType {
-  constructor(public login: string, public email: string, public password: string) {
+  constructor(
+    public login: string,
+    public email: string,
+    public password: string) {
   }
 }
 
-export type TokenType = {
-  confirmationToken: string;
-  tokenStatus: TOKEN_STATUS;
-  tokenJWT: string;
-}
-export type UserShortType = {
-  id: string;
-  login: string;
-}
-export type UserJWTType = UserShortType & { email: string };
-//export type UserFullType = Omit<UserDBType, "_id">
-
-export type LoginType = {
-  login: string;
-  password: string;
+export class TokenType {
+  constructor(
+    public confirmationToken: string,
+    public tokenStatus: TOKEN_STATUS,
+    public tokenJWT: string,
+  ) {
+  }
 }
 
-export type UserInputType = {
-  pageNumber: number;
-  pageSize: number;
+export class UserShortType {
+  constructor(
+    public id: string,
+    public login: string) {
+  }
 }
 
-export type JWTType = {
-  accessToken: string
+export class UserJWTType extends UserShortType {
+  email: string;
+
+  constructor(id: string, login: string, email: string) {
+    super(id, login);
+    this.email = email;
+  }
 }
 
-export type PostCommentsInputType = {
-  pageNumber: number;
-  pageSize: number;
-  postId: string;
-}
-export type CommentsPaginatorType = {
-  skip: number;
-  limit: number;
-  postId: string;
+export class LoginType {
+  constructor(
+    public login: string,
+    public password: string
+  ) {
+  }
 }
 
+export class UserInputType {
+  constructor(
+    public pageNumber: number,
+    public pageSize: number
+  ) {
+  }
+}
+
+export class JWTType {
+  constructor(public accessToken: string) {
+  }
+}
+
+export class PostCommentsInputType {
+  constructor(
+    public pageNumber: number,
+    public pageSize: number,
+    public postId: string
+  ) {
+  }
+}
+
+export class CommentsPaginatorType {
+  constructor(
+    public skip: number,
+    public limit: number,
+    public postId: string
+  ) {
+  }
+}
 
 export type CommentContentType = {
   content: string;
 }
-export type CommentDBType = WithId<{
-  id: string;
-  userId: string;
-  content: string;
-  postId: string;
-  userLogin: string;
-  addedAt: Date;
-}>
 
-export type CommentType = Omit<CommentDBType, "_id" | "postId">
-export type CommentExtendedType = CommentType & { likesInfo: LikesInfoType };
+export class CommentType {
+  constructor(
+    public id: string,
+    public userId: string,
+    public content: string,
+    public userLogin: string,
+    public addedAt: Date,
+  ) {
+  }
+}
+
+export class CommentDBType extends CommentType {
+  _id: ObjectId;
+  postId: string;
+
+  constructor(
+    _id: ObjectId,
+    id: string,
+    userId: string,
+    content: string,
+    postId: string,
+    userLogin: string,
+    addedAt: Date) {
+
+    super(id, userId, content, userLogin, addedAt);
+
+    this._id = _id;
+    this.postId = postId;
+  }
+}
+
+export class CommentExtendedType extends CommentType {
+  likesInfo: LikesInfoType;
+
+  constructor(
+    _id: ObjectId,
+    id: string,
+    userId: string,
+    content: string,
+    postId: string,
+    userLogin: string,
+    addedAt: Date,
+    likesInfo: LikesInfoType) {
+
+    super(id, userId, content, userLogin, addedAt);
+    this.likesInfo = likesInfo;
+  }
+}
 
 export interface RequestWithShortUser extends Request {
   user?: UserShortType
@@ -254,25 +341,55 @@ export enum TOKEN_STATUS {
   CONFIRMED = "Confirmed"
 }
 
-export type AttemptsDBType = WithId<{
-  ip: string | null;
-  url: string | null;
-  method: string | null;
-  lastRequestsAt: Array<Date>;
-}>
-export type AttemptsType = Omit<AttemptsDBType, "_id">
-
-export type PaginatorParamsType = {
-  skip: number,
-  limit: number
+export class AttemptsType {
+  constructor(
+    public ip: string | null,
+    public url: string | null,
+    public method: string | null,
+    public lastRequestsAt: Array<Date>,
+  ) {
+  }
 }
 
-export type BlacklistDBType = WithId<{
-  id: string;
-  refreshToken: string;
-}>
+export class AttemptsDBType extends AttemptsType {
+  _id: ObjectId
 
-export type BlacklistType = Omit<BlacklistDBType, "_id">
+  constructor(_id: ObjectId,
+              ip: string | null,
+              url: string | null,
+              method: string | null,
+              lastRequestsAt: Array<Date>,) {
+
+    super(ip, url, method, lastRequestsAt);
+    this._id = _id;
+  }
+
+}
+
+export class PaginatorParamsType {
+  constructor(public skip: number,
+              public limit: number) {
+  }
+}
+
+export class BlacklistType {
+  constructor(
+    public id: string,
+    public refreshToken: string) {
+  }
+}
+
+export class BlacklistDBType extends BlacklistType {
+  _id: ObjectId;
+
+  constructor(
+    _id: ObjectId,
+    id: string,
+    refreshToken: string) {
+    super(id, refreshToken);
+    this._id = _id;
+  }
+}
 
 export enum LIKE_STATUS {
   NONE = "None",
@@ -280,37 +397,91 @@ export enum LIKE_STATUS {
   DISLIKE = "Dislike"
 }
 
-export type LikesInfoType = {
-  likesCount: number,
-  dislikesCount: number,
-  myStatus: LIKE_STATUS
+export class LikesInfoType {
+  constructor(
+    public likesCount: number,
+    public dislikesCount: number,
+    public myStatus: LIKE_STATUS
+  ) {
+  }
 }
-export type LikeUserDetailsInfoType = {
-  addedAt: string,
-  userId: string | null,
-  login: string | null
+
+export class LikeUserDetailsInfoType {
+  constructor(
+    public addedAt: string,
+    public userId: string | null,
+    public login: string | null) {
+  }
 }
-export type ExtendedPostLikesInfoType = LikesInfoType & {
+
+export class ExtendedPostLikesInfoType extends LikesInfoType {
   newestLikes: Array<LikeUserDetailsInfoType>
+
+  constructor(likesCount: number,
+              dislikesCount: number,
+              myStatus: LIKE_STATUS,
+              newestLikes: Array<LikeUserDetailsInfoType>) {
+    super(likesCount, dislikesCount, myStatus);
+
+    this.newestLikes = newestLikes;
+  }
 }
 
-export type PostLikeDBType = WithId<{
-  id: string,
-  postId: string,
-  userId: string | null,
-  login: string | null,
-  likeStatus: LIKE_STATUS,
-  addedAt: Date
-}>
+{
+}
 
-export type PostLikeType = Omit<PostLikeDBType, "_id">
+export class PostLikeType {
+  constructor(
+    public id: string,
+    public postId: string,
+    public userId: string | null,
+    public login: string | null,
+    public likeStatus: LIKE_STATUS,
+    public addedAt: Date
+  ) {
+  }
+}
 
-export type CommentLikeDBType = WithId<{
-  id: string,
-  commentId: string,
-  userId: string | null,
-  likeStatus: LIKE_STATUS,
-  addedAt: Date
-}>
+export class PostLikeDBType extends PostLikeType {
+  _id: ObjectId
 
-export type CommentLikeType = Omit<CommentLikeDBType, "_id">
+  constructor(
+    _id: ObjectId,
+    id: string,
+    postId: string,
+    userId: string | null,
+    login: string | null,
+    likeStatus: LIKE_STATUS,
+    addedAt: Date
+  ) {
+    super(id, postId, userId, login, likeStatus, addedAt);
+    this._id = _id
+  }
+}
+
+export class CommentLikeType {
+  constructor(
+    public id: string,
+    public commentId: string,
+    public userId: string | null,
+    public likeStatus: LIKE_STATUS,
+    public addedAt: Date
+  ) {
+  }
+}
+
+export class CommentLikeDBType extends CommentLikeType {
+  _id: ObjectId;
+
+  constructor(
+    _id: ObjectId,
+    id: string,
+    commentId: string,
+    userId: string | null,
+    likeStatus: LIKE_STATUS,
+    addedAt: Date
+  ) {
+    super(id, commentId, userId, likeStatus, addedAt)
+    this._id = _id
+  }
+}

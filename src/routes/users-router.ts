@@ -25,6 +25,7 @@ class UsersController {
     const {id, credentials: {login}} = newUser;
     res.status(201).send({id, login})
   }
+
   async deleteUser(req: Request, res: Response) {
     const isDeleted = await usersService.delete(req.params.id);
     if (isDeleted) {
@@ -32,6 +33,7 @@ class UsersController {
     }
     res.status(404).send()
   }
+
   async getUsers(req: Request, res: Response) {
     const searchUsers: UserInputType = {
       pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 1),

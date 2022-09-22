@@ -28,17 +28,16 @@ export const commentsService = {
       await commentsRepository.getAll(commentsPaginator);
 
     const commentIds: Array<string> = commentsSearch.map((c: CommentType) => c.id);
-    const commentLikes: Array<CommentLikeType> = await  commentLikesService.findByIds(commentIds);
+    const commentLikes: Array<CommentLikeType> = await commentLikesService.findByIds(commentIds);
 
     const commentsSearchExtended: Array<CommentExtendedType> = commentsSearch.map((comment: CommentType) => getCommentExtendedElement(comment, commentLikes, userId))
     //getCommentExtendedElement
-    const result: SearchResultType<CommentExtendedType> = {
-      pagesCount: Math.ceil(commentsCount / pageSize),
-      page: pageNumber,
-      pageSize: pageSize,
-      totalCount: commentsCount,
-      items: commentsSearchExtended
-    }
+    const result = new SearchResultType<CommentExtendedType>(
+      Math.ceil(commentsCount / pageSize),
+      pageNumber,
+      pageSize,
+      commentsCount,
+      commentsSearchExtended)
 
     return result;
 
@@ -53,7 +52,7 @@ export const commentsService = {
       addedAt: new Date(),
     }
 
-    const commentReturned =  await commentsRepository.create(comment, postId);
+    const commentReturned = await commentsRepository.create(comment, postId);
     const commentLikes = await commentLikesService.findByIds([commentReturned.id]);
     const commentExtended = getCommentExtendedElement(commentReturned, commentLikes, user.id);
 
@@ -62,7 +61,7 @@ export const commentsService = {
 
   async findById(id: string, userId: string = ""): Promise<CommentExtendedType | null> {
     const comment = await commentsRepository.findById(id);
-    if(!comment) return null;
+    if (!comment) return null;
     const commentLikes = await commentLikesService.findByIds([comment.id]);
     const commentExtended = getCommentExtendedElement(comment, commentLikes, userId);
     return commentExtended;
