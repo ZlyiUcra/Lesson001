@@ -11,21 +11,8 @@ import {jwtUtility} from "../application/jwt-utility";
 
 export const usersRouter = Router({});
 
-usersRouter.get('/',
-  async (req: Request, res: Response) => {
-  const searchUsers: UserInputType = {
-    pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 1),
-    pageSize: +(req.query.PageSize ? req.query.PageSize : 10)
-  }
-  const users = await usersService.getAll(searchUsers)
-  res.send(users)
-});
-
-usersRouter.post("/",
-  authBasicValidationMiddleware,
-  userCreateValidationMiddleware,
-  userAlreadyExistMiddleware,
-  async (req: Request, res: Response) => {
+class UsersController {
+  async createUser(req: Request, res: Response) {
     const credentials: CredentialType = {login: req.body.login, email: req.body.email, password: req.body.password}
     const newUser = await usersService.create(credentials);
     const refreshToken = await jwtUtility.createUserJWT({
@@ -37,15 +24,35 @@ usersRouter.post("/",
     res.cookie("refreshToken", refreshToken, {secure: true, httpOnly: true})
     const {id, credentials: {login}} = newUser;
     res.status(201).send({id, login})
-  });
-
-usersRouter.delete("/:id",
-  authBasicValidationMiddleware,
-  userAlreadyNotExistMiddleware,
-  async (req: Request, res: Response) => {
+  }
+  async deleteUser(req: Request, res: Response) {
     const isDeleted = await usersService.delete(req.params.id);
     if (isDeleted) {
       res.status(204).send()
     }
     res.status(404).send()
-  })
+  }
+  async getUsers(req: Request, res: Response) {
+    const searchUsers: UserInputType = {
+      pageNumber: +(req.query.PageNumber ? req.query.PageNumber : 1),
+      pageSize: +(req.query.PageSize ? req.query.PageSize : 10)
+    }
+    const users = await usersService.getAll(searchUsers)
+    res.send(users)
+  }
+}
+
+const usersController = new UsersController()
+
+usersRouter.post("/",
+  authBasicValidationMiddleware,
+  userCreateValidationMiddleware,
+  userAlreadyExistMiddleware,
+  usersController.createUser);
+
+usersRouter.delete("/:id",
+  authBasicValidationMiddleware,
+  userAlreadyNotExistMiddleware,
+  usersController.deleteUser)
+
+usersRouter.get('/', usersController.getUsers);

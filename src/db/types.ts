@@ -1,4 +1,4 @@
-import {WithId} from 'mongodb'
+import {ObjectId, WithId} from 'mongodb'
 import {Request} from "express";
 
 export type BloggerPaginatorInputType = {
@@ -39,35 +39,147 @@ export type PostPaginatorType = {
   limit: number;
 }
 
-export type PostDBType = WithId<{
-  id: string,
-  title: string,
-  shortDescription: string,
-  content: string,
-  bloggerId: string,
-  bloggerName?: string,
-  addedAt: string
-}>
-
-export type PostType = Omit<PostDBType, "_id">
-export type PostExtendedType = PostType & { extendedLikesInfo: ExtendedPostLikesInfoType }
 
 
-export type PostCreateType = Omit<PostType, "id" | "bloggerName" | "addedAt">
-export type PostUpdateType = Omit<PostType, "bloggerName" | "addedAt">
-export type PostInsertType = Omit<PostType,  "addedAt">
+export class PostCreateType {
+  constructor(
+    public title: string,
+    public shortDescription: string,
+    public content: string,
+    public bloggerId: string) {
+  }
+}
 
-export type UserDBType = WithId<{
+export class PostUpdateType extends PostCreateType {
   id: string;
-  credentials: CredentialType;
-  token: TokenType;
-  createdAt: Date;
-}>
-export type CredentialType = {
-  login: string;
-  email: string;
-  password: string;
-};
+
+  constructor(
+    id: string,
+    title: string,
+    shortDescription: string,
+    content: string,
+    bloggerId: string) {
+
+    super(title, shortDescription, content, bloggerId)
+    this.id = id;
+  }
+}
+
+export class PostInsertType extends PostUpdateType {
+  bloggerName?: string;
+
+  constructor(
+    id: string,
+    title: string,
+    shortDescription: string,
+    content: string,
+    bloggerId: string,
+    bloggerName: string | undefined = undefined) {
+
+    super(id, title, shortDescription, content, bloggerId)
+    this.bloggerName = bloggerName;
+  }
+}
+
+export class PostType extends PostInsertType {
+  addedAt: string;
+
+  constructor(
+    id: string,
+    title: string,
+    shortDescription: string,
+    content: string,
+    bloggerId: string,
+    bloggerName: string | undefined = undefined,
+    addedAt: string) {
+
+    super(id, title, shortDescription, content, bloggerId, bloggerName)
+    this.addedAt = addedAt;
+  }
+}
+
+export class PostDBType extends PostType {
+  _id: ObjectId;
+
+  constructor(
+    _id: ObjectId,
+    id: string,
+    title: string,
+    shortDescription: string,
+    content: string,
+    bloggerId: string,
+    bloggerName: string | undefined = undefined,
+    addedAt: string) {
+
+    super(id, title, shortDescription, content, bloggerId, bloggerName, addedAt);
+    this._id = _id;
+  }
+}
+
+export class PostExtendedType extends PostType {
+  extendedLikesInfo: ExtendedPostLikesInfoType;
+
+  constructor(
+    id: string,
+    title: string,
+    shortDescription: string,
+    content: string,
+    bloggerId: string,
+    bloggerName: string | undefined = undefined,
+    addedAt: string,
+    extendedLikesInfo: ExtendedPostLikesInfoType) {
+
+    super(id, title, shortDescription, content, bloggerId, bloggerName, addedAt);
+    this.extendedLikesInfo = extendedLikesInfo;
+  }
+
+}
+// export type PostDBType = WithId<{
+//   id: string,
+//   title: string,
+//   shortDescription: string,
+//   content: string,
+//   bloggerId: string,
+//   bloggerName?: string,
+//   addedAt: string
+// }>
+
+//export type PostType = Omit<PostDBType, "_id">
+//export type PostExtendedType = PostType & { extendedLikesInfo: ExtendedPostLikesInfoType }
+
+//export type PostCreateType = Omit<PostType, "id" | "bloggerName" | "addedAt">
+//export type PostUpdateType = Omit<PostType, "bloggerName" | "addedAt">
+//export type PostInsertType = Omit<PostType, "addedAt">
+
+export class UserFullType {
+  constructor(public id: string,
+              public credentials: CredentialType,
+              public token: TokenType,
+              public createdAt: Date
+  ) {
+  }
+}
+
+export class UserDBType extends UserFullType {
+  _id: ObjectId;
+
+  constructor(_id: ObjectId,
+              id: string,
+              credentials: CredentialType,
+              token: TokenType,
+              createdAt: Date,
+  ) {
+    {
+      super(id, credentials, token, createdAt);
+      this._id = _id;
+    }
+  }
+}
+
+export class CredentialType {
+  constructor(public login: string, public email: string, public password: string) {
+  }
+}
 
 export type TokenType = {
   confirmationToken: string;
@@ -79,7 +191,7 @@ export type UserShortType = {
   login: string;
 }
 export type UserJWTType = UserShortType & { email: string };
-export type UserFullType = Omit<UserDBType, "_id">
+//export type UserFullType = Omit<UserDBType, "_id">
 
 export type LoginType = {
   login: string;

@@ -13,8 +13,7 @@ import {usersRepository} from "../repositories/users-repository";
 import {v4 as uuidv4} from 'uuid';
 import {authService} from "./auth-services";
 
-export const usersService = {
-
+class UsersServices {
   async getAll(userInput: UserInputType): Promise<SearchResultType<UserShortType>> {
 
     let {pageNumber, pageSize} = userInput;
@@ -39,76 +38,78 @@ export const usersService = {
     };
 
     return result;
-  },
+  }
 
   async findById(id: string): Promise<UserFullType | null> {
     return await usersRepository.findById(id)
-  },
+  }
 
   async create(userCredentials: CredentialType, status: TOKEN_STATUS = TOKEN_STATUS.NONE): Promise<UserFullType> {
     const passwordHash = await authService.generateHash(userCredentials.password);
 
-    const credentials: CredentialType = {
-      login: userCredentials.login,
-      email: userCredentials.email,
-      password: passwordHash,
-    };
+    const credentials: CredentialType = new CredentialType(userCredentials.login, userCredentials.email, passwordHash);
 
     const token: TokenType = {
       confirmationToken: uuidv4(),
       tokenStatus: status,
       tokenJWT: ''
     }
-    const user: UserFullType = {
-      id: uuidv4(),
-      credentials,
-      token,
-      createdAt: new Date()
-    }
-    return  await usersRepository.create(user);
-  },
+    const user = new UserFullType(uuidv4(), credentials, token, new Date())
+
+    return await usersRepository.create(user);
+  }
+
   async findByLogin(login: string): Promise<UserFullType | null> {
     return await usersRepository.findByLogin(login)
-  },
+  }
+
   async findByEmail(email: string): Promise<UserFullType | null> {
     return await usersRepository.findByEmail(email)
-  },
+  }
 
   async findByLoginPass(shortCredentials: LoginType): Promise<UserFullType | null> {
     const userByLogin = await this.findByLogin(shortCredentials.login);
-    if(userByLogin){
+    if (userByLogin) {
       const isPassCorrect = await authService.isPasswordCorrect(shortCredentials.password, userByLogin.credentials.password);
-      if(isPassCorrect){
+      if (isPassCorrect) {
         return userByLogin
       }
     }
     return null;
-  },
+  }
+
   async findByLoginEmailPass(credentials: CredentialType): Promise<UserFullType | null> {
     const {login, email, password} = credentials
     const user = await usersRepository.findByLoginEmail(login, email);
-    if(user) {
+    if (user) {
       const isPassCorrect = await authService.isPasswordCorrect(password, user.credentials.password);
-      if(isPassCorrect){
+      if (isPassCorrect) {
         return user
       }
     }
     return null;
-  },
+  }
+
   async delete(id: string): Promise<boolean> {
     return await usersRepository.delete(id);
-  },
+  }
+
   async setTokenStatus(id: string, status: TOKEN_STATUS): Promise<boolean> {
     return await usersRepository.updateTokenStatus(id, status)
-  },
+  }
+
   async findByLoginOrEmail(login: any, email: any): Promise<string[]> {
     const result = await usersRepository.findByLoginOrEmail(login, email);
     return result
-  },
+  }
+
   async updateToken(id: string, token: TokenType) {
     return await usersRepository.updateToken(id, token)
-  },
+  }
+
   async findByCode(code: string) {
     return await usersRepository.findByCode(code);
   }
 }
+
+export const usersService = new UsersServices()

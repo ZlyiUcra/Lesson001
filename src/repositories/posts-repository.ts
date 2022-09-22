@@ -11,7 +11,7 @@ import {postModel} from "../db/mongoose/models";
 import {projection} from "../helpers/constants";
 
 
-export const postsRepository = {
+export class PostsRepository {
   async getAll(postPaginator: PostPaginatorType):
     Promise<{ postsSearch: PostType[], postsCount: number }> {
 
@@ -27,21 +27,19 @@ export const postsRepository = {
       .lean();
 
     return {postsSearch, postsCount};
-  },
+  }
   async create(post: PostType): Promise<PostType> {
+    const {id, title, shortDescription, content, bloggerId, bloggerName, addedAt} = post;
 
-    const resultPost: PostDBType = {
-      ...post,
-      _id: new ObjectId()
-    };
+    const resultPost = new PostDBType(new ObjectId(), id, title, shortDescription, content, bloggerId, bloggerName, addedAt )
 
     await postModel.insertMany([resultPost]);
 
     return await postModel.findOne({id: post.id}, projection) as PostType;
-  },
+  }
   async findById(id: string): Promise<PostType | null> {
     return postModel.findOne({id}, projection).lean();
-  },
+  }
   async update(post: PostUpdateType | PostInsertType): Promise<boolean> {
     const {id, ...restPost} = post;
     let result: UpdateResult =
@@ -50,10 +48,11 @@ export const postsRepository = {
       return true;
     }
     return false;
-  },
+  }
   async delete(id: string): Promise<boolean> {
     let result: DeleteResult = await postModel.deleteOne({id});
     if (result.deletedCount) return true;
     return false;
   }
 }
+ export const postsRepository = new PostsRepository()

@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import {CredentialType, LoginType, RequestWithFullUser, RequestWithInternetData, UserFullType} from "../db/types";
+import {CredentialType, LoginType, RequestWithFullUser, RequestWithInternetData} from "../db/types";
 import {authService} from "../domain/auth-services";
 
 import {addIPMiddleware} from "../middlewares/ipMiddlware/addIPMiddleware";
