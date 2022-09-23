@@ -4,17 +4,17 @@ import {settings} from "../settings";
 import {type} from "os";
 
 
-export const jwtUtility = {
+export class JwtUtility {
   /**
    * @param user
    * @return Returns JWT-token
    */
   async createJWT(user: UserShortType, expiresIn: string = '1h') {
     return jwt.sign({id: user.id, login: user.login}, settings.JWT_SECRET, {expiresIn})
-  },
+  }
   async createUserJWT(user: UserJWTType, expiresIn: string = '1h') {
     return jwt.sign({id: user.id, login: user.login, email: user.email}, settings.JWT_SECRET, {expiresIn})
-  },
+  }
   async extractUserIdFromToken(token: string): Promise<string | null> {
     try {
       const result = jwt.verify(token, settings.JWT_SECRET) as JwtPayload;
@@ -22,7 +22,7 @@ export const jwtUtility = {
     } catch (error) {
       return null
     }
-  },
+  }
   async extractUserJWTFromToken(token: string): Promise<UserShortType | null> {
     try {
       // noinspection JSVoidFunctionReturnValueUsed
@@ -47,7 +47,7 @@ export const jwtUtility = {
       // console.log(error)
       return null
     }
-  },
+  }
   async extractCompleteUserJWTFromToken(refreshToken: string): Promise<{id: string, login: string, email: string} | null> {
     try {
       // noinspection JSVoidFunctionReturnValueUsed
@@ -74,3 +74,4 @@ export const jwtUtility = {
     }
   }
 }
+export const jwtUtility = new JwtUtility()

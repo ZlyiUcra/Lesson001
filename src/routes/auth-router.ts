@@ -21,13 +21,8 @@ import {jwtUtility} from "../application/jwt-utility";
 
 export const authRouter = Router({});
 
-authRouter.post('/refresh-token',
-  // addIPMiddleware,
-  authRefreshTokenBlacklistMiddleware,
-  authRefreshTokenIsValidMiddleware,
-  authAddUserDataFromTokenMiddleware,
-  // authAccessTokenAliveMiddleware,
-  async (req: RequestWithFullUser, res: Response) => {
+class AuthController {
+  async refreshToken(req: RequestWithFullUser, res: Response) {
     const user = req.user;
 
     if (!user) {
@@ -47,13 +42,9 @@ authRouter.post('/refresh-token',
 
       return res.status(200).send({accessToken});
     }
-  });
+  }
 
-authRouter.post('/login',
-  addIPMiddleware,
-  authAttemptsMiddleware,
-  authUserExistMiddleware,
-  async (req: Request, res: Response) => {
+  async login(req: Request, res: Response) {
     const credentials: LoginType = {
       login: req.body.login,
       password: req.body.password
@@ -73,20 +64,14 @@ authRouter.post('/login',
       return res.status(200).send({accessToken});
     }
     return res.status(401).send()
-  });
+  }
 
-authRouter.post('/logout',
-  authLogoutMiddleware,
-  async (req: Request, res: Response) => {
+  async logout(req: Request, res: Response) {
     res.clearCookie("refreshToken");
     return res.status(204).send();
-  });
+  }
 
-authRouter.post('/registration',
-  addIPMiddleware,
-  authAttemptsMiddleware,
-  authLoginPassEmailValidationMiddleware,
-  async (req: RequestWithInternetData, res: Response) => {
+  async registration(req: RequestWithInternetData, res: Response) {
     const credentials: CredentialType = {
       login: req.body.login,
       email: req.body.email,
@@ -97,28 +82,18 @@ authRouter.post('/registration',
       return res.status(204).send();
     }
     return res.status(401).send();
-  })
+  }
 
-
-authRouter.post('/registration-email-resending',
-  addIPMiddleware,
-  authAttemptsMiddleware,
-  authRegistrationEmailValidationMiddleware,
-  async (req: RequestWithInternetData, res: Response) => {
+  async registrationEmailResending(req: RequestWithInternetData, res: Response) {
     const {email} = req.body;
     const isEmailResent = await authService.emailResending(email);
     if (isEmailResent) {
       return res.status(204).send();
     }
     return res.status(400).send();
-  })
+  }
 
-authRouter.post('/registration-confirmation',
-  addIPMiddleware,
-  authAttemptsMiddleware,
-  authCodeConfirmationValidationMiddleware,
-  authConfirmedValidationMiddleware,
-  async (req: RequestWithInternetData, res: Response) => {
+  async registrationConfirmation(req: RequestWithInternetData, res: Response) {
     const {code} = req.body;
     const isConfirmed = await authService.emailConfirmedByCode(code);
     if (isConfirmed) {
@@ -126,12 +101,9 @@ authRouter.post('/registration-confirmation',
     }
     return res.status(400).send();
 
-  });
+  }
 
-authRouter.get('/me',
-  authAddUserFromAccessTokenMiddleware,
-  authAccessTokenAliveMiddleware,
-  async (req: RequestWithFullUser, res: Response) => {
+  async me(req: RequestWithFullUser, res: Response) {
     const user = req.user;
 
     if (!user)
@@ -145,4 +117,50 @@ authRouter.get('/me',
 
     res.status(200).send(result);
 
-  });
+  }
+}
+
+const authController = new AuthController()
+
+authRouter.post('/refresh-token',
+  // addIPMiddleware,
+  authRefreshTokenBlacklistMiddleware,
+  authRefreshTokenIsValidMiddleware,
+  authAddUserDataFromTokenMiddleware,
+  // authAccessTokenAliveMiddleware,
+  authController.refreshToken);
+
+authRouter.post('/login',
+  addIPMiddleware,
+  authAttemptsMiddleware,
+  authUserExistMiddleware,
+  authController.login);
+
+authRouter.post('/logout',
+  authLogoutMiddleware,
+  authController.logout);
+
+authRouter.post('/registration',
+  addIPMiddleware,
+  authAttemptsMiddleware,
+  authLoginPassEmailValidationMiddleware,
+  authController.registration)
+
+
+authRouter.post('/registration-email-resending',
+  addIPMiddleware,
+  authAttemptsMiddleware,
+  authRegistrationEmailValidationMiddleware,
+  authController.registrationEmailResending)
+
+authRouter.post('/registration-confirmation',
+  addIPMiddleware,
+  authAttemptsMiddleware,
+  authCodeConfirmationValidationMiddleware,
+  authConfirmedValidationMiddleware,
+  authController.registrationConfirmation);
+
+authRouter.get('/me',
+  authAddUserFromAccessTokenMiddleware,
+  authAccessTokenAliveMiddleware,
+  authController.me);

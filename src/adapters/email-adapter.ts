@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
 import {settings} from "../settings";
 
-export const emailAdapter = {
-  sendEmail: async (email: string, subject: string, message: string) => {
+export class EmailAdapter {
+  async sendEmail (email: string, subject: string, message: string) {
     let transporter = await nodemailer.createTransport({
       service: settings.EMAIL_SERVICE,
       auth: {
@@ -20,3 +20,4 @@ export const emailAdapter = {
     return info
   }
 }
+export const emailAdapter = new EmailAdapter()
