@@ -3,7 +3,7 @@ import {postLikesRepository} from "../repositories/postLikes-repository";
 import {v4 as uuidv4} from "uuid";
 import {correctLikeStatus} from "../helpers/likes/likesHelper";
 
-export const postLikesService = {
+export class PostLikesService {
   async upsert(postId: string, likeStatus: LIKE_STATUS, user: UserFullType | null): Promise<boolean> {
     const userId: string | null = user ? user.id : null;
     const login: string | null = user ? user.credentials.login : null;
@@ -54,11 +54,15 @@ export const postLikesService = {
     //
     // return postLikesRepository.upsert(postLike);
     return false
-  },
+  }
+
   async findByPostIdAndUserId(postId: string, userId: string | null): Promise<PostLikeType | null> {
     return postLikesRepository.findByPostIdAndUserId(postId, userId);
-  },
+  }
+
   async findByIds(postIds: Array<string>): Promise<Array<PostLikeType>> {
     return postLikesRepository.findByIds(postIds);
   }
 }
+
+export const postLikesService = new PostLikesService()
