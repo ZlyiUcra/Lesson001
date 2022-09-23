@@ -92,6 +92,7 @@ class BloggersRouter {
 }
 
 const bloggersController = new BloggersRouter()
+
 export const bloggersRouter = Router({});
 
 bloggersRouter.get("/",

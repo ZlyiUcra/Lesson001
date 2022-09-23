@@ -3,7 +3,7 @@ import {DeleteResult, ObjectId} from "mongodb";
 import {commentModel} from "../db/mongoose/models";
 import {projection, projectionExcludePostId} from "../helpers/constants";
 
-export const commentsRepository = {
+export class CommentsRepository {
   async getAll(searchPostComments: CommentsPaginatorType):
     Promise<{ commentsSearch: CommentType[], commentsCount: number }> {
 
@@ -16,18 +16,20 @@ export const commentsRepository = {
       .lean();
 
     return {commentsSearch, commentsCount};
-  },
+  }
+
   async create(comment: CommentType, postId: string): Promise<CommentType> {
     const resultComment: CommentDBType = {...comment, postId, _id: new ObjectId()}
     await commentModel.insertMany([resultComment]);
     const result = await commentModel
       .findOne({id: comment.id}, projectionExcludePostId).lean() as CommentType;
     return result;
-  },
+  }
 
   async findById(id: string): Promise<CommentType | null> {
     return commentModel.findOne({id}, projectionExcludePostId).lean();
-  },
+  }
+
   async update(comment: CommentContentType, commentId: string) {
     const result = await commentModel.updateOne(
       {id: commentId},
@@ -39,10 +41,13 @@ export const commentsRepository = {
       return true;
     }
     return false;
-  },
+  }
+
   async delete(id: string) {
     const result: DeleteResult = await commentModel.deleteOne({id});
     if (result.deletedCount === 1) return true;
     return false;
   }
 }
+
+export const commentsRepository = new CommentsRepository()

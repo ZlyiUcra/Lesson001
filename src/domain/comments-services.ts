@@ -14,7 +14,7 @@ import {commentLikesService} from "./commentLikes-service";
 import {getCommentExtendedElement} from "../helpers/likes/likesHelper";
 
 
-export const commentsService = {
+export class CommentsService {
 
   async getAll(searchPostComments: PostCommentsInputType, userId: string = ""): Promise<SearchResultType<CommentExtendedType>> {
     const {pageNumber, pageSize, postId} = searchPostComments;
@@ -41,7 +41,7 @@ export const commentsService = {
 
     return result;
 
-  },
+  }
 
   async create(commentContent: CommentContentType, user: UserShortType, postId: string): Promise<CommentExtendedType> {
     const comment: CommentType = {
@@ -57,7 +57,7 @@ export const commentsService = {
     const commentExtended = getCommentExtendedElement(commentReturned, commentLikes, user.id);
 
     return commentExtended;
-  },
+  }
 
   async findById(id: string, userId: string = ""): Promise<CommentExtendedType | null> {
     const comment = await commentsRepository.findById(id);
@@ -65,17 +65,21 @@ export const commentsService = {
     const commentLikes = await commentLikesService.findByIds([comment.id]);
     const commentExtended = getCommentExtendedElement(comment, commentLikes, userId);
     return commentExtended;
-  },
+  }
+
   async update(comment: CommentContentType, commentId: string): Promise<boolean> {
     return await commentsRepository.update(comment, commentId);
-  },
+  }
 
   async delete(id: string): Promise<boolean> {
     return await commentsRepository.delete(id)
-  },
+  }
+
   async likeStatus(commentId: string, likeStatus: LIKE_STATUS, user: UserFullType | undefined): Promise<boolean> {
 
     return await commentLikesService.upsert(commentId, likeStatus, user || null);
 
   }
 }
+
+export const commentsService = new CommentsService()

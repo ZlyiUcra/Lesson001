@@ -18,43 +18,29 @@ import {
 
 export const commentsRouter = Router({});
 
-commentsRouter.get("/:id",
-  authAddUserDataFromTokenMiddleware,
-  async (req: RequestWithFullUser, res: Response) => {
+class CommentsController {
+  async getComment(req: RequestWithFullUser, res: Response) {
     const user = req.user;
     const result = await commentsService.findById(req.params.id, user?.id);
     if (result) return res.status(200).send(result);
     return res.status(404).send()
-  });
+  }
 
-commentsRouter.put("/:commentId",
-  bearerPostCreatorValidationMiddleware,
-  commentOwnPostMiddleware,
-  commentContentMiddleware,
-  async (req: RequestWithShortUser, res: Response) => {
+  async updateComment(req: RequestWithShortUser, res: Response) {
     const comment: CommentContentType = {content: req.body.content}
     const result = await commentsService.update(comment, req.params.commentId);
     if (result) return res.status(204).send();
     return res.status(404).send()
-  });
+  }
 
-commentsRouter.delete("/:commentId",
-  bearerPostCreatorValidationMiddleware,
-  commentOwnPostMiddleware,
-  commentExistsMiddleware,
-  async (req: RequestWithShortUser, res: Response) => {
+  async deleteComment(req: RequestWithShortUser, res: Response) {
 
     const result = await commentsService.delete(req.params.commentId);
     if (result) return res.status(204).send();
     return res.status(404).send()
-  });
+  }
 
-commentsRouter.put('/:commentId/like-status',
-  authAddUserFromAccessTokenMiddleware,
-  commentLikesAuthMiddleware,
-  commentLikesCorrectLikesStatusMiddleware,
-  commentLikesCorrectsCommentIdMiddleware,
-  async (req: RequestWithFullUser, res: Response) => {
+  async setCommentsLikeStatus(req: RequestWithFullUser, res: Response) {
     const commentId = req.params.commentId;
     const likeStatus = req.body.likeStatus;
     const user = req.user;
@@ -64,4 +50,30 @@ commentsRouter.put('/:commentId/like-status',
     // if (!isLikedStatus) return res.status(401).send();
     res.status(204).send();
   }
+}
+
+const commentsController = new CommentsController()
+
+commentsRouter.get("/:id",
+  authAddUserDataFromTokenMiddleware,
+  commentsController.getComment);
+
+commentsRouter.put("/:commentId",
+  bearerPostCreatorValidationMiddleware,
+  commentOwnPostMiddleware,
+  commentContentMiddleware,
+  commentsController.updateComment);
+
+commentsRouter.delete("/:commentId",
+  bearerPostCreatorValidationMiddleware,
+  commentOwnPostMiddleware,
+  commentExistsMiddleware,
+  commentsController.deleteComment);
+
+commentsRouter.put('/:commentId/like-status',
+  authAddUserFromAccessTokenMiddleware,
+  commentLikesAuthMiddleware,
+  commentLikesCorrectLikesStatusMiddleware,
+  commentLikesCorrectsCommentIdMiddleware,
+  commentsController.setCommentsLikeStatus
 )
