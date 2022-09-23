@@ -1,7 +1,7 @@
 import {connection} from "mongoose";
 
 
-export const testingRepository = {
+export class TestingRepository {
   async deleteAll(): Promise<boolean> {
     try {
       const collections = await connection.db.collections()
@@ -15,3 +15,5 @@ export const testingRepository = {
     }
   }
 }
+
+export const testingRepository = new TestingRepository()

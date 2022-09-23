@@ -1,7 +1,9 @@
-import { testingRepository } from "../repositories/testing-repository"
+import {testingRepository} from "../repositories/testing-repository"
 
-export const testingServices = {
-  async deleteAll(): Promise<boolean>{
+export class TestingServices {
+  async deleteAll(): Promise<boolean> {
     return testingRepository.deleteAll()
   }
 }
+
+export const testingServices = new TestingServices()
