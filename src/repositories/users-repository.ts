@@ -11,7 +11,7 @@ import {DeleteResult, ObjectId} from "mongodb";
 import {projection} from "../helpers/constants";
 import {userModel} from "../db/mongoose/models";
 
-class UsersRepository {
+export class UsersRepository {
   async findAll({skip, limit}: PaginatorParamsType): Promise<{ usersSearch: UserFullType[], usersCount: number }> {
 
     const usersCount = await userModel.count({});
@@ -32,10 +32,6 @@ class UsersRepository {
   async findByLogin(login: string): Promise<UserFullType | null> {
     const user = await userModel.findOne({"credentials.login": login}, projection).lean();
     return user
-  }
-
-  async findByLoginEmail(login: string, email: string): Promise<UserFullType | null> {
-    return userModel.findOne({"credentials.login": login, "credentials.email": email}, projection).lean()
   }
 
   async findByEmail(email: string): Promise<UserFullType | null> {
