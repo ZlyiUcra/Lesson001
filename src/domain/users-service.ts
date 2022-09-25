@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {
   CredentialType,
   LoginType,
@@ -10,16 +11,17 @@ import {
   UserShortType,
 } from "../db/types";
 import {UsersRepository} from "../repositories/users-repository";
-import {v4 as uuidv4} from 'uuid';
-import {AuthService} from "./auth-services";
+import {AuthHelperService} from "./auth-services";
+import {inject, injectable} from "inversify";
+import {userForRepository} from "../helpers/user/userServiceHelper";
+import {TYPES} from "../ioc/compositionRoot";
 
-export class UsersServices {
-  usersRepository: UsersRepository;
-  authService: AuthService;
 
-  constructor() {
-    this.usersRepository = new UsersRepository();
-    this.authService = new AuthService();
+@injectable()
+export class UsersService {
+  constructor(
+    @inject<UsersRepository>(TYPES.UsersRepository) private usersRepository: UsersRepository,
+    @inject<AuthHelperService>(TYPES.AuthHelperService) private authHelperService: AuthHelperService) {
   }
 
   async getAll(userInput: UserInputType): Promise<SearchResultType<UserShortType>> {
@@ -50,12 +52,7 @@ export class UsersServices {
   }
 
   async create(userCredentials: CredentialType, status: TOKEN_STATUS = TOKEN_STATUS.NONE): Promise<UserFullType> {
-    const passwordHash = await this.authService.generateHash(userCredentials.password);
-
-    const credentials = new CredentialType(userCredentials.login, userCredentials.email, passwordHash);
-
-    const token = new TokenType(uuidv4(), status, '')
-    const user = new UserFullType(uuidv4(), credentials, token, new Date())
+    const user = await userForRepository(userCredentials, this.authHelperService, status)
 
     return await this.usersRepository.create(user);
   }
@@ -71,7 +68,7 @@ export class UsersServices {
   async findByLoginPass(shortCredentials: LoginType): Promise<UserFullType | null> {
     const userByLogin = await this.findByLogin(shortCredentials.login);
     if (userByLogin) {
-      const isPassCorrect = await this.authService.isPasswordCorrect(shortCredentials.password, userByLogin.credentials.password);
+      const isPassCorrect = await this.authHelperService.isPasswordCorrect(shortCredentials.password, userByLogin.credentials.password);
       if (isPassCorrect) {
         return userByLogin
       }
@@ -98,4 +95,3 @@ export class UsersServices {
   }
 }
 
-export const usersService = new UsersServices()

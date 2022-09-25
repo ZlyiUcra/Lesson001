@@ -1,5 +1,4 @@
 import {Router, Request, Response} from "express";
-import {usersService} from "../domain/users-services";
 import {testingServices} from "../domain/testing-service";
 
 export const testingRouter = Router({});

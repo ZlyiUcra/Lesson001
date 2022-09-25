@@ -10,12 +10,15 @@ import {
 import {isErrorsPresent} from "../../helpers/errorCommon/isErrorPresente";
 import {AttemptsType, RequestWithFullUser, RequestWithInternetData, TOKEN_STATUS, UserFullType} from "../../db/types";
 import {attemptsService} from "../../domain/attempts-service";
-import {usersService} from "../../domain/users-services";
 import {settings} from "../../settings";
 import differenceInSeconds from "date-fns/differenceInSeconds";
-import {jwtUtility} from "../../application/jwt-utility";
 import { blacklistService } from "../../domain/blacklist-service";
+import {rootContainer, TYPES} from "../../ioc/compositionRoot";
+import {UsersService} from "../../domain/users-service";
+import {JwtUtility} from "../../application/jwt-utility";
 
+const usersService = rootContainer.get<UsersService>(TYPES.UsersService);
+const jwtUtility = rootContainer.get<JwtUtility>(TYPES.JwtUtility);
 
 export const authUserExistMiddleware = async (req: RequestWithInternetData, res: Response,
                                               next: NextFunction) => {

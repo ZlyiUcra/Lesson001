@@ -1,10 +1,12 @@
 import bcrypt from 'bcrypt'
-import {jwtUtility} from '../application/jwt-utility';
+import {JwtUtility} from '../application/jwt-utility';
 import {CredentialType, JWTType, LoginType, TOKEN_STATUS, TokenType, UserFullType} from "../db/types";
-import {usersService} from "./users-services";
-import {emailAdapter} from "../adapters/email-adapter";
-import {usersRepository} from "../repositories/users-repository";
+import {UsersRepository} from "../repositories/users-repository";
 import {v4 as uuidv4} from 'uuid';
+import "reflect-metadata";
+import {userForRepository} from "../helpers/user/userServiceHelper";
+import {inject, injectable} from "inversify";
+import {EmailAdapter} from "../adapters/email-adapter";
 
 export class EmailMessage {
   constructor(private confirmationToken: string) {
@@ -15,23 +17,35 @@ export class EmailMessage {
   }
 }
 
-export class AuthService {
-  async generateHash(password: string, saltOrRounds: number = 10): Promise<string> {
+@injectable()
+export class AuthHelperService {
+  generateHash = async (password: string, saltOrRounds: number = 10): Promise<string> => {
     const hash = await bcrypt.hash(password, saltOrRounds)
     return hash
   }
 
-  async isPasswordCorrect(password: string, hash: string) {
+  isPasswordCorrect = async (password: string, hash: string) => {
     const compareResult: boolean = await bcrypt.compare(password, hash)
     return compareResult
   }
+}
+
+@injectable()
+export class AuthService {
+  constructor(
+    private usersRepository: UsersRepository,
+    private authHelperService: AuthHelperService,
+    private jwtUtility: JwtUtility,
+    private emailAdapter: EmailAdapter) {
+  }
+
 
   async login(credentials: LoginType, expiresIn = "1h"): Promise<JWTType & { user: UserFullType } | null> {
-    const user = await usersService.findByLogin(credentials.login);
+    const user = await this.usersRepository.findByLogin(credentials.login);
     if (user !== null) {
-      const isCorrectUserPassword = await this.isPasswordCorrect(credentials.password, user.credentials.password);
+      const isCorrectUserPassword = await this.authHelperService.isPasswordCorrect(credentials.password, user.credentials.password);
       if (isCorrectUserPassword) {
-        const accessToken = await jwtUtility.createUserJWT({
+        const accessToken = await this.jwtUtility.createUserJWT({
           id: user.id,
           login: user.credentials.login,
           email: user.credentials.email
@@ -44,7 +58,7 @@ export class AuthService {
   }
 
   async registration(credentials: CredentialType): Promise<boolean> {
-    let user = await usersService.create(credentials);
+    let user = await userForRepository(credentials, this.authHelperService, TOKEN_STATUS.NONE)
 
     const message = new EmailMessage(user.token.confirmationToken).getMessage();
     //`<a href="https://it-kamasutra-lesson-01.herokuapp.com/auth/registration-confirmation/?code=${user.token.confirmationToken}">${user.token.confirmationToken}</a>`;
@@ -53,9 +67,9 @@ export class AuthService {
     try {
       /* TODO:  Parsing of infoEmail must be implemented */
       // Returned value
-      emailAdapter.sendEmail(user.credentials.email, "Registration's confirmation", message);
+      this.emailAdapter.sendEmail(user.credentials.email, "Registration's confirmation", message);
 
-      return await usersRepository.updateTokenStatus(user.id, TOKEN_STATUS.SENT);
+      return await this.usersRepository.updateTokenStatus(user.id, TOKEN_STATUS.SENT);
 
     } catch (err) {
       return false
@@ -64,7 +78,7 @@ export class AuthService {
   }
 
   async emailResending(email: string): Promise<boolean> {
-    const user = await usersService.findByEmail(email);
+    const user = await this.usersRepository.findByEmail(email);
     if (user) {
       const confirmationToken = uuidv4();
       const message = new EmailMessage(confirmationToken).getMessage();
@@ -78,8 +92,8 @@ export class AuthService {
       try {
         /* TODO:  Parsing of infoEmail must be implemented */
         if (user.token.tokenStatus !== TOKEN_STATUS.CONFIRMED) {
-          emailAdapter.sendEmail(email, "Email Resending", message);
-          return await usersService.updateToken(user.id, token);
+          this.emailAdapter.sendEmail(email, "Email Resending", message);
+          return await this.usersRepository.updateToken(user.id, token);
         } else {
           return false
         }
@@ -91,12 +105,10 @@ export class AuthService {
   }
 
   async emailConfirmedByCode(confirmationToken: string): Promise<boolean> {
-    const user = await usersService.findByCode(confirmationToken);
+    const user = await this.usersRepository.findByCode(confirmationToken);
     if (user) {
-      return await usersRepository.updateTokenStatus(user.id, TOKEN_STATUS.CONFIRMED);
+      return await this.usersRepository.updateTokenStatus(user.id, TOKEN_STATUS.CONFIRMED);
     }
     return false;
   }
 }
-
-export const authService = new AuthService()

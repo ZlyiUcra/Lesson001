@@ -1,9 +1,13 @@
 import {NextFunction, Request, Response} from "express";
-import {usersService} from "../../domain/users-services";
 import {RequestWithShortUser} from "../../db/types";
 import {commentsService} from "../../domain/comments-services";
-import {jwtUtility} from "../../application/jwt-utility";
+import {rootContainer, TYPES} from "../../ioc/compositionRoot";
+import {UsersService} from "../../domain/users-service";
+import {JwtUtility} from "../../application/jwt-utility";
 
+
+const usersService = rootContainer.get<UsersService>(TYPES.UsersService);
+const jwtUtility = rootContainer.get<JwtUtility>(TYPES.JwtUtility);
 
 export const bearerPostCreatorValidationMiddleware = async (req: RequestWithShortUser, res: Response, next: NextFunction) => {
   const auth = req.headers.authorization;

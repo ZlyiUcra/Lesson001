@@ -1,10 +1,11 @@
 import {ErrorMessagesType, errorsMessagesCreator} from "../errorCommon/errorMessagesCreator";
 import {baseErrorList} from "../errorCommon/baseErrorListHelper";
-import {usersService} from "../../domain/users-services";
 import {TOKEN_STATUS} from "../../db/types";
 import {isValidEmail, userLoginPasswordErrorCreator} from "../user/userHelper";
+import {rootContainer} from "../../ioc/compositionRoot";
+import {UsersService} from "../../domain/users-service";
 
-
+const usersService = rootContainer.resolve(UsersService);
 
 export const authRegistrationEmailValidationCreator = async (errors: ErrorMessagesType | undefined, email: string) => {
   if (!isValidEmail(email)) {
@@ -40,9 +41,9 @@ export const authLoginPassEmailErrorCreator = (errors: ErrorMessagesType | undef
 export const authCodeConfirmationValidationCreator = (errors: ErrorMessagesType | undefined) => {
 
   return errorsMessagesCreator(baseErrorList(errors),
-      "Confirmation code doesn't exist",
-      "code"
-    );
+    "Confirmation code doesn't exist",
+    "code"
+  );
 
 }
 export const authConfirmedValidationCreator = (errors: ErrorMessagesType | undefined) => {

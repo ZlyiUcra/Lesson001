@@ -9,8 +9,13 @@ import {
   PostType, UserFullType
 } from "../../db/types";
 import differenceInMilliseconds from "date-fns/differenceInMilliseconds";
-import {jwtUtility} from "../../application/jwt-utility";
-import {usersService} from "../../domain/users-services";
+import "reflect-metadata";
+import {rootContainer, TYPES} from "../../ioc/compositionRoot";
+import {UsersService} from "../../domain/users-service";
+import {JwtUtility} from "../../application/jwt-utility";
+
+const usersService = rootContainer.get<UsersService>(TYPES.UsersService);
+const jwtUtility = rootContainer.get<JwtUtility>(TYPES.JwtUtility);
 
 export const correctLikeStatus = (oldLikeStatus: LIKE_STATUS, newLikeStatus: LIKE_STATUS, user: UserFullType | null): LIKE_STATUS => {
   // if (!user || (oldLikeStatus === LIKE_STATUS.LIKE && newLikeStatus === LIKE_STATUS.LIKE) ||

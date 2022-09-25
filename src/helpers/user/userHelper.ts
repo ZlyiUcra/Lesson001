@@ -1,8 +1,9 @@
 import {ErrorMessagesType, errorsMessagesCreator} from "../errorCommon/errorMessagesCreator";
 import {baseErrorList} from "../errorCommon/baseErrorListHelper";
-import {usersService} from "../../domain/users-services";
-import {authService} from "../../domain/auth-services";
-import {TOKEN_STATUS} from "../../db/types";
+import {rootContainer} from "../../ioc/compositionRoot";
+import {UsersService} from "../../domain/users-service";
+
+const usersService = rootContainer.resolve(UsersService);
 
 export const isValidEmail = (email: string) => {
   const check = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;

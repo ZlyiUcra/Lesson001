@@ -10,6 +10,7 @@ import {
   userSchema
 } from "./schemas";
 
+
 export const userModel = model('users', userSchema);
 
 export const bloggerModel = model('bloggers', bloggerSchema);
@@ -25,3 +26,5 @@ export const blacklistModel = model('blacklist', blacklistSchema);
 export const postLikeModel = model('postLikes', postLikeSchema);
 
 export const commentLikeModel = model('commentLikes', commentLikeSchema)
+
+//export {MODELS_TYPES}

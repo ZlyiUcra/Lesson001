@@ -1,10 +1,7 @@
 import {LIKE_STATUS, RequestWithFullUser} from "../../db/types";
 import {Response, NextFunction} from "express";
-import {jwtUtility} from "../../application/jwt-utility";
-import {usersService} from "../../domain/users-services";
 import {ErrorMessagesType, errorsMessagesCreator} from "../../helpers/errorCommon/errorMessagesCreator";
 import {baseErrorList} from "../../helpers/errorCommon/baseErrorListHelper";
-import {postsService} from "../../domain/posts-services";
 import {commentsService} from "../../domain/comments-services";
 import {likesAuthValidator} from "../../helpers/likes/likesHelper";
 
@@ -13,9 +10,6 @@ export const commentLikesAuthMiddleware = async (req: RequestWithFullUser, res: 
 
   const {headerAuth, accessToken, userJWT, user, isBearer} = await likesAuthValidator(req.headers.authorization)
   if (!isBearer) return res.status(401).send()
-  // if(!user){
-  //   return res.status(401).send()
-  // }
   next();
 }
 
