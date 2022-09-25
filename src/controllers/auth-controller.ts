@@ -1,16 +1,17 @@
 import {AuthService} from "../domain/auth-services";
 import {CredentialType, LoginType, RequestWithFullUser, RequestWithInternetData} from "../db/types";
 import {Request, Response} from "express";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import {JwtUtility} from "../application/jwt-utility";
 import {EmailAdapter} from "../adapters/email-adapter";
+import {TYPES} from "../db/iocTypes";
 
 
 @injectable()
 export class AuthController {
   constructor(
-    private authService: AuthService,
-    private jwtUtility: JwtUtility) {
+    @inject<AuthService>(TYPES.AuthService) private authService: AuthService,
+    @inject<JwtUtility>(TYPES.JwtUtility) private jwtUtility: JwtUtility) {
   }
 
   async refreshToken(req: RequestWithFullUser, res: Response) {

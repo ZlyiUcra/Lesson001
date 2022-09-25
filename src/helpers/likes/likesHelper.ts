@@ -10,9 +10,10 @@ import {
 } from "../../db/types";
 import differenceInMilliseconds from "date-fns/differenceInMilliseconds";
 import "reflect-metadata";
-import {rootContainer, TYPES} from "../../ioc/compositionRoot";
+import {rootContainer} from "../../ioc/compositionRoot";
 import {UsersService} from "../../domain/users-service";
 import {JwtUtility} from "../../application/jwt-utility";
+import {TYPES} from "../../db/iocTypes";
 
 const usersService = rootContainer.get<UsersService>(TYPES.UsersService);
 const jwtUtility = rootContainer.get<JwtUtility>(TYPES.JwtUtility);

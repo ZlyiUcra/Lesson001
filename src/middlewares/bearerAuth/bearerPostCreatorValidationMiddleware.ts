@@ -1,9 +1,10 @@
 import {NextFunction, Request, Response} from "express";
 import {RequestWithShortUser} from "../../db/types";
 import {commentsService} from "../../domain/comments-services";
-import {rootContainer, TYPES} from "../../ioc/compositionRoot";
+import {rootContainer} from "../../ioc/compositionRoot";
 import {UsersService} from "../../domain/users-service";
 import {JwtUtility} from "../../application/jwt-utility";
+import {TYPES} from "../../db/iocTypes";
 
 
 const usersService = rootContainer.get<UsersService>(TYPES.UsersService);

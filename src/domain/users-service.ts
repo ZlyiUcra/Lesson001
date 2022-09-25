@@ -11,10 +11,10 @@ import {
   UserShortType,
 } from "../db/types";
 import {UsersRepository} from "../repositories/users-repository";
-import {AuthHelperService} from "./auth-services";
 import {inject, injectable} from "inversify";
 import {userForRepository} from "../helpers/user/userServiceHelper";
-import {TYPES} from "../ioc/compositionRoot";
+import {TYPES} from "../db/iocTypes";
+import {AuthHelperService} from "./auth-helper-service";
 
 
 @injectable()

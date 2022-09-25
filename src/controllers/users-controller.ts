@@ -2,11 +2,14 @@ import {UsersService} from "../domain/users-service";
 import {JwtUtility} from "../application/jwt-utility";
 import {Request, Response} from "express";
 import {CredentialType, UserInputType, UserJWTType} from "../db/types";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../db/iocTypes";
 
 @injectable()
 export class UsersController {
-  constructor(protected usersService: UsersService, protected jwtUtility: JwtUtility) {
+  constructor(
+    @inject<UsersService>(TYPES.UsersService) private usersService: UsersService,
+    @inject<JwtUtility>(TYPES.JwtUtility) private jwtUtility: JwtUtility) {
   }
 
   async createUser(req: Request, res: Response) {

@@ -1,11 +1,11 @@
 import {CredentialType, TOKEN_STATUS, TokenType, UserFullType} from "../../db/types";
-import {AuthHelperService} from "../../domain/auth-services";
 import {v4 as uuidv4} from "uuid";
+import {AuthHelperService} from "../../domain/auth-helper-service";
 
 export const userForRepository = async (
   userCredentials: CredentialType,
   authHelperService: AuthHelperService,
-  status: TOKEN_STATUS ): Promise<UserFullType> => {
+  status: TOKEN_STATUS): Promise<UserFullType> => {
 
   const passwordHash = await authHelperService.generateHash(userCredentials.password);
 

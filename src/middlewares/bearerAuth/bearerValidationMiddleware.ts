@@ -1,8 +1,9 @@
 import {NextFunction, Request, Response} from "express";
 import {RequestWithShortUser} from "../../db/types";
 import {JwtUtility} from "../../application/jwt-utility";
-import {rootContainer, TYPES} from "../../ioc/compositionRoot";
+import {rootContainer} from "../../ioc/compositionRoot";
 import {UsersService} from "../../domain/users-service";
+import { TYPES } from "../../db/iocTypes";
 
 const usersService = rootContainer.get<UsersService>(TYPES.UsersService);
 const jwtUtility = rootContainer.get<JwtUtility>(TYPES.JwtUtility);

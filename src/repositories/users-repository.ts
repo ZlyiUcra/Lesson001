@@ -11,14 +11,14 @@ import {DeleteResult, ObjectId} from "mongodb";
 import {projection} from "../helpers/constants";
 import "reflect-metadata";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../ioc/compositionRoot";
 import mongoose from "mongoose";
+import {TYPES} from "../db/iocTypes";
 
 
 @injectable()
 export class UsersRepository {
-  constructor(@inject(TYPES.userModel) private userModel: mongoose.Model<UserDBType>) {
-
+  constructor(
+    @inject(TYPES.userModel) private userModel: mongoose.Model<UserDBType>) {
   }
 
   async findAll({skip, limit}: PaginatorParamsType): Promise<{ usersSearch: UserFullType[], usersCount: number }> {
@@ -74,6 +74,7 @@ export class UsersRepository {
         "token.tokenStatus": tokenStatus
       }
     })
+
     if (isUpdated.matchedCount) return true;
     return false;
   }

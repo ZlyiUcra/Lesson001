@@ -1,7 +1,6 @@
 import {NextFunction, Response} from "express";
-import {AttemptsType, RequestWithInternetData} from "../../db/types";
-import {attemptsService} from "../../domain/attempts-service";
-import differenceInSeconds from "date-fns/differenceInSeconds";
+import {RequestWithInternetData} from "../../db/types";
+
 
 export const addIPMiddleware = async (req: RequestWithInternetData, res: Response,
                                       next: NextFunction) => {

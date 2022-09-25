@@ -1,8 +1,17 @@
-import {AttemptsType} from "../db/types";
+import "reflect-metadata";
+import {AttemptsDBType, AttemptsType} from "../db/types";
 import {attemptModel} from "../db/mongoose/models";
 import {projection} from "../helpers/constants";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../db/iocTypes";
+import mongoose from "mongoose";
 
+@injectable()
 export class AttemptsRepository {
+  constructor(
+    @inject(TYPES.attemptModel) private attemptModel: mongoose.Model<AttemptsDBType>
+  ) {
+  }
 
   async updateRequests({ip, url, method, lastRequestsAt}: AttemptsType): Promise<boolean> {
     const update = {
@@ -24,4 +33,4 @@ export class AttemptsRepository {
   }
 }
 
-export const  attemptsRepository = new AttemptsRepository()
+//export const  attemptsRepository = new AttemptsRepository()

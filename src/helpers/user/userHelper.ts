@@ -2,8 +2,10 @@ import {ErrorMessagesType, errorsMessagesCreator} from "../errorCommon/errorMess
 import {baseErrorList} from "../errorCommon/baseErrorListHelper";
 import {rootContainer} from "../../ioc/compositionRoot";
 import {UsersService} from "../../domain/users-service";
+import { TYPES } from "../../db/iocTypes";
 
-const usersService = rootContainer.resolve(UsersService);
+
+const usersService = rootContainer.get<UsersService>(TYPES.UsersService);
 
 export const isValidEmail = (email: string) => {
   const check = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;

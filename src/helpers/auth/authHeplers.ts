@@ -4,8 +4,9 @@ import {TOKEN_STATUS} from "../../db/types";
 import {isValidEmail, userLoginPasswordErrorCreator} from "../user/userHelper";
 import {rootContainer} from "../../ioc/compositionRoot";
 import {UsersService} from "../../domain/users-service";
+import {TYPES} from "../../db/iocTypes";
 
-const usersService = rootContainer.resolve(UsersService);
+const usersService = rootContainer.get<UsersService>(TYPES.UsersService);
 
 export const authRegistrationEmailValidationCreator = async (errors: ErrorMessagesType | undefined, email: string) => {
   if (!isValidEmail(email)) {
