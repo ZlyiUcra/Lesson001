@@ -1,6 +1,8 @@
 import {EmailMessage} from "../../adapters/email-message";
-import {attemptModel} from "../mongoose/models";
+import {attemptModel, blacklistModel} from "../mongoose/models";
 import {AttemptsRepository} from "../../repositories/attempts-repository";
+import {BlacklistRepository} from "../../repositories/blacklist-repository";
+import {BlacklistService} from "../../domain/blacklist-service";
 
 export const TYPES = {
   //user and auth with derivatives
@@ -18,5 +20,8 @@ export const TYPES = {
   attemptModel: Symbol.for("attemptModel"),
   AttemptsRepository: Symbol.for("AttemptsRepository"),
   AttemptsService: Symbol.for("AttemptsService"),
-
+  // blacklist
+  blacklistModel: Symbol.for("blacklistModel"),
+  BlacklistRepository: Symbol.for("BlacklistRepository"),
+  BlacklistService: Symbol.for("BlacklistService"),
 };

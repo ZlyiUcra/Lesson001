@@ -12,7 +12,7 @@ import {AttemptsType, RequestWithFullUser, RequestWithInternetData, TOKEN_STATUS
 import {AttemptsService} from "../../domain/attempts-service";
 import {settings} from "../../settings";
 import differenceInSeconds from "date-fns/differenceInSeconds";
-import { blacklistService } from "../../domain/blacklist-service";
+import {BlacklistService, } from "../../domain/blacklist-service";
 import {rootContainer} from "../../ioc/compositionRoot";
 import {UsersService} from "../../domain/users-service";
 import {JwtUtility} from "../../application/jwt-utility";
@@ -21,6 +21,7 @@ import { TYPES } from "../../db/iocTypes";
 const usersService = rootContainer.get<UsersService>(TYPES.UsersService);
 const jwtUtility = rootContainer.get<JwtUtility>(TYPES.JwtUtility);
 const attemptsService = rootContainer.get<AttemptsService>(TYPES.AttemptsService);
+const blacklistService = rootContainer.get<BlacklistService>(TYPES.BlacklistService);
 
 export const authUserExistMiddleware = async (req: RequestWithInternetData, res: Response,
                                               next: NextFunction) => {

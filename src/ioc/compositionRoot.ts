@@ -7,14 +7,16 @@ import {JwtUtility} from "../application/jwt-utility";
 import {UsersController} from "../controllers/users-controller";
 import {AuthController} from "../controllers/auth-controller";
 import {EmailAdapter} from "../adapters/email-adapter";
-import {attemptModel, userModel} from "../db/mongoose/models";
-import {AttemptsDBType, UserDBType} from "../db/types";
+import {attemptModel, blacklistModel, userModel} from "../db/mongoose/models";
+import {AttemptsDBType, BlacklistType, UserDBType} from "../db/types";
 import mongoose from "mongoose";
 import {TYPES} from "../db/iocTypes";
 import {AuthHelperService} from "../domain/auth-helper-service";
 import {EmailMessage} from "../adapters/email-message";
 import {AttemptsRepository} from "../repositories/attempts-repository";
 import {AttemptsService} from "../domain/attempts-service";
+import {BlacklistRepository} from "../repositories/blacklist-repository";
+import {BlacklistService} from "../domain/blacklist-service";
 
 export const rootContainer = new Container();
 
@@ -33,4 +35,8 @@ rootContainer.bind<mongoose.Model<UserDBType>>(TYPES.userModel).toConstantValue(
 rootContainer.bind<AttemptsRepository>(TYPES.AttemptsRepository).to(AttemptsRepository);
 rootContainer.bind<AttemptsService>(TYPES.AttemptsService).to(AttemptsService);
 rootContainer.bind<mongoose.Model<AttemptsDBType>>(TYPES.attemptModel).toConstantValue(attemptModel);
+// blacklist
+rootContainer.bind<BlacklistRepository>(TYPES.BlacklistRepository).to(BlacklistRepository);
+rootContainer.bind<BlacklistService>(TYPES.BlacklistService).to(BlacklistService);
+rootContainer.bind<mongoose.Model<BlacklistType>>(TYPES.blacklistModel).toConstantValue(blacklistModel);
 

@@ -1,12 +1,19 @@
 import {BlacklistType} from "../db/types";
 import {ObjectId} from "mongodb";
-import {blacklistModel} from "../db/mongoose/models";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../db/iocTypes";
+import mongoose from "mongoose";
 
+@injectable()
 export class BlacklistRepository {
+  constructor(
+    @inject(TYPES.blacklistModel) private blacklistModel: mongoose.Model<BlacklistType>
+  ) {
+  }
 
   async insert(refreshToken: BlacklistType): Promise<boolean> {
     try {
-      const result = await blacklistModel.insertMany([{_id: new ObjectId(), ...refreshToken}]);
+      const result = await this.blacklistModel.insertMany([{_id: new ObjectId(), ...refreshToken}]);
       console.log("Blacklist insert result:", result)
       return true
     } catch (e) {
@@ -16,9 +23,7 @@ export class BlacklistRepository {
   }
 
   async findByRefreshToken(refreshToken: string): Promise<string | null> {
-    const result = await blacklistModel.findOne({refreshToken}, {projection: {_id: 0}}).lean();
+    const result = await this.blacklistModel.findOne({refreshToken}, {projection: {_id: 0}}).lean();
     return result?.refreshToken ? result.refreshToken : null
   }
 }
-
-export const blacklistRepository = new BlacklistRepository()
