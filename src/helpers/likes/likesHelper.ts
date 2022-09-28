@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import {rootContainer} from "../../ioc/compositionRoot";
 import {
   CommentExtendedType,
   CommentLikeType, CommentType,
@@ -13,9 +14,8 @@ import differenceInMilliseconds from "date-fns/differenceInMilliseconds";
 import {UsersService} from "../../domain/users-service";
 import {JwtUtility} from "../../application/jwt-utility";
 import {TYPES} from "../../db/iocTypes";
-import {rootContainer} from "../../ioc/compositionRoot";
 
-console.log("rootContainer", rootContainer);
+
 const usersService = rootContainer.get<UsersService>(TYPES.UsersService);
 const jwtUtility = rootContainer.get<JwtUtility>(TYPES.JwtUtility);
 
