@@ -1,9 +1,9 @@
+import "reflect-metadata";
 import {UserJWTType, UserShortType} from "../db/types";
 import jwt, {decode, JwtPayload} from 'jsonwebtoken'
 import {settings} from "../settings";
-import {type} from "os";
 import {injectable} from "inversify";
-import "reflect-metadata";
+
 
 @injectable()
 export class JwtUtility {

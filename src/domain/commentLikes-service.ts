@@ -1,9 +1,17 @@
-import {CommentLikeType, LIKE_STATUS, PostLikeType, UserFullType} from "../db/types";
-import {commentLikesRepository} from "../repositories/commentLikes-repository";
+import "reflect-metadata";
+import {CommentLikeType, LIKE_STATUS, UserFullType} from "../db/types";
 import {v4 as uuidv4} from "uuid";
-import {correctLikeStatus} from "../helpers/likes/likesHelper";
+import {inject, injectable} from "inversify";
+import {CommentLikesRepository} from "../repositories/commentLikes-repository";
+import {TYPES} from "../db/iocTypes";
 
+@injectable()
 export class CommentLikesService {
+  constructor(
+    @inject<CommentLikesRepository>(TYPES.CommentLikesService) private commentLikesRepository: CommentLikesRepository
+  ) {
+  }
+
   async upsert(commentId: string, likeStatus: LIKE_STATUS, user: UserFullType | null): Promise<boolean> {
 
     const userId: string | null = user ? user.id : null;
@@ -25,16 +33,14 @@ export class CommentLikesService {
         addedAt: new Date()
       }
     }
-    return commentLikesRepository.upsert(commentLike);
+    return this.commentLikesRepository.upsert(commentLike);
   }
 
   async findByCommentIdAndUserId(commentId: string, userId: string | null): Promise<CommentLikeType | null> {
-    return commentLikesRepository.findByCommentIdAndUserId(commentId, userId);
+    return this.commentLikesRepository.findByCommentIdAndUserId(commentId, userId);
   }
 
   async findByIds(commentIds: Array<string>): Promise<Array<CommentLikeType>> {
-    return commentLikesRepository.findByIds(commentIds);
+    return this.commentLikesRepository.findByIds(commentIds);
   }
 }
-
-export const commentLikesService = new CommentLikesService()

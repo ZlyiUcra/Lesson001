@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {BlacklistRepository} from "../repositories/blacklist-repository";
 import {v4 as uuidv4} from 'uuid';
 import {BlacklistType} from "../db/types";

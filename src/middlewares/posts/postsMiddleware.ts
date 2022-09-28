@@ -4,7 +4,11 @@ import {
   postsTitleShorDescriptionContentBloggerIdErrorCreator,
   postsTitleShorDescriptionContentErrorCreator
 } from "../../helpers/posts/postsHelpers";
-import {postsService} from "../../domain/posts-services";
+import { PostsServices} from "../../domain/posts-services";
+import {rootContainer} from "../../ioc/compositionRoot";
+import {TYPES} from "../../db/iocTypes";
+
+const postsService = rootContainer.get<PostsServices>(TYPES.PostsServices)
 
 
 export const postTitleShorDescriptionContentMiddleware = async (req: Request,

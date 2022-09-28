@@ -1,6 +1,8 @@
+import "reflect-metadata";
 import {connection} from "mongoose";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class TestingRepository {
   async deleteAll(): Promise<boolean> {
     try {
@@ -15,5 +17,3 @@ export class TestingRepository {
     }
   }
 }
-
-export const testingRepository = new TestingRepository()

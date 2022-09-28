@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {UsersService} from "../domain/users-service";
 import {JwtUtility} from "../application/jwt-utility";
 import {Request, Response} from "express";

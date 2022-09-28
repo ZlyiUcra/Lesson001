@@ -1,8 +1,13 @@
+import "reflect-metadata";
 import {NextFunction, Request, Response} from "express";
-import {bloggersService} from "../../domain/bloggers-services";
+import {BloggersService} from "../../domain/bloggers-services";
 import {ErrorMessagesType, errorsMessagesCreator} from "../../helpers/errorCommon/errorMessagesCreator";
 import {bloggerNameAndYoutubeURLErrorCreator} from "../../helpers/bloggers/bloggersHelpers";
 import {isErrorsPresent} from "../../helpers/errorCommon/isErrorPresente";
+import {rootContainer} from "../../ioc/compositionRoot";
+import {TYPES} from "../../db/iocTypes";
+
+const bloggersService = rootContainer.get<BloggersService>(TYPES.BloggersService);
 
 export const bloggerForPostMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   const blogger = await bloggersService.findById(req.params.bloggerId);

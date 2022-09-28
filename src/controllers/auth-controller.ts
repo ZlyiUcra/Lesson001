@@ -1,9 +1,9 @@
+import "reflect-metadata";
 import {AuthService} from "../domain/auth-services";
 import {CredentialType, LoginType, RequestWithFullUser, RequestWithInternetData} from "../db/types";
 import {Request, Response} from "express";
 import {inject, injectable} from "inversify";
 import {JwtUtility} from "../application/jwt-utility";
-import {EmailAdapter} from "../adapters/email-adapter";
 import {TYPES} from "../db/iocTypes";
 
 

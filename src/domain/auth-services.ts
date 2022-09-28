@@ -1,15 +1,14 @@
-import bcrypt from 'bcrypt'
+import "reflect-metadata";
 import {JwtUtility} from '../application/jwt-utility';
 import {CredentialType, JWTType, LoginType, TOKEN_STATUS, TokenType, UserFullType} from "../db/types";
 import {UsersRepository} from "../repositories/users-repository";
 import {v4 as uuidv4} from 'uuid';
-import "reflect-metadata";
 import {userForRepository} from "../helpers/user/userServiceHelper";
 import {inject, injectable} from "inversify";
 import {EmailAdapter} from "../adapters/email-adapter";
 import {TYPES} from "../db/iocTypes";
 import {AuthHelperService} from "./auth-helper-service";
-import { EmailMessage } from '../adapters/email-message';
+import {EmailMessage} from '../adapters/email-message';
 
 @injectable()
 export class AuthService {

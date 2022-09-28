@@ -32,5 +32,3 @@ export class AttemptsRepository {
     return await attemptModel.findOne({ip, url, method}, projection).lean() as AttemptsType
   }
 }
-
-//export const  attemptsRepository = new AttemptsRepository()

@@ -1,16 +1,21 @@
+import "reflect-metadata";
 import {
-  BloggerDBType,
   BloggerPaginatorInputType,
   SearchResultType,
   BloggerType,
   BloggerPaginatorType
 } from "../db/types";
-//import {bloggersCollection} from "../db/db";
-import {bloggersRepository} from "../repositories/bloggers-repository";
+import {BloggersRepository} from "../repositories/bloggers-repository";
 import {v4 as uuidv4} from "uuid";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../db/iocTypes";
 
-
+@injectable()
 export class BloggersService {
+  constructor(
+    @inject<BloggersRepository>(TYPES.BloggersRepository) private bloggersRepository: BloggersRepository
+  ) {
+  }
 
   async findAll(paginatorInput: BloggerPaginatorInputType):
     Promise<SearchResultType<BloggerType>> {
@@ -24,7 +29,7 @@ export class BloggersService {
 
 
     const {bloggersSearch, bloggersCount} =
-      await bloggersRepository.getAll(bloggerPaginator);
+      await this.bloggersRepository.getAll(bloggerPaginator);
 
     const result: SearchResultType<BloggerType> = {
       pagesCount: Math.ceil(bloggersCount / pageSize),
@@ -45,20 +50,18 @@ export class BloggersService {
         name,
         youtubeUrl: youtubeUrl
       };
-    return await bloggersRepository.create(newBlogger);
+    return await this.bloggersRepository.create(newBlogger);
   }
 
   async findById(id: string): Promise<BloggerType | null> {
-    return await bloggersRepository.findById(id);
+    return await this.bloggersRepository.findById(id);
   }
 
   async update({id, name, youtubeUrl}: BloggerType): Promise<boolean> {
-    return await bloggersRepository.update({id, name, youtubeUrl});
+    return await this.bloggersRepository.update({id, name, youtubeUrl});
   }
 
   async delete(id: string): Promise<boolean> {
-    return await bloggersRepository.delete(id);
+    return await this.bloggersRepository.delete(id);
   }
 }
-
-export const bloggersService = new BloggersService()

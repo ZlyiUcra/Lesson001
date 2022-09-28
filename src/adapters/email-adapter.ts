@@ -1,7 +1,7 @@
+import "reflect-metadata";
 import nodemailer from "nodemailer";
 import {settings} from "../settings";
 import {injectable} from "inversify";
-import "reflect-metadata";
 
 @injectable()
 export class EmailAdapter {
@@ -23,4 +23,3 @@ export class EmailAdapter {
     return info
   }
 }
-//export const emailAdapter = new EmailAdapter()

@@ -2,9 +2,12 @@ import {LIKE_STATUS, RequestWithFullUser} from "../../db/types";
 import {Response, NextFunction} from "express";
 import {ErrorMessagesType, errorsMessagesCreator} from "../../helpers/errorCommon/errorMessagesCreator";
 import {baseErrorList} from "../../helpers/errorCommon/baseErrorListHelper";
-import {commentsService} from "../../domain/comments-services";
 import {likesAuthValidator} from "../../helpers/likes/likesHelper";
+import {rootContainer} from "../../ioc/compositionRoot";
+import {CommentsService} from "../../domain/comments-services";
+import {TYPES} from "../../db/iocTypes";
 
+const commentsService = rootContainer.get<CommentsService>(TYPES.CommentsService);
 
 export const commentLikesAuthMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
 

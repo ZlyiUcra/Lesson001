@@ -1,9 +1,16 @@
+import "reflect-metadata";
 import {LIKE_STATUS, PostLikeType, UserFullType} from "../db/types";
-import {postLikesRepository} from "../repositories/postLikes-repository";
 import {v4 as uuidv4} from "uuid";
-import {correctLikeStatus} from "../helpers/likes/likesHelper";
+import {inject, injectable} from "inversify";
+import {PostLikesRepository} from "../repositories/postLikes-repository";
+import {TYPES} from "../db/iocTypes";
 
+@injectable()
 export class PostLikesService {
+  constructor(
+    @inject<PostLikesRepository>(TYPES.PostLikesRepository) private postLikesRepository: PostLikesRepository
+  ) {
+  }
   async upsert(postId: string, likeStatus: LIKE_STATUS, user: UserFullType | null): Promise<boolean> {
     const userId: string | null = user ? user.id : null;
     const login: string | null = user ? user.credentials.login : null;
@@ -26,43 +33,17 @@ export class PostLikesService {
         addedAt: new Date()
       }
     }
-    return postLikesRepository.upsert(postLike);
+    return this.postLikesRepository.upsert(postLike);
 
 
-    // let postLike: PostLikeType = {
-    //   id: "",
-    //   postId,
-    //   likeStatus: LIKE_STATUS.NONE,
-    //   userId,
-    //   login,
-    //   addedAt: new Date()
-    // }
-
-    // if (user) {
-    //   postLike.userId = user.id;
-    //   postLike.login = user.credentials.login;
-    //   postLike.likeStatus = likeStatus;
-    //   savedPostLike = await this.findByPostIdAndUserId(postId, user.id);
-    //
-    // } else {
-    //   savedPostLike = await this.findByPostIdAndUserId(postId, null);
-    // }
-    // if (savedPostLike) {
-    //   savedPostLike.likeStatus = correctLikeStatus(savedPostLike.likeStatus, likeStatus, user)
-    //   postLike = {...savedPostLike, id: uuidv4()}
-    // }
-    //
-    // return postLikesRepository.upsert(postLike);
     return false
   }
 
   async findByPostIdAndUserId(postId: string, userId: string | null): Promise<PostLikeType | null> {
-    return postLikesRepository.findByPostIdAndUserId(postId, userId);
+    return this.postLikesRepository.findByPostIdAndUserId(postId, userId);
   }
 
   async findByIds(postIds: Array<string>): Promise<Array<PostLikeType>> {
-    return postLikesRepository.findByIds(postIds);
+    return this.postLikesRepository.findByIds(postIds);
   }
 }
-
-export const postLikesService = new PostLikesService()

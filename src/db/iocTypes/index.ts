@@ -1,8 +1,5 @@
-import {EmailMessage} from "../../adapters/email-message";
-import {attemptModel, blacklistModel} from "../mongoose/models";
-import {AttemptsRepository} from "../../repositories/attempts-repository";
-import {BlacklistRepository} from "../../repositories/blacklist-repository";
-import {BlacklistService} from "../../domain/blacklist-service";
+import {TestingRepository} from "../../repositories/testing-repository";
+import {TestingServices} from "../../domain/testing-service";
 
 export const TYPES = {
   //user and auth with derivatives
@@ -24,4 +21,32 @@ export const TYPES = {
   blacklistModel: Symbol.for("blacklistModel"),
   BlacklistRepository: Symbol.for("BlacklistRepository"),
   BlacklistService: Symbol.for("BlacklistService"),
+  //posts
+  postModel: Symbol.for("postModel"),
+  PostsRepository: Symbol.for("PostsRepository"),
+  PostsServices: Symbol.for("PostsServices"),
+  PostsController: Symbol.for("PostsController"),
+  //postLikes
+  PostLikesRepository: Symbol.for("PostLikesRepository"),
+  PostLikesService: Symbol.for("PostLikesService"),
+  postLikeModel: Symbol.for("postLikeModel"),
+  // bloggers
+  bloggerModel: Symbol.for("bloggerModel"),
+  BloggersRepository: Symbol.for("BloggersRepository"),
+  BloggersService: Symbol.for("BloggersService"),
+  BloggersController: Symbol.for("BloggersController"),
+  // comments
+  commentModel: Symbol.for("commentModel"),
+  CommentsRepository: Symbol.for("CommentsRepository"),
+  CommentsService: Symbol.for("CommentsService"),
+  CommentsController: Symbol.for("CommentsController"),
+  //commentLikes
+  CommentLikesRepository: Symbol.for("CommentLikesRepository"),
+  CommentLikesService: Symbol.for("CommentLikesService"),
+  commentLikeModel: Symbol.for("commentLikeModel"),
+  // testing
+  TestingRepository: Symbol.for("TestingRepository"),
+  TestingServices: Symbol.for("TestingServices"),
+  TestingController: Symbol.for("TestingController")
+
 };

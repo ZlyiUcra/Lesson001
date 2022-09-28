@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import {AttemptsType} from "../db/types";
-//import {attemptsRepository} from "../repositories/attempts-repository";
 import {inject, injectable} from "inversify";
 import {AttemptsRepository} from "../repositories/attempts-repository";
 import {TYPES} from "../db/iocTypes";

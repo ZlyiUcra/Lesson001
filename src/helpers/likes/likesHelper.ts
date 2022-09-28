@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {
   CommentExtendedType,
   CommentLikeType, CommentType,
@@ -6,35 +7,17 @@ import {
   LikeUserDetailsInfoType,
   PostExtendedType,
   PostLikeType,
-  PostType, UserFullType
+  PostType
 } from "../../db/types";
 import differenceInMilliseconds from "date-fns/differenceInMilliseconds";
-import "reflect-metadata";
-import {rootContainer} from "../../ioc/compositionRoot";
 import {UsersService} from "../../domain/users-service";
 import {JwtUtility} from "../../application/jwt-utility";
 import {TYPES} from "../../db/iocTypes";
+import {rootContainer} from "../../ioc/compositionRoot";
 
+console.log("rootContainer", rootContainer);
 const usersService = rootContainer.get<UsersService>(TYPES.UsersService);
 const jwtUtility = rootContainer.get<JwtUtility>(TYPES.JwtUtility);
-
-export const correctLikeStatus = (oldLikeStatus: LIKE_STATUS, newLikeStatus: LIKE_STATUS, user: UserFullType | null): LIKE_STATUS => {
-  // if (!user || (oldLikeStatus === LIKE_STATUS.LIKE && newLikeStatus === LIKE_STATUS.LIKE) ||
-  //   (oldLikeStatus === LIKE_STATUS.DISLIKE && newLikeStatus === LIKE_STATUS.DISLIKE)) {
-  //   return LIKE_STATUS.NONE
-  // }
-  // if (newLikeStatus === LIKE_STATUS.NONE) {
-  //   return oldLikeStatus;
-  // }
-  if (!user) {
-    return LIKE_STATUS.NONE
-  }
-  //else if (newLikeStatus === LIKE_STATUS.NONE) {
-  //   return oldLikeStatus;
-  // }
-  return newLikeStatus
-
-}
 
 export const newest3LikesElements = (postLikes: Array<PostLikeType>, postId: string) => {
   const newestLikes: Array<LikeUserDetailsInfoType> =

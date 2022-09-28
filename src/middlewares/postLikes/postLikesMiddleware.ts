@@ -2,10 +2,12 @@ import {LIKE_STATUS, RequestWithFullUser} from "../../db/types";
 import {Response, NextFunction} from "express";
 import {ErrorMessagesType, errorsMessagesCreator} from "../../helpers/errorCommon/errorMessagesCreator";
 import {baseErrorList} from "../../helpers/errorCommon/baseErrorListHelper";
-import {postsService} from "../../domain/posts-services";
+import { PostsServices} from "../../domain/posts-services";
 import {likesAuthValidator} from "../../helpers/likes/likesHelper";
+import {rootContainer} from "../../ioc/compositionRoot";
+import {TYPES} from "../../db/iocTypes";
 
-
+const postsService = rootContainer.get<PostsServices>(TYPES.PostsServices)
 export const postLikesAuthMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
 
   const {headerAuth, accessToken, userJWT, user, isBearer} = await likesAuthValidator(req.headers.authorization);

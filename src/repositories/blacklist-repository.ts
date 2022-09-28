@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {BlacklistType} from "../db/types";
 import {ObjectId} from "mongodb";
 import {inject, injectable} from "inversify";
@@ -14,7 +15,6 @@ export class BlacklistRepository {
   async insert(refreshToken: BlacklistType): Promise<boolean> {
     try {
       const result = await this.blacklistModel.insertMany([{_id: new ObjectId(), ...refreshToken}]);
-      console.log("Blacklist insert result:", result)
       return true
     } catch (e) {
       console.log("Error inserting blacklist: ", e)

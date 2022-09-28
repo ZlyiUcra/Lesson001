@@ -1,12 +1,16 @@
-import {ErrorMessagesType, errorsMessagesCreator, ErrorType} from "../errorCommon/errorMessagesCreator";
-import {bloggersService} from "../../domain/bloggers-services";
+import "reflect-metadata";
+import {ErrorMessagesType, errorsMessagesCreator} from "../errorCommon/errorMessagesCreator";
+import {BloggersService} from "../../domain/bloggers-services";
 import {baseErrorList} from "../errorCommon/baseErrorListHelper";
+import {rootContainer} from "../../ioc/compositionRoot";
+import {TYPES} from "../../db/iocTypes";
 
+const bloggersService = rootContainer.get<BloggersService>(TYPES.BloggersService);
 
 export const postsTitleShorDescriptionContentErrorCreator = (errors: ErrorMessagesType | undefined,
-                                                                   title?: string,
-                                                                   shortDescription?: string,
-                                                                   content?: string) => {
+                                                             title?: string,
+                                                             shortDescription?: string,
+                                                             content?: string) => {
 
   if (!title || title.trim().length === 0 || title.length > 30) {
     errors = errorsMessagesCreator(baseErrorList(errors),
@@ -36,12 +40,12 @@ export const postsTitleShorDescriptionContentErrorCreator = (errors: ErrorMessag
 
 
 export const postsTitleShorDescriptionContentBloggerIdErrorCreator = async (errors: ErrorMessagesType | undefined,
-                                                                   title?: string,
-                                                                   shortDescription?: string,
-                                                                   content?: string, bloggerId?: string) => {
+                                                                            title?: string,
+                                                                            shortDescription?: string,
+                                                                            content?: string, bloggerId?: string) => {
 
   const blogger = await bloggersService.findById(bloggerId || '');
-  if(!blogger){
+  if (!blogger) {
     errors = errorsMessagesCreator(baseErrorList(errors),
       "Blogger not exist",
       "bloggerId"

@@ -1,15 +1,14 @@
+import "reflect-metadata";
 import {
-  LoginType,
   PaginatorParamsType,
   TOKEN_STATUS,
   TokenType,
   UserDBType,
   UserFullType,
-  UserInputType
+
 } from "../db/types";
 import {DeleteResult, ObjectId} from "mongodb";
 import {projection} from "../helpers/constants";
-import "reflect-metadata";
 import {inject, injectable} from "inversify";
 import mongoose from "mongoose";
 import {TYPES} from "../db/iocTypes";

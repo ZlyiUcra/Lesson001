@@ -1,10 +1,16 @@
+import "reflect-metadata";
 import {RequestWithShortUser} from "../../db/types";
 import {NextFunction, Response} from "express";
 import {ErrorMessagesType, errorsMessagesCreator} from "../../helpers/errorCommon/errorMessagesCreator";
 import {commentContentErrorCreator} from "../../helpers/comments/commentsHelper";
-import {postsService} from "../../domain/posts-services";
-import {commentsService} from "../../domain/comments-services";
+import {PostsServices} from "../../domain/posts-services";
 import {baseErrorList} from "../../helpers/errorCommon/baseErrorListHelper";
+import {rootContainer} from "../../ioc/compositionRoot";
+import {TYPES} from "../../db/iocTypes";
+import {CommentsService} from "../../domain/comments-services";
+
+const postsService = rootContainer.get<PostsServices>(TYPES.PostsServices);
+const commentsService = rootContainer.get<CommentsService>(TYPES.CommentsService);
 
 export const commentForPostMiddleware = async (req: RequestWithShortUser,
                                                res: Response,
