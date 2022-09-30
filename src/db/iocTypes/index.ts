@@ -1,6 +1,3 @@
-import {TestingRepository} from "../../repositories/testing-repository";
-import {TestingServices} from "../../domain/testing-service";
-
 export const TYPES = {
   //user and auth with derivatives
   UsersRepository: Symbol.for("UsersRepository"),
@@ -47,6 +44,8 @@ export const TYPES = {
   // testing
   TestingRepository: Symbol.for("TestingRepository"),
   TestingServices: Symbol.for("TestingServices"),
-  TestingController: Symbol.for("TestingController")
+  TestingController: Symbol.for("TestingController"),
+  // middleware
+  LikesAuthValidator: Symbol.for("LikesAuthValidator"),
 
 };

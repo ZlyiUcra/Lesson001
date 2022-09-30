@@ -3,14 +3,19 @@ import {Response, NextFunction} from "express";
 import {ErrorMessagesType, errorsMessagesCreator} from "../../helpers/errorCommon/errorMessagesCreator";
 import {baseErrorList} from "../../helpers/errorCommon/baseErrorListHelper";
 import { PostsServices} from "../../domain/posts-services";
-import {likesAuthValidator} from "../../helpers/likes/likesHelper";
+//import {likesAuthValidator} from "../../helpers/likes/likesHelper";
 import {rootContainer} from "../../ioc/compositionRoot";
 import {TYPES} from "../../db/iocTypes";
+import {LikesAuthValidator} from "../../helpers/likes/LikesAuthValidator";
 
-const postsService = rootContainer.get<PostsServices>(TYPES.PostsServices)
+const likesAuthValidator = rootContainer.get<LikesAuthValidator>(TYPES.LikesAuthValidator);
+
+const postsService = rootContainer.get<PostsServices>(TYPES.PostsServices);
+
 export const postLikesAuthMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
 
-  const {headerAuth, accessToken, userJWT, user, isBearer} = await likesAuthValidator(req.headers.authorization);
+  const {headerAuth, accessToken, userJWT, user, isBearer} = await likesAuthValidator.likesAuthValidator(req.headers.authorization);
+  //const {headerAuth, accessToken, userJWT, user, isBearer} = await likesAuthValidator(req.headers.authorization);
 
   if (!isBearer) return res.status(401).send()
 

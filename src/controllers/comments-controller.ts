@@ -3,11 +3,12 @@ import {CommentContentType, RequestWithFullUser, RequestWithShortUser} from "../
 import {Response} from "express";
 import {inject, injectable} from "inversify";
 import {CommentsService} from "../domain/comments-services";
+import {TYPES} from "../db/iocTypes";
 
 @injectable()
 export class CommentsController {
   constructor(
-    @inject<CommentsService>(CommentsService) private commentsService: CommentsService,
+    @inject<CommentsService>(TYPES.CommentsService) private commentsService: CommentsService,
   ){}
   async getComment(req: RequestWithFullUser, res: Response) {
     const user = req.user;

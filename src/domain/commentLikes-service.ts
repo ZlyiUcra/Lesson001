@@ -8,7 +8,7 @@ import {TYPES} from "../db/iocTypes";
 @injectable()
 export class CommentLikesService {
   constructor(
-    @inject<CommentLikesRepository>(TYPES.CommentLikesService) private commentLikesRepository: CommentLikesRepository
+    @inject<CommentLikesRepository>(TYPES.CommentLikesRepository) private commentLikesRepository: CommentLikesRepository
   ) {
   }
 

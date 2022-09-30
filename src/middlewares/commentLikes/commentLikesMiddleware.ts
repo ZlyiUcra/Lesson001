@@ -2,16 +2,19 @@ import {LIKE_STATUS, RequestWithFullUser} from "../../db/types";
 import {Response, NextFunction} from "express";
 import {ErrorMessagesType, errorsMessagesCreator} from "../../helpers/errorCommon/errorMessagesCreator";
 import {baseErrorList} from "../../helpers/errorCommon/baseErrorListHelper";
-import {likesAuthValidator} from "../../helpers/likes/likesHelper";
+//import {likesAuthValidator} from "../../helpers/likes/likesHelper";
 import {rootContainer} from "../../ioc/compositionRoot";
 import {CommentsService} from "../../domain/comments-services";
 import {TYPES} from "../../db/iocTypes";
+import {LikesAuthValidator} from "../../helpers/likes/LikesAuthValidator";
 
 const commentsService = rootContainer.get<CommentsService>(TYPES.CommentsService);
+const likesAuthValidator = rootContainer.get<LikesAuthValidator>(TYPES.LikesAuthValidator);
 
 export const commentLikesAuthMiddleware = async (req: RequestWithFullUser, res: Response, next: NextFunction) => {
 
-  const {headerAuth, accessToken, userJWT, user, isBearer} = await likesAuthValidator(req.headers.authorization)
+  const {headerAuth, accessToken, userJWT, user, isBearer} = await likesAuthValidator.likesAuthValidator(req.headers.authorization)
+  //const {headerAuth, accessToken, userJWT, user, isBearer} = await likesAuthValidator(req.headers.authorization)
   if (!isBearer) return res.status(401).send()
   next();
 }

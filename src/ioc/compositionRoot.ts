@@ -48,7 +48,8 @@ import {PostLikesService} from "../domain/postLikes-service";
 import {PostLikesRepository} from "../repositories/postLikes-repository";
 import {TestingRepository} from "../repositories/testing-repository";
 import {TestingServices} from "../domain/testing-service";
-import { TestingController } from "../controllers/testing-controller";
+import {TestingController} from "../controllers/testing-controller";
+import { LikesAuthValidator } from "../helpers/likes/LikesAuthValidator";
 
 export const rootContainer = new Container();
 
@@ -63,6 +64,7 @@ rootContainer.bind<AuthHelperService>(TYPES.AuthHelperService).to(AuthHelperServ
 rootContainer.bind<JwtUtility>(TYPES.JwtUtility).to(JwtUtility);
 rootContainer.bind<EmailAdapter>(TYPES.EmailAdapter).to(EmailAdapter);
 rootContainer.bind<EmailMessage>(TYPES.EmailMessage).to(EmailMessage);
+
 
 // attempts
 rootContainer.bind<AttemptsRepository>(TYPES.AttemptsRepository).to(AttemptsRepository);
@@ -100,3 +102,6 @@ rootContainer.bind<mongoose.Model<CommentLikeType>>(TYPES.commentLikeModel).toCo
 rootContainer.bind<TestingRepository>(TYPES.TestingRepository).to(TestingRepository);
 rootContainer.bind<TestingServices>(TYPES.TestingServices).to(TestingServices);
 rootContainer.bind<TestingController>(TYPES.TestingController).to(TestingController);
+
+//middleware
+rootContainer.bind<LikesAuthValidator>(TYPES.LikesAuthValidator).to(LikesAuthValidator)

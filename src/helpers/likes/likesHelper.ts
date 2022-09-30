@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import {rootContainer} from "../../ioc/compositionRoot";
+import { rootContainer} from "../../ioc/compositionRoot";
 import {
   CommentExtendedType,
   CommentLikeType, CommentType,
@@ -14,10 +14,8 @@ import differenceInMilliseconds from "date-fns/differenceInMilliseconds";
 import {UsersService} from "../../domain/users-service";
 import {JwtUtility} from "../../application/jwt-utility";
 import {TYPES} from "../../db/iocTypes";
+import {inject, injectable} from "inversify";
 
-
-const usersService = rootContainer.get<UsersService>(TYPES.UsersService);
-const jwtUtility = rootContainer.get<JwtUtility>(TYPES.JwtUtility);
 
 export const newest3LikesElements = (postLikes: Array<PostLikeType>, postId: string) => {
   const newestLikes: Array<LikeUserDetailsInfoType> =
@@ -100,18 +98,18 @@ export const getCommentExtendedElement = (comment: CommentType, commentLikes: Ar
 }
 
 
-export const likesAuthValidator = async (headerAuthorization: string | undefined) => {
-  const headerAuth = headerAuthorization;
-  const accessToken = headerAuth?.split(" ")[1] || "";
-  const isBearer = headerAuth?.split(" ")[0].trim() === "Bearer" && accessToken.split(".").length === 3;
-  let userJWT = await jwtUtility.extractUserJWTFromToken(accessToken);
-
-  const user = await usersService.findById(userJWT?.id as string);
-  // console.log("likesAuthValidator: ",
-  //   "\n1.", headerAuth,
-  //   "\n2.", accessToken,
-  //   "\n3.", userJWT,
-  //   "\n4.", user,
-  //   "\n5.", isBearer)
-  return {headerAuth, accessToken, userJWT, user, isBearer}
-}
+// export const likesAuthValidator = async (headerAuthorization: string | undefined) => {
+//   const headerAuth = headerAuthorization;
+//   const accessToken = headerAuth?.split(" ")[1] || "";
+//   const isBearer = headerAuth?.split(" ")[0].trim() === "Bearer" && accessToken.split(".").length === 3;
+//   let userJWT = await jwtUtility.extractUserJWTFromToken(accessToken);
+//
+//   const user = await usersService.findById(userJWT?.id as string);
+//   // console.log("likesAuthValidator: ",
+//   //   "\n1.", headerAuth,
+//   //   "\n2.", accessToken,
+//   //   "\n3.", userJWT,
+//   //   "\n4.", user,
+//   //   "\n5.", isBearer)
+//   return {headerAuth, accessToken, userJWT, user, isBearer}
+// }
