@@ -64,8 +64,6 @@ rootContainer.bind<AuthHelperService>(TYPES.AuthHelperService).to(AuthHelperServ
 rootContainer.bind<JwtUtility>(TYPES.JwtUtility).to(JwtUtility);
 rootContainer.bind<EmailAdapter>(TYPES.EmailAdapter).to(EmailAdapter);
 rootContainer.bind<EmailMessage>(TYPES.EmailMessage).to(EmailMessage);
-
-
 // attempts
 rootContainer.bind<AttemptsRepository>(TYPES.AttemptsRepository).to(AttemptsRepository);
 rootContainer.bind<AttemptsService>(TYPES.AttemptsService).to(AttemptsService);

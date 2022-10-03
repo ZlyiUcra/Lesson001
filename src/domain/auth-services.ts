@@ -21,7 +21,7 @@ export class AuthService {
   }
 
 
-  async login(credentials: LoginType, expiresIn = "1h"): Promise<JWTType & { user: UserFullType } | null> {
+  async login(credentials: LoginType, expiresIn?: string): Promise<JWTType & { user: UserFullType } | null> {
     const user = await this.usersRepository.findByLogin(credentials.login);
     if (user !== null) {
       const isCorrectUserPassword = await this.authHelperService.isPasswordCorrect(credentials.password, user.credentials.password);
@@ -42,8 +42,6 @@ export class AuthService {
     let user = await userForRepository(credentials, this.authHelperService, TOKEN_STATUS.NONE)
     user = await this.usersRepository.create(user);
     const message = this.emailMessage.getMessage(user.token.confirmationToken);
-    //`<a href="https://it-kamasutra-lesson-01.herokuapp.com/auth/registration-confirmation/?code=${user.token.confirmationToken}">${user.token.confirmationToken}</a>`;
-
 
     try {
       /* TODO:  Parsing of infoEmail must be implemented */
@@ -55,15 +53,14 @@ export class AuthService {
     } catch (err) {
       return false
     }
-    return false
   }
 
   async emailResending(email: string): Promise<boolean> {
     const user = await this.usersRepository.findByEmail(email);
+
     if (user) {
       const confirmationToken = uuidv4();
       const message = this.emailMessage.getMessage(confirmationToken);
-      // const message = `<a href="https://it-kamasutra-lesson-01.herokuapp.com/auth/registration-confirmation/?code=${confirmationToken}">${confirmationToken}</a>`;
 
       const token: TokenType = {
         ...user.token,
