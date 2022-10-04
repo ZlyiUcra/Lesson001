@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1664835558944" clover="3.2.0">
-  <project timestamp="1664835558944" name="All files">
-    <metrics statements="406" coveredstatements="288" conditionals="49" coveredconditionals="33" methods="97" coveredmethods="59" elements="552" coveredelements="380" complexity="0" loc="406" ncloc="406" packages="10" files="16" classes="16"/>
+<coverage generated="1664846223177" clover="3.2.0">
+  <project timestamp="1664846223177" name="All files">
+    <metrics statements="406" coveredstatements="289" conditionals="49" coveredconditionals="34" methods="97" coveredmethods="58" elements="552" coveredelements="381" complexity="0" loc="406" ncloc="406" packages="10" files="16" classes="16"/>
     <package name="src">
       <metrics statements="3" coveredstatements="3" conditionals="10" coveredconditionals="10" methods="0" coveredmethods="0"/>
       <file name="settings.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\settings.ts">
@@ -12,16 +12,16 @@
       </file>
     </package>
     <package name="src.adapters">
-      <metrics statements="12" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+      <metrics statements="12" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
       <file name="email-adapter.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\adapters\email-adapter.ts">
-        <metrics statements="8" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <metrics statements="8" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
-        <line num="9" count="2" type="stmt"/>
-        <line num="17" count="2" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
       </file>
       <file name="email-message.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\adapters\email-message.ts">
@@ -29,7 +29,7 @@
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
-        <line num="8" count="2" type="stmt"/>
+        <line num="8" count="5" type="stmt"/>
       </file>
     </package>
     <package name="src.application">
@@ -125,21 +125,21 @@
         <line num="151" count="0" type="stmt"/>
         <line num="152" count="0" type="stmt"/>
         <line num="174" count="3" type="stmt"/>
-        <line num="175" count="8" type="stmt"/>
-        <line num="176" count="8" type="stmt"/>
-        <line num="177" count="8" type="stmt"/>
-        <line num="178" count="8" type="stmt"/>
+        <line num="175" count="10" type="stmt"/>
+        <line num="176" count="10" type="stmt"/>
+        <line num="177" count="10" type="stmt"/>
+        <line num="178" count="10" type="stmt"/>
         <line num="183" count="3" type="stmt"/>
-        <line num="193" count="4" type="stmt"/>
-        <line num="194" count="4" type="stmt"/>
+        <line num="193" count="5" type="stmt"/>
+        <line num="194" count="5" type="stmt"/>
         <line num="199" count="3" type="stmt"/>
-        <line num="201" count="8" type="stmt"/>
-        <line num="202" count="8" type="stmt"/>
-        <line num="203" count="8" type="stmt"/>
+        <line num="201" count="10" type="stmt"/>
+        <line num="202" count="10" type="stmt"/>
+        <line num="203" count="10" type="stmt"/>
         <line num="207" count="3" type="stmt"/>
-        <line num="209" count="4" type="stmt"/>
-        <line num="210" count="4" type="stmt"/>
-        <line num="211" count="4" type="stmt"/>
+        <line num="209" count="5" type="stmt"/>
+        <line num="210" count="5" type="stmt"/>
+        <line num="211" count="5" type="stmt"/>
         <line num="216" count="3" type="stmt"/>
         <line num="218" count="0" type="stmt"/>
         <line num="219" count="0" type="stmt"/>
@@ -270,21 +270,21 @@
       </file>
     </package>
     <package name="src.domain">
-      <metrics statements="110" coveredstatements="107" conditionals="10" coveredconditionals="9" methods="28" coveredmethods="28"/>
+      <metrics statements="110" coveredstatements="110" conditionals="10" coveredconditionals="10" methods="28" coveredmethods="28"/>
       <file name="auth-helper-service.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\domain\auth-helper-service.ts">
         <metrics statements="9" coveredstatements="9" conditionals="1" coveredconditionals="1" methods="5" coveredmethods="5"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="5" count="2" type="stmt"/>
-        <line num="6" count="4" type="cond" truecount="1" falsecount="0"/>
-        <line num="7" count="4" type="stmt"/>
-        <line num="8" count="4" type="stmt"/>
+        <line num="6" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="7" count="5" type="stmt"/>
+        <line num="8" count="5" type="stmt"/>
         <line num="11" count="3" type="stmt"/>
         <line num="12" count="3" type="stmt"/>
         <line num="13" count="3" type="stmt"/>
       </file>
       <file name="auth-services.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\domain\auth-services.ts">
-        <metrics statements="48" coveredstatements="45" conditionals="6" coveredconditionals="5" methods="5" coveredmethods="5"/>
+        <metrics statements="48" coveredstatements="48" conditionals="6" coveredconditionals="6" methods="5" coveredmethods="5"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -297,11 +297,11 @@
         <line num="10" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
-        <line num="20" count="1" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
         <line num="25" count="3" type="stmt"/>
         <line num="26" count="3" type="cond" truecount="1" falsecount="0"/>
         <line num="27" count="2" type="stmt"/>
@@ -310,24 +310,24 @@
         <line num="34" count="2" type="stmt"/>
         <line num="35" count="2" type="stmt"/>
         <line num="38" count="1" type="stmt"/>
-        <line num="42" count="1" type="stmt"/>
-        <line num="43" count="1" type="stmt"/>
-        <line num="44" count="1" type="stmt"/>
-        <line num="46" count="1" type="stmt"/>
-        <line num="49" count="1" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="44" count="2" type="stmt"/>
+        <line num="46" count="2" type="stmt"/>
+        <line num="49" count="2" type="stmt"/>
         <line num="51" count="1" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="59" count="2" type="stmt"/>
-        <line num="61" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="62" count="1" type="stmt"/>
-        <line num="63" count="1" type="stmt"/>
-        <line num="65" count="1" type="stmt"/>
-        <line num="70" count="1" type="stmt"/>
-        <line num="72" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="73" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="59" count="4" type="stmt"/>
+        <line num="61" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="62" count="3" type="stmt"/>
+        <line num="63" count="3" type="stmt"/>
+        <line num="65" count="3" type="stmt"/>
+        <line num="70" count="3" type="stmt"/>
+        <line num="72" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="73" count="2" type="stmt"/>
         <line num="74" count="1" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
+        <line num="79" count="1" type="stmt"/>
         <line num="82" count="1" type="stmt"/>
         <line num="86" count="2" type="stmt"/>
         <line num="87" count="2" type="cond" truecount="1" falsecount="0"/>
@@ -390,7 +390,7 @@
         <line num="80" count="2" type="stmt"/>
         <line num="85" count="1" type="stmt"/>
         <line num="86" count="1" type="stmt"/>
-        <line num="90" count="4" type="stmt"/>
+        <line num="90" count="6" type="stmt"/>
         <line num="94" count="1" type="stmt"/>
       </file>
     </package>
@@ -409,12 +409,12 @@
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="5" count="2" type="stmt"/>
-        <line num="8" count="4" type="stmt"/>
-        <line num="10" count="4" type="stmt"/>
-        <line num="12" count="4" type="stmt"/>
-        <line num="14" count="4" type="stmt"/>
-        <line num="15" count="4" type="stmt"/>
-        <line num="16" count="4" type="stmt"/>
+        <line num="8" count="5" type="stmt"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="12" count="5" type="stmt"/>
+        <line num="14" count="5" type="stmt"/>
+        <line num="15" count="5" type="stmt"/>
+        <line num="16" count="5" type="stmt"/>
       </file>
     </package>
     <package name="src.repositories">
@@ -464,10 +464,10 @@
         <line num="37" count="1" type="stmt"/>
         <line num="41" count="6" type="stmt"/>
         <line num="42" count="6" type="stmt"/>
-        <line num="46" count="3" type="stmt"/>
-        <line num="51" count="4" type="stmt"/>
-        <line num="59" count="4" type="stmt"/>
-        <line num="61" count="4" type="stmt"/>
+        <line num="46" count="5" type="stmt"/>
+        <line num="51" count="5" type="stmt"/>
+        <line num="59" count="5" type="stmt"/>
+        <line num="61" count="5" type="stmt"/>
         <line num="65" count="2" type="stmt"/>
         <line num="66" count="2" type="cond" truecount="1" falsecount="0"/>
         <line num="67" count="1" type="stmt"/>
@@ -480,8 +480,8 @@
         <line num="85" count="1" type="cond" truecount="1" falsecount="0"/>
         <line num="86" count="1" type="cond" truecount="1" falsecount="0"/>
         <line num="88" count="1" type="stmt"/>
-        <line num="92" count="5" type="stmt"/>
-        <line num="93" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="92" count="7" type="stmt"/>
+        <line num="93" count="7" type="cond" truecount="1" falsecount="0"/>
         <line num="94" count="1" type="stmt"/>
         <line num="98" count="3" type="stmt"/>
       </file>

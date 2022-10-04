@@ -9,6 +9,7 @@ import {EmailAdapter} from "../../adapters/email-adapter";
 import {EmailMessage} from "../../adapters/email-message";
 import {AuthService} from "../auth-services";
 import {CredentialType, JWTType, LoginType, TOKEN_STATUS, TokenType, UserFullType} from "../../db/types";
+import {throws} from "assert";
 
 describe("integration tests for auth service", () => {
   let mongoServer: MongoMemoryServer;
@@ -25,13 +26,30 @@ describe("integration tests for auth service", () => {
   const usersRepository = new UsersRepository(userModel);
   const authHelperService = new AuthHelperService();
   const jwtUtility = new JwtUtility();
-  const emailAdapter = new EmailAdapter();
-  const emailMessage = new EmailMessage()
+  //const emailAdapter = new EmailAdapter();
+
+  const emailAdapterMock: jest.Mocked<EmailAdapter> = {
+    sendEmail: jest.fn()
+  };
+  // @ts-ignore
+  const emailAdapterExceptionMock: jest.Mocked<EmailAdapter> = {
+    // @ts-ignore
+    sendEmail: jest.fn().mockImplementation(() => {throw new Error()})
+  };
+
+
+  const emailMessage = new EmailMessage();
 
   const authService = new AuthService(usersRepository,
     authHelperService,
     jwtUtility,
-    emailAdapter,
+    emailAdapterMock,
+    emailMessage);
+
+  const authExceptionService = new AuthService(usersRepository,
+    authHelperService,
+    jwtUtility,
+    emailAdapterExceptionMock,
     emailMessage);
 
   const usersService = new UsersService(usersRepository, authHelperService);
@@ -89,21 +107,22 @@ describe("integration tests for auth service", () => {
         const userCredentials = new CredentialType("login1", "email@email1.com", "123321");
 
         const result = await authService.registration(userCredentials);
+        expect(emailAdapterMock.sendEmail).toBeCalled()
         expect(result).toBeTruthy()
+      })
+      it("should not pass registration", async () => {
+        const userCredentials = new CredentialType("login1", "email@email1.com", "123321");
+
+        const result = await authExceptionService.registration(userCredentials);
+        expect(result).toBeFalsy();
       })
     })
 
     describe("email resending", () => {
-      beforeAll(
-        async () => {
-          await mongoose.connection.db.dropDatabase()
-        }
-      )
       let user: UserFullType;
 
-
       beforeAll(async () => {
-        await  mongoose.connection.db.dropDatabase();
+        await mongoose.connection.db.dropDatabase();
         const userCredentials = new CredentialType(login, email, password);
         user = await usersService.create(userCredentials);
         const token: TokenType = {confirmationToken, tokenStatus: TOKEN_STATUS.SENT, tokenJWT: "123.123.123"}
@@ -119,12 +138,18 @@ describe("integration tests for auth service", () => {
         expect(result).toBeTruthy()
       })
 
-      // it("should not resend email because of status", async () => {
-      //   const token: TokenType = {confirmationToken, tokenStatus: TOKEN_STATUS.CONFIRMED, tokenJWT: "123.123.123"}
-      //   await usersService.updateToken(user.id, token)
-      //   const result = await authService.emailResending(email);
-      //   expect(result).toBeFalsy()
-      // })
+      it("should not resend email because of status", async () => {
+        const token: TokenType = {confirmationToken, tokenStatus: TOKEN_STATUS.CONFIRMED, tokenJWT: "123.123.123"}
+        await usersService.updateToken(user.id, token)
+        const result = await authService.emailResending(email);
+        expect(result).toBeFalsy()
+      })
+      it("should not resend email because exception", async () => {
+        const token: TokenType = {confirmationToken, tokenStatus: TOKEN_STATUS.NONE, tokenJWT: "123.123.123"}
+        await usersService.updateToken(user.id, token)
+        const result = await authExceptionService.emailResending(email);
+        expect(result).toBeFalsy()
+      })
     })
   })
 

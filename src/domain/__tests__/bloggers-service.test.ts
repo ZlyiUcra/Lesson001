@@ -13,12 +13,16 @@ describe("integration test for bloggers service", () => {
     const mongoUri = mongoServer.getUri();
     await mongoose.connect(mongoUri);
   })
+  afterAll(async () => {
+    await mongoose.disconnect()
+    await mongoServer.stop()
+  })
 
   const bloggersRepository = new BloggersRepository(bloggerModel);
   const bloggersService = new BloggersService(bloggersRepository);
   let blogger: BloggerType;
 
-  describe(" blogger service", () => {
+  describe("blogger service", () => {
     const name = "Blogger name";
     const youtubeUrl = "www.youtube.com/link"
 
