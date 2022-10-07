@@ -66,7 +66,7 @@ export const getPostExtendedElement = (post: PostType, postLikes: Array<PostLike
   }
 }
 
-export const getCommentMyStatus = (commentLikes: Array<CommentLikeType>, commentId: string, userId: string): LIKE_STATUS => {
+export const getCommentMyStatus = (commentLikes: Array<CommentLikeType>, commentId: string, userId: string =""): LIKE_STATUS => {
   //if (!userId) return LIKE_STATUS.NONE
 
   const myStatusPostLike = commentLikes.find((pl: CommentLikeType) => pl.commentId === commentId && pl.userId === userId)

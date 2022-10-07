@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1664846223177" clover="3.2.0">
-  <project timestamp="1664846223177" name="All files">
-    <metrics statements="406" coveredstatements="289" conditionals="49" coveredconditionals="34" methods="97" coveredmethods="58" elements="552" coveredelements="381" complexity="0" loc="406" ncloc="406" packages="10" files="16" classes="16"/>
+<coverage generated="1665104956185" clover="3.2.0">
+  <project timestamp="1665104956185" name="All files">
+    <metrics statements="644" coveredstatements="533" conditionals="126" coveredconditionals="89" methods="161" coveredmethods="118" elements="931" coveredelements="740" complexity="0" loc="644" ncloc="644" packages="11" files="25" classes="25"/>
     <package name="src">
       <metrics statements="3" coveredstatements="3" conditionals="10" coveredconditionals="10" methods="0" coveredmethods="0"/>
       <file name="settings.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\settings.ts">
@@ -72,163 +72,163 @@
       </file>
     </package>
     <package name="src.db">
-      <metrics statements="156" coveredstatements="70" conditionals="8" coveredconditionals="4" methods="41" coveredmethods="9"/>
+      <metrics statements="156" coveredstatements="82" conditionals="8" coveredconditionals="4" methods="41" coveredmethods="14"/>
       <file name="types.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\db\types.ts">
-        <metrics statements="156" coveredstatements="70" conditionals="8" coveredconditionals="4" methods="41" coveredmethods="9"/>
-        <line num="4" count="3" type="stmt"/>
+        <metrics statements="156" coveredstatements="82" conditionals="8" coveredconditionals="4" methods="41" coveredmethods="14"/>
+        <line num="4" count="5" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
-        <line num="12" count="3" type="stmt"/>
+        <line num="12" count="5" type="stmt"/>
         <line num="14" count="2" type="stmt"/>
         <line num="15" count="2" type="stmt"/>
         <line num="16" count="2" type="stmt"/>
-        <line num="20" count="3" type="stmt"/>
+        <line num="20" count="5" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="27" count="3" type="stmt"/>
+        <line num="27" count="5" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="36" count="3" type="stmt"/>
-        <line num="37" count="1" type="stmt"/>
-        <line num="38" count="1" type="stmt"/>
-        <line num="39" count="1" type="stmt"/>
-        <line num="40" count="1" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
-        <line num="46" count="3" type="stmt"/>
+        <line num="36" count="5" type="stmt"/>
+        <line num="37" count="3" type="stmt"/>
+        <line num="38" count="3" type="stmt"/>
+        <line num="39" count="3" type="stmt"/>
+        <line num="40" count="3" type="stmt"/>
+        <line num="41" count="3" type="stmt"/>
+        <line num="46" count="5" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
-        <line num="54" count="3" type="stmt"/>
+        <line num="54" count="5" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
-        <line num="63" count="3" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="72" count="3" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="87" count="3" type="stmt"/>
-        <line num="98" count="0" type="stmt"/>
-        <line num="99" count="0" type="stmt"/>
-        <line num="103" count="3" type="stmt"/>
-        <line num="115" count="0" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="120" count="3" type="stmt"/>
-        <line num="133" count="0" type="stmt"/>
-        <line num="134" count="0" type="stmt"/>
-        <line num="138" count="3" type="stmt"/>
+        <line num="63" count="5" type="stmt"/>
+        <line num="65" count="4" type="stmt"/>
+        <line num="66" count="4" type="stmt"/>
+        <line num="67" count="4" type="stmt"/>
+        <line num="68" count="4" type="stmt"/>
+        <line num="72" count="5" type="stmt"/>
+        <line num="82" count="4" type="stmt"/>
+        <line num="83" count="4" type="stmt"/>
+        <line num="87" count="5" type="stmt"/>
+        <line num="98" count="4" type="stmt"/>
+        <line num="99" count="4" type="stmt"/>
+        <line num="103" count="5" type="stmt"/>
+        <line num="115" count="4" type="stmt"/>
+        <line num="116" count="4" type="stmt"/>
+        <line num="120" count="5" type="stmt"/>
+        <line num="133" count="4" type="stmt"/>
+        <line num="134" count="4" type="stmt"/>
+        <line num="138" count="5" type="stmt"/>
         <line num="151" count="0" type="stmt"/>
         <line num="152" count="0" type="stmt"/>
-        <line num="174" count="3" type="stmt"/>
-        <line num="175" count="10" type="stmt"/>
-        <line num="176" count="10" type="stmt"/>
-        <line num="177" count="10" type="stmt"/>
-        <line num="178" count="10" type="stmt"/>
-        <line num="183" count="3" type="stmt"/>
-        <line num="193" count="5" type="stmt"/>
-        <line num="194" count="5" type="stmt"/>
-        <line num="199" count="3" type="stmt"/>
-        <line num="201" count="10" type="stmt"/>
-        <line num="202" count="10" type="stmt"/>
-        <line num="203" count="10" type="stmt"/>
-        <line num="207" count="3" type="stmt"/>
-        <line num="209" count="5" type="stmt"/>
-        <line num="210" count="5" type="stmt"/>
-        <line num="211" count="5" type="stmt"/>
-        <line num="216" count="3" type="stmt"/>
+        <line num="174" count="5" type="stmt"/>
+        <line num="175" count="14" type="stmt"/>
+        <line num="176" count="14" type="stmt"/>
+        <line num="177" count="14" type="stmt"/>
+        <line num="178" count="14" type="stmt"/>
+        <line num="183" count="5" type="stmt"/>
+        <line num="193" count="7" type="stmt"/>
+        <line num="194" count="7" type="stmt"/>
+        <line num="199" count="5" type="stmt"/>
+        <line num="201" count="14" type="stmt"/>
+        <line num="202" count="14" type="stmt"/>
+        <line num="203" count="14" type="stmt"/>
+        <line num="207" count="5" type="stmt"/>
+        <line num="209" count="7" type="stmt"/>
+        <line num="210" count="7" type="stmt"/>
+        <line num="211" count="7" type="stmt"/>
+        <line num="216" count="5" type="stmt"/>
         <line num="218" count="0" type="stmt"/>
         <line num="219" count="0" type="stmt"/>
-        <line num="223" count="3" type="stmt"/>
+        <line num="223" count="5" type="stmt"/>
         <line num="227" count="0" type="stmt"/>
         <line num="228" count="0" type="stmt"/>
-        <line num="232" count="3" type="stmt"/>
+        <line num="232" count="5" type="stmt"/>
         <line num="234" count="0" type="stmt"/>
         <line num="235" count="0" type="stmt"/>
-        <line num="240" count="3" type="stmt"/>
+        <line num="240" count="5" type="stmt"/>
         <line num="242" count="0" type="stmt"/>
         <line num="243" count="0" type="stmt"/>
-        <line num="248" count="3" type="stmt"/>
+        <line num="248" count="5" type="stmt"/>
         <line num="249" count="0" type="stmt"/>
-        <line num="253" count="3" type="stmt"/>
+        <line num="253" count="5" type="stmt"/>
         <line num="255" count="0" type="stmt"/>
         <line num="256" count="0" type="stmt"/>
         <line num="257" count="0" type="stmt"/>
-        <line num="262" count="3" type="stmt"/>
+        <line num="262" count="5" type="stmt"/>
         <line num="264" count="0" type="stmt"/>
         <line num="265" count="0" type="stmt"/>
         <line num="266" count="0" type="stmt"/>
-        <line num="275" count="3" type="stmt"/>
+        <line num="275" count="5" type="stmt"/>
         <line num="277" count="0" type="stmt"/>
         <line num="278" count="0" type="stmt"/>
         <line num="279" count="0" type="stmt"/>
         <line num="280" count="0" type="stmt"/>
         <line num="281" count="0" type="stmt"/>
-        <line num="286" count="3" type="stmt"/>
+        <line num="286" count="5" type="stmt"/>
         <line num="299" count="0" type="stmt"/>
         <line num="301" count="0" type="stmt"/>
         <line num="302" count="0" type="stmt"/>
-        <line num="306" count="3" type="stmt"/>
+        <line num="306" count="5" type="stmt"/>
         <line num="319" count="0" type="stmt"/>
         <line num="320" count="0" type="stmt"/>
-        <line num="337" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="338" count="3" type="stmt"/>
-        <line num="339" count="3" type="stmt"/>
-        <line num="340" count="3" type="stmt"/>
-        <line num="341" count="3" type="stmt"/>
-        <line num="344" count="3" type="stmt"/>
+        <line num="337" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="338" count="5" type="stmt"/>
+        <line num="339" count="5" type="stmt"/>
+        <line num="340" count="5" type="stmt"/>
+        <line num="341" count="5" type="stmt"/>
+        <line num="344" count="5" type="stmt"/>
         <line num="346" count="0" type="stmt"/>
         <line num="347" count="0" type="stmt"/>
         <line num="348" count="0" type="stmt"/>
         <line num="349" count="0" type="stmt"/>
-        <line num="354" count="3" type="stmt"/>
+        <line num="354" count="5" type="stmt"/>
         <line num="363" count="0" type="stmt"/>
         <line num="364" count="0" type="stmt"/>
-        <line num="369" count="3" type="stmt"/>
+        <line num="369" count="5" type="stmt"/>
         <line num="370" count="1" type="stmt"/>
         <line num="371" count="1" type="stmt"/>
-        <line num="375" count="3" type="stmt"/>
+        <line num="375" count="5" type="stmt"/>
         <line num="377" count="0" type="stmt"/>
         <line num="378" count="0" type="stmt"/>
-        <line num="382" count="3" type="stmt"/>
+        <line num="382" count="5" type="stmt"/>
         <line num="389" count="0" type="stmt"/>
         <line num="390" count="0" type="stmt"/>
-        <line num="394" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="395" count="3" type="stmt"/>
-        <line num="396" count="3" type="stmt"/>
-        <line num="397" count="3" type="stmt"/>
-        <line num="400" count="3" type="stmt"/>
+        <line num="394" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="395" count="5" type="stmt"/>
+        <line num="396" count="5" type="stmt"/>
+        <line num="397" count="5" type="stmt"/>
+        <line num="400" count="5" type="stmt"/>
         <line num="402" count="0" type="stmt"/>
         <line num="403" count="0" type="stmt"/>
         <line num="404" count="0" type="stmt"/>
-        <line num="409" count="3" type="stmt"/>
+        <line num="409" count="5" type="stmt"/>
         <line num="411" count="0" type="stmt"/>
         <line num="412" count="0" type="stmt"/>
         <line num="413" count="0" type="stmt"/>
-        <line num="417" count="3" type="stmt"/>
+        <line num="417" count="5" type="stmt"/>
         <line num="424" count="0" type="stmt"/>
         <line num="426" count="0" type="stmt"/>
-        <line num="433" count="3" type="stmt"/>
+        <line num="433" count="5" type="stmt"/>
         <line num="435" count="0" type="stmt"/>
         <line num="436" count="0" type="stmt"/>
         <line num="437" count="0" type="stmt"/>
         <line num="438" count="0" type="stmt"/>
         <line num="439" count="0" type="stmt"/>
         <line num="440" count="0" type="stmt"/>
-        <line num="445" count="3" type="stmt"/>
+        <line num="445" count="5" type="stmt"/>
         <line num="457" count="0" type="stmt"/>
         <line num="458" count="0" type="stmt"/>
-        <line num="462" count="3" type="stmt"/>
+        <line num="462" count="5" type="stmt"/>
         <line num="464" count="0" type="stmt"/>
         <line num="465" count="0" type="stmt"/>
         <line num="466" count="0" type="stmt"/>
         <line num="467" count="0" type="stmt"/>
         <line num="468" count="0" type="stmt"/>
-        <line num="473" count="3" type="stmt"/>
+        <line num="473" count="5" type="stmt"/>
         <line num="484" count="0" type="stmt"/>
         <line num="485" count="0" type="stmt"/>
       </file>
@@ -237,49 +237,49 @@
       <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="index.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\db\iocTypes\index.ts">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="3" type="stmt"/>
+        <line num="1" count="5" type="stmt"/>
       </file>
     </package>
     <package name="src.db.mongoose">
       <metrics statements="20" coveredstatements="20" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="models.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\db\mongoose\models.ts">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="3" count="3" type="stmt"/>
-        <line num="14" count="3" type="stmt"/>
-        <line num="16" count="3" type="stmt"/>
-        <line num="18" count="3" type="stmt"/>
-        <line num="20" count="3" type="stmt"/>
-        <line num="22" count="3" type="stmt"/>
-        <line num="24" count="3" type="stmt"/>
-        <line num="26" count="3" type="stmt"/>
-        <line num="28" count="3" type="stmt"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="14" count="5" type="stmt"/>
+        <line num="16" count="5" type="stmt"/>
+        <line num="18" count="5" type="stmt"/>
+        <line num="20" count="5" type="stmt"/>
+        <line num="22" count="5" type="stmt"/>
+        <line num="24" count="5" type="stmt"/>
+        <line num="26" count="5" type="stmt"/>
+        <line num="28" count="5" type="stmt"/>
       </file>
       <file name="schemas.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\db\mongoose\schemas.ts">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="2" count="3" type="stmt"/>
-        <line num="27" count="3" type="stmt"/>
-        <line num="46" count="3" type="stmt"/>
-        <line num="52" count="3" type="stmt"/>
-        <line num="62" count="3" type="stmt"/>
-        <line num="71" count="3" type="stmt"/>
-        <line num="78" count="3" type="stmt"/>
-        <line num="83" count="3" type="stmt"/>
-        <line num="92" count="3" type="stmt"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="27" count="5" type="stmt"/>
+        <line num="46" count="5" type="stmt"/>
+        <line num="52" count="5" type="stmt"/>
+        <line num="62" count="5" type="stmt"/>
+        <line num="71" count="5" type="stmt"/>
+        <line num="78" count="5" type="stmt"/>
+        <line num="83" count="5" type="stmt"/>
+        <line num="92" count="5" type="stmt"/>
       </file>
     </package>
     <package name="src.domain">
-      <metrics statements="110" coveredstatements="110" conditionals="10" coveredconditionals="10" methods="28" coveredmethods="28"/>
+      <metrics statements="221" coveredstatements="219" conditionals="51" coveredconditionals="49" methods="54" coveredmethods="54"/>
       <file name="auth-helper-service.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\domain\auth-helper-service.ts">
         <metrics statements="9" coveredstatements="9" conditionals="1" coveredconditionals="1" methods="5" coveredmethods="5"/>
-        <line num="1" count="2" type="stmt"/>
-        <line num="2" count="2" type="stmt"/>
-        <line num="5" count="2" type="stmt"/>
-        <line num="6" count="5" type="cond" truecount="1" falsecount="0"/>
-        <line num="7" count="5" type="stmt"/>
-        <line num="8" count="5" type="stmt"/>
-        <line num="11" count="3" type="stmt"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="6" count="7" type="cond" truecount="1" falsecount="0"/>
+        <line num="7" count="7" type="stmt"/>
+        <line num="8" count="7" type="stmt"/>
+        <line num="11" count="4" type="stmt"/>
         <line num="12" count="3" type="stmt"/>
         <line num="13" count="3" type="stmt"/>
       </file>
@@ -336,14 +336,14 @@
       </file>
       <file name="bloggers-services.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\domain\bloggers-services.ts">
         <metrics statements="20" coveredstatements="20" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="6"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="2" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
-        <line num="9" count="1" type="stmt"/>
-        <line num="10" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
+        <line num="9" count="3" type="stmt"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="11" count="3" type="stmt"/>
+        <line num="14" count="3" type="stmt"/>
+        <line num="16" count="3" type="stmt"/>
         <line num="23" count="2" type="stmt"/>
         <line num="25" count="2" type="stmt"/>
         <line num="26" count="2" type="stmt"/>
@@ -351,24 +351,147 @@
         <line num="32" count="2" type="stmt"/>
         <line num="34" count="2" type="stmt"/>
         <line num="42" count="2" type="stmt"/>
-        <line num="48" count="1" type="stmt"/>
-        <line num="53" count="1" type="stmt"/>
+        <line num="48" count="3" type="stmt"/>
+        <line num="53" count="3" type="stmt"/>
         <line num="57" count="1" type="stmt"/>
         <line num="61" count="2" type="stmt"/>
         <line num="65" count="2" type="stmt"/>
       </file>
-      <file name="users-service.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\domain\users-service.ts">
-        <metrics statements="33" coveredstatements="33" conditionals="3" coveredconditionals="3" methods="12" coveredmethods="12"/>
+      <file name="commentLikes-service.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\domain\commentLikes-service.ts">
+        <metrics statements="18" coveredstatements="17" conditionals="12" coveredconditionals="11" methods="4" coveredmethods="4"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="17" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="18" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="21" count="2" type="cond" truecount="6" falsecount="0"/>
+        <line num="22" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="44" count="4" type="stmt"/>
+      </file>
+      <file name="comments-services.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\domain\comments-services.ts">
+        <metrics statements="34" coveredstatements="34" conditionals="5" coveredconditionals="5" methods="9" coveredmethods="9"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="49" count="2" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="70" count="2" type="stmt"/>
+        <line num="71" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="78" count="2" type="stmt"/>
+        <line num="82" count="2" type="stmt"/>
+        <line num="87" count="2" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="postLikes-service.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\domain\postLikes-service.ts">
+        <metrics statements="19" coveredstatements="18" conditionals="14" coveredconditionals="13" methods="4" coveredmethods="4"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="15" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="16" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="20" count="2" type="cond" truecount="6" falsecount="0"/>
+        <line num="21" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="45" count="7" type="stmt"/>
+      </file>
+      <file name="posts-services.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\domain\posts-services.ts">
+        <metrics statements="40" coveredstatements="40" conditionals="10" coveredconditionals="10" methods="9" coveredmethods="9"/>
+        <line num="1" count="2" type="stmt"/>
         <line num="13" count="2" type="stmt"/>
-        <line num="14" count="2" type="stmt"/>
         <line num="15" count="2" type="stmt"/>
         <line num="16" count="2" type="stmt"/>
         <line num="17" count="2" type="stmt"/>
-        <line num="21" count="2" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
         <line num="23" count="2" type="stmt"/>
-        <line num="24" count="2" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="30" count="4" type="stmt"/>
+        <line num="31" count="4" type="stmt"/>
+        <line num="33" count="4" type="stmt"/>
+        <line num="41" count="4" type="stmt"/>
+        <line num="42" count="4" type="stmt"/>
+        <line num="43" count="4" type="stmt"/>
+        <line num="44" count="4" type="stmt"/>
+        <line num="50" count="2" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="53" count="2" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="58" count="2" type="stmt"/>
+        <line num="60" count="4" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="63" count="4" type="stmt"/>
+        <line num="65" count="2" type="stmt"/>
+        <line num="72" count="2" type="stmt"/>
+        <line num="76" count="2" type="stmt"/>
+        <line num="77" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="78" count="1" type="stmt"/>
+        <line num="79" count="1" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="84" count="3" type="stmt"/>
+        <line num="85" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="86" count="3" type="stmt"/>
+        <line num="87" count="3" type="stmt"/>
+        <line num="91" count="2" type="stmt"/>
+        <line num="96" count="2" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="users-service.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\domain\users-service.ts">
+        <metrics statements="33" coveredstatements="33" conditionals="3" coveredconditionals="3" methods="12" coveredmethods="12"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="21" count="4" type="stmt"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="24" count="4" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
         <line num="31" count="1" type="stmt"/>
         <line num="33" count="1" type="stmt"/>
@@ -377,8 +500,8 @@
         <line num="39" count="1" type="stmt"/>
         <line num="47" count="1" type="stmt"/>
         <line num="51" count="1" type="stmt"/>
-        <line num="55" count="3" type="stmt"/>
-        <line num="57" count="3" type="stmt"/>
+        <line num="55" count="5" type="stmt"/>
+        <line num="57" count="5" type="stmt"/>
         <line num="61" count="3" type="stmt"/>
         <line num="65" count="1" type="stmt"/>
         <line num="69" count="2" type="stmt"/>
@@ -398,47 +521,94 @@
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="constants.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\helpers\constants.ts">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="2" count="3" type="stmt"/>
-        <line num="3" count="3" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.helpers.likes">
+      <metrics statements="41" coveredstatements="39" conditionals="20" coveredconditionals="2" methods="18" coveredmethods="9"/>
+      <file name="likesHelper.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\helpers\likes\likesHelper.ts">
+        <metrics statements="41" coveredstatements="39" conditionals="20" coveredconditionals="2" methods="18" coveredmethods="9"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="23" count="9" type="cond" truecount="0" falsecount="3"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="33" count="9" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="39" count="9" type="cond" truecount="0" falsecount="2"/>
+        <line num="40" count="9" type="cond" truecount="1" falsecount="1"/>
+        <line num="41" count="9" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="44" count="9" type="cond" truecount="0" falsecount="2"/>
+        <line num="45" count="9" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="48" count="9" type="cond" truecount="0" falsecount="2"/>
+        <line num="49" count="9" type="stmt"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="52" count="9" type="stmt"/>
+        <line num="53" count="9" type="stmt"/>
+        <line num="54" count="9" type="stmt"/>
+        <line num="55" count="9" type="stmt"/>
+        <line num="57" count="9" type="stmt"/>
+        <line num="63" count="9" type="stmt"/>
+        <line num="69" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="72" count="4" type="cond" truecount="0" falsecount="2"/>
+        <line num="73" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="74" count="4" type="stmt"/>
+        <line num="76" count="2" type="stmt"/>
+        <line num="77" count="4" type="cond" truecount="0" falsecount="2"/>
+        <line num="78" count="4" type="stmt"/>
+        <line num="80" count="2" type="stmt"/>
+        <line num="81" count="4" type="cond" truecount="0" falsecount="2"/>
+        <line num="82" count="4" type="stmt"/>
+        <line num="84" count="2" type="stmt"/>
+        <line num="85" count="4" type="stmt"/>
+        <line num="86" count="4" type="stmt"/>
+        <line num="87" count="4" type="stmt"/>
+        <line num="89" count="4" type="stmt"/>
+        <line num="94" count="4" type="stmt"/>
       </file>
     </package>
     <package name="src.helpers.user">
       <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
       <file name="userServiceHelper.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\helpers\user\userServiceHelper.ts">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-        <line num="1" count="2" type="stmt"/>
-        <line num="2" count="2" type="stmt"/>
-        <line num="5" count="2" type="stmt"/>
-        <line num="8" count="5" type="stmt"/>
-        <line num="10" count="5" type="stmt"/>
-        <line num="12" count="5" type="stmt"/>
-        <line num="14" count="5" type="stmt"/>
-        <line num="15" count="5" type="stmt"/>
-        <line num="16" count="5" type="stmt"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="8" count="7" type="stmt"/>
+        <line num="10" count="7" type="stmt"/>
+        <line num="12" count="7" type="stmt"/>
+        <line num="14" count="7" type="stmt"/>
+        <line num="15" count="7" type="stmt"/>
+        <line num="16" count="7" type="stmt"/>
       </file>
     </package>
     <package name="src.repositories">
-      <metrics statements="60" coveredstatements="59" conditionals="9" coveredconditionals="9" methods="17" coveredmethods="17"/>
+      <metrics statements="146" coveredstatements="143" conditionals="25" coveredconditionals="23" methods="37" coveredmethods="37"/>
       <file name="bloggers-repository.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\repositories\bloggers-repository.ts">
         <metrics statements="25" coveredstatements="25" conditionals="4" coveredconditionals="4" methods="6" coveredmethods="6"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="10" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="12" count="3" type="stmt"/>
         <line num="18" count="2" type="stmt"/>
         <line num="19" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="22" count="2" type="stmt"/>
         <line num="23" count="2" type="stmt"/>
         <line num="29" count="2" type="stmt"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="34" count="1" type="stmt"/>
-        <line num="35" count="1" type="stmt"/>
-        <line num="36" count="1" type="stmt"/>
-        <line num="40" count="1" type="stmt"/>
+        <line num="33" count="3" type="stmt"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="35" count="3" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
+        <line num="40" count="8" type="stmt"/>
         <line num="45" count="2" type="stmt"/>
         <line num="46" count="2" type="cond" truecount="1" falsecount="0"/>
         <line num="47" count="1" type="stmt"/>
@@ -447,17 +617,115 @@
         <line num="54" count="2" type="cond" truecount="1" falsecount="0"/>
         <line num="56" count="1" type="stmt"/>
       </file>
-      <file name="users-repository.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\repositories\users-repository.ts">
-        <metrics statements="35" coveredstatements="34" conditionals="5" coveredconditionals="5" methods="11" coveredmethods="11"/>
+      <file name="commentLikes-repository.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\repositories\commentLikes-repository.ts">
+        <metrics statements="17" coveredstatements="16" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="18" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="32" count="4" type="stmt"/>
+        <line num="33" count="4" type="stmt"/>
+      </file>
+      <file name="comments-repository.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\repositories\comments-repository.ts">
+        <metrics statements="24" coveredstatements="24" conditionals="5" coveredconditionals="5" methods="6" coveredmethods="6"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="49" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="56" count="2" type="stmt"/>
+        <line num="57" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="58" count="1" type="stmt"/>
+      </file>
+      <file name="postLikes-repository.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\repositories\postLikes-repository.ts">
+        <metrics statements="17" coveredstatements="16" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="17" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="31" count="7" type="stmt"/>
+        <line num="32" count="7" type="stmt"/>
+      </file>
+      <file name="posts-repository.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\repositories\posts-repository.ts">
+        <metrics statements="28" coveredstatements="28" conditionals="7" coveredconditionals="5" methods="6" coveredmethods="6"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
         <line num="10" count="2" type="stmt"/>
         <line num="11" count="2" type="stmt"/>
         <line num="12" count="2" type="stmt"/>
         <line num="13" count="2" type="stmt"/>
         <line num="14" count="2" type="stmt"/>
-        <line num="18" count="2" type="stmt"/>
-        <line num="20" count="2" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="27" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="39" count="4" type="stmt"/>
+        <line num="41" count="4" type="stmt"/>
+        <line num="43" count="4" type="stmt"/>
+        <line num="45" count="4" type="stmt"/>
+        <line num="49" count="2" type="stmt"/>
+        <line num="53" count="3" type="stmt"/>
+        <line num="55" count="3" type="stmt"/>
+        <line num="56" count="3" type="cond" truecount="3" falsecount="1"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="63" count="2" type="stmt"/>
+        <line num="64" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="65" count="1" type="stmt"/>
+      </file>
+      <file name="users-repository.ts" path="C:\Projects\it-kamasutra\IT-BE\Lesson001\src\repositories\users-repository.ts">
+        <metrics statements="35" coveredstatements="34" conditionals="5" coveredconditionals="5" methods="11" coveredmethods="11"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="11" count="4" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="20" count="4" type="stmt"/>
         <line num="25" count="1" type="stmt"/>
         <line num="27" count="1" type="stmt"/>
         <line num="33" count="1" type="stmt"/>
@@ -465,9 +733,9 @@
         <line num="41" count="6" type="stmt"/>
         <line num="42" count="6" type="stmt"/>
         <line num="46" count="5" type="stmt"/>
-        <line num="51" count="5" type="stmt"/>
-        <line num="59" count="5" type="stmt"/>
-        <line num="61" count="5" type="stmt"/>
+        <line num="51" count="7" type="stmt"/>
+        <line num="59" count="7" type="stmt"/>
+        <line num="61" count="7" type="stmt"/>
         <line num="65" count="2" type="stmt"/>
         <line num="66" count="2" type="cond" truecount="1" falsecount="0"/>
         <line num="67" count="1" type="stmt"/>

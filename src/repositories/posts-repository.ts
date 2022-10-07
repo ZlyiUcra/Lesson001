@@ -32,7 +32,6 @@ export class PostsRepository {
       .find(searchTerm, projection)
       .skip(skip).limit(limit)
       .lean();
-
     return {postsSearch, postsCount};
   }
 

@@ -35,8 +35,6 @@ export class PostLikesService {
     }
     return this.postLikesRepository.upsert(postLike);
 
-
-    return false
   }
 
   async findByPostIdAndUserId(postId: string, userId: string | null): Promise<PostLikeType | null> {
