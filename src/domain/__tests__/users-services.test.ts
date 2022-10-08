@@ -15,6 +15,10 @@ describe("integration test for user service", () => {
     const mongoUri = mongoServer.getUri();
     await mongoose.connect(mongoUri);
   })
+  afterAll(async () => {
+    await mongoose.disconnect()
+    await mongoServer.stop()
+  })
 
   const usersRepository = new UsersRepository(userModel);
   const authHelperService = new AuthHelperService();
